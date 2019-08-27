@@ -19,7 +19,7 @@ fn run(cmd: &str) -> bool {
 }
 
 fn main() {
-  let last_cwd = env::current_dir().unwrap();
+  let last_current_dir = env::current_dir().unwrap();
   let workspace_dir = std::path::Path::new(&env::var("OUT_DIR").unwrap())
     .join("..")
     .join("..")
@@ -41,7 +41,7 @@ fn main() {
     }
   }
 
-  let CARGO_MANIFEST_DIR = env::var("CARGO_MANIFEST_DIR").unwrap();
+  let last_manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
   env::set_var("CARGO_MANIFEST_DIR", workspace_dir);
 
   includedir_codegen::start("WEB_FILES")
@@ -49,6 +49,6 @@ fn main() {
     .build("web_files.rs")
     .unwrap();
 
-  env::set_var("CARGO_MANIFEST_DIR", CARGO_MANIFEST_DIR);
-  env::set_current_dir(last_cwd).unwrap();
+  env::set_var("CARGO_MANIFEST_DIR", last_manifest_dir);
+  env::set_current_dir(last_current_dir).unwrap();
 }
