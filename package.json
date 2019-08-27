@@ -1,0 +1,12 @@
+{
+  "name": "rust-parceljs",
+  "version": "1.0.0",
+  "author": "SpiralP <spiral.palmer@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "parcel build --no-source-maps web/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3"
+  }
+}
