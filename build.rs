@@ -20,14 +20,16 @@ fn run(cmd: &str) -> bool {
 
 fn main() {
   let last_current_dir = env::current_dir().unwrap();
-  let workspace_dir = std::path::Path::new(&env::var("OUT_DIR").unwrap())
-    .join("..")
-    .join("..")
-    .join("..")
-    .join("..")
-    .join("..")
-    .canonicalize()
-    .unwrap();
+
+  // /unison/Projects/rust-parceljs/target/debug/build/parceljs-83b0eeadf2f2e1d5/out
+  //                               /..    /..   /..   /..                       /..
+  let mut workspace_dir = std::path::PathBuf::from(&env::var("OUT_DIR").unwrap());
+  workspace_dir.pop();
+  workspace_dir.pop();
+  workspace_dir.pop();
+  workspace_dir.pop();
+  workspace_dir.pop();
+
   env::set_current_dir(&workspace_dir).unwrap();
 
   if !env::var("OUT_DIR").unwrap().contains("rls") {
