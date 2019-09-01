@@ -1,3 +1,5 @@
+#![allow(clippy::unreadable_literal)]
+
 use std::{borrow, io};
 
 include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
