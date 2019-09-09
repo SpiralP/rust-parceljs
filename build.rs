@@ -1,5 +1,10 @@
 use includedir_codegen::Compression;
-use std::{env, fs, process::Command};
+use std::{
+  env, fs,
+  path::{Path, PathBuf},
+  process::Command,
+};
+use walkdir::WalkDir;
 
 fn run(cmd: &str) -> bool {
   if cfg!(target_os = "windows") {
@@ -23,7 +28,7 @@ fn main() {
 
   // /unison/Projects/rust-parceljs/target/debug/build/parceljs-83b0eeadf2f2e1d5/out
   //                               /..    /..   /..   /..                       /..
-  let mut workspace_dir = std::path::PathBuf::from(&env::var("OUT_DIR").unwrap());
+  let mut workspace_dir = PathBuf::from(&env::var("OUT_DIR").unwrap());
   workspace_dir.pop();
   workspace_dir.pop();
   workspace_dir.pop();
@@ -44,12 +49,22 @@ fn main() {
   }
 
   let last_manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-  env::set_var("CARGO_MANIFEST_DIR", workspace_dir);
+  env::set_var("CARGO_MANIFEST_DIR", &workspace_dir);
 
   includedir_codegen::start("WEB_FILES")
     .dir("dist", Compression::Gzip)
     .build("web_files.rs")
     .unwrap();
+
+  for entry in WalkDir::new("web") {
+    match entry {
+      Ok(ref e) if !e.file_type().is_dir() => {
+        let full_path = Path::new(workspace_dir.as_path()).join(e.path());
+        println!("cargo:rerun-if-changed={}", full_path.display());
+      }
+      _ => (),
+    }
+  }
 
   env::set_var("CARGO_MANIFEST_DIR", last_manifest_dir);
   env::set_current_dir(last_current_dir).unwrap();
