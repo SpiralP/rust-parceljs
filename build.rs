@@ -8,19 +8,20 @@ use walkdir::WalkDir;
 
 fn run(cmd: &str) -> bool {
   if cfg!(target_os = "windows") {
-    Command::new("cmd")
-      .args(&["/C", cmd])
-      .status()
-      .unwrap()
-      .success()
+    check_command(Command::new("cmd").args(&["/C", cmd]))
   } else {
-    Command::new("sh")
-      .arg("-c")
-      .arg(cmd)
-      .status()
-      .unwrap()
-      .success()
+    check_command(Command::new("sh").arg("-c").arg(cmd))
   }
+}
+
+fn check_command(command: &mut Command) -> bool {
+  if !command.status().unwrap().success() {
+    return false;
+  }
+
+  let output = command.output().unwrap();
+
+  output.stderr.is_empty()
 }
 
 fn main() {
@@ -39,6 +40,7 @@ fn main() {
 
   if !env::var("OUT_DIR").unwrap().contains("rls") {
     if fs::metadata("package.json").is_ok() {
+      // if no node_modules, run yarn install
       if fs::metadata("node_modules").is_err() {
         assert!(run("yarn install"));
       }
@@ -47,6 +49,13 @@ fn main() {
       assert!(run("yarn build"));
     }
   }
+
+  assert!(
+    fs::metadata("dist")
+      .map(|meta| meta.is_dir())
+      .unwrap_or(false),
+    "dist not a directory"
+  );
 
   let last_manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
   env::set_var("CARGO_MANIFEST_DIR", &workspace_dir);
@@ -62,7 +71,8 @@ fn main() {
         let full_path = Path::new(workspace_dir.as_path()).join(e.path());
         println!("cargo:rerun-if-changed={}", full_path.display());
       }
-      _ => (),
+
+      _ => {}
     }
   }
 
