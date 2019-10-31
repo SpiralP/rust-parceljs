@@ -9,7 +9,7 @@ edition = "2018"
 [dependencies]
 includedir = { git = "https://github.com/SpiralP/includedir.git" }
 phf = "0.7.24"
-warp = { version = "0.1.20", optional = true }
+warp = { git = "https://github.com/seanmonstar/warp.git", optional = true }
 
 [build-dependencies]
 includedir_codegen = { git = "https://github.com/SpiralP/includedir.git" }
