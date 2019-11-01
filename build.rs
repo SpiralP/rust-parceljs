@@ -24,17 +24,38 @@ fn check_command(command: &mut Command) -> bool {
   output.stderr.is_empty()
 }
 
+fn pop<T>(path: &mut PathBuf, maybe: T)
+where
+  T: Into<Option<&'static str>>,
+  T: std::fmt::Debug,
+{
+  if let Some(name) = maybe.into() {
+    assert_eq!(path.file_name().unwrap(), name);
+  }
+  path.pop();
+}
+
 fn main() {
   let last_current_dir = env::current_dir().unwrap();
 
+  // /unison/Projects/rust-parceljs/target/rls/debug/build/parceljs-afcec2ed84625bb4/out
   // /unison/Projects/rust-parceljs/target/debug/build/parceljs-83b0eeadf2f2e1d5/out
   //                               /..    /..   /..   /..                       /..
   let mut workspace_dir = PathBuf::from(&env::var("OUT_DIR").unwrap());
-  workspace_dir.pop();
-  workspace_dir.pop();
-  workspace_dir.pop();
-  workspace_dir.pop();
-  workspace_dir.pop();
+  pop(&mut workspace_dir, "out");
+  pop(&mut workspace_dir, None); // pop parceljs-123123
+  pop(&mut workspace_dir, "build");
+
+  let file_name = workspace_dir.file_name().unwrap();
+  assert!(file_name == "debug" || file_name == "release");
+  pop(&mut workspace_dir, None); // pop "debug" or "release"
+
+  if workspace_dir.file_name().unwrap() == "rls" {
+    // fix for rls being target/rls/debug instead of target/debug
+    pop(&mut workspace_dir, "rls");
+  }
+
+  pop(&mut workspace_dir, "target");
 
   env::set_current_dir(&workspace_dir).unwrap();
 
