@@ -3,6 +3,9 @@
 #[cfg(feature = "warp")]
 pub mod warp;
 
+#[cfg(feature = "actix")]
+pub mod actix;
+
 use std::{borrow, io};
 
 include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
