@@ -19,7 +19,7 @@ impl Reply for ParceljsResponder {
       let mut response = Response::builder();
 
       if let Some(content_type) = get_content_type(path) {
-        response.header(&b"Content-Type"[..], content_type);
+        response = response.header(&b"Content-Type"[..], content_type);
       }
 
       response
