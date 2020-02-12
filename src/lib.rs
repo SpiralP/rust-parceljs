@@ -11,7 +11,7 @@ use std::{borrow, io};
 include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
 
 pub fn get_file(mut file_path: &str) -> Result<borrow::Cow<'static, [u8]>, io::Error> {
-  if let Some(c) = file_path.chars().nth(0) {
+  if let Some(c) = file_path.chars().next() {
     if c == '/' {
       file_path = &file_path[1..];
     }

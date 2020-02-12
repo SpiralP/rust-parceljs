@@ -6,6 +6,8 @@ use std::{
 };
 use walkdir::WalkDir;
 
+const PARCEL_OUT_DIR: &str = "dist";
+
 fn run(cmd: &str) -> bool {
   if cfg!(target_os = "windows") {
     check_command(Command::new("cmd").arg("/C").arg(cmd))
@@ -23,13 +25,17 @@ fn run_envs(cmd: &str, envs: Vec<(&str, &str)>) -> bool {
 }
 
 fn check_command(command: &mut Command) -> bool {
-  if !command.status().unwrap().success() {
-    return false;
-  }
+  command.status().unwrap().success()
 
-  let output = command.output().unwrap();
+  // npm likes to warn a lot so disabled
 
-  output.stderr.is_empty()
+  // if !command.status().unwrap().success() {
+  //   return false;
+  // }
+
+  // let output = command.output().unwrap();
+
+  // output.stderr.is_empty()
 }
 
 fn pop<T>(path: &mut PathBuf, maybe: T)
@@ -74,7 +80,7 @@ fn main() {
         assert!(run("npm install"));
       }
 
-      let _ = fs::remove_dir_all("dist");
+      let _ = fs::remove_dir_all(PARCEL_OUT_DIR);
 
       if cfg!(debug_assertions) {
         assert!(run_envs(
@@ -88,7 +94,7 @@ fn main() {
   }
 
   assert!(
-    fs::metadata("dist")
+    fs::metadata(PARCEL_OUT_DIR)
       .map(|meta| meta.is_dir())
       .unwrap_or(false),
     "dist wasn't created"
@@ -98,7 +104,7 @@ fn main() {
   env::set_var("CARGO_MANIFEST_DIR", &workspace_dir);
 
   includedir_codegen::start("WEB_FILES")
-    .dir("dist", Compression::Gzip)
+    .dir(PARCEL_OUT_DIR, Compression::Gzip)
     .build("web_files.rs")
     .unwrap();
 
