@@ -8,9 +8,17 @@ use walkdir::WalkDir;
 
 fn run(cmd: &str) -> bool {
   if cfg!(target_os = "windows") {
-    check_command(Command::new("cmd").args(&["/C", cmd]))
+    check_command(Command::new("cmd").arg("/C").arg(cmd))
   } else {
     check_command(Command::new("sh").arg("-c").arg(cmd))
+  }
+}
+
+fn run_envs(cmd: &str, envs: Vec<(&str, &str)>) -> bool {
+  if cfg!(target_os = "windows") {
+    check_command(Command::new("cmd").arg("/C").arg(cmd).envs(envs))
+  } else {
+    check_command(Command::new("sh").arg("-c").arg(cmd).envs(envs))
   }
 }
 
@@ -38,9 +46,9 @@ where
 fn main() {
   let last_current_dir = env::current_dir().unwrap();
 
-  // /unison/Projects/rust-parceljs/target/rls/debug/build/parceljs-afcec2ed84625bb4/out
-  // /unison/Projects/rust-parceljs/target/debug/build/parceljs-83b0eeadf2f2e1d5/out
-  //                               /..    /..   /..   /..                       /..
+  // rust-parceljs/target/rls/debug/build/parceljs-afcec2ed84625bb4/out
+  // rust-parceljs/target/debug/build/parceljs-83b0eeadf2f2e1d5/out
+  //              /..    /..   /..   /..                       /..
   let mut workspace_dir = PathBuf::from(&env::var("OUT_DIR").unwrap());
   pop(&mut workspace_dir, "out");
   pop(&mut workspace_dir, None); // pop parceljs-123123
@@ -61,13 +69,21 @@ fn main() {
 
   if !env::var("OUT_DIR").unwrap().contains("rls") {
     if fs::metadata("package.json").is_ok() {
-      // if no node_modules, run yarn install
+      // if no node_modules, run npm install
       if fs::metadata("node_modules").is_err() {
-        assert!(run("yarn install"));
+        assert!(run("npm install"));
       }
 
       let _ = fs::remove_dir_all("dist");
-      assert!(run("yarn build"));
+
+      if cfg!(debug_assertions) {
+        assert!(run_envs(
+          "npm run-script build",
+          vec![("NODE_ENV", "development")]
+        ));
+      } else {
+        assert!(run("npm run-script build"));
+      }
     }
   }
 
@@ -75,7 +91,7 @@ fn main() {
     fs::metadata("dist")
       .map(|meta| meta.is_dir())
       .unwrap_or(false),
-    "dist not a directory"
+    "dist wasn't created"
   );
 
   let last_manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
