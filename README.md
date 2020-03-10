@@ -42,7 +42,7 @@ fn main() {
 }
 ```
 
-main.rs with warp
+main.rs with [warp](https://github.com/seanmonstar/warp)
 
 ```rust
 include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
@@ -56,7 +56,7 @@ async fn main() {
 }
 ```
 
-main.rs with actix
+main.rs with [actix](https://github.com/actix/actix-web)
 
 ```rust
 include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
