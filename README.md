@@ -1,15 +1,5 @@
 # rust-parceljs
 
-Cargo.toml
-
-```toml
-[dependencies]
-parceljs = { git = "https://github.com/SpiralP/rust-parceljs.git" }
-
-[build-dependencies]
-parceljs-builder = { git = "https://github.com/SpiralP/rust-parceljs.git" }
-```
-
 package.json
 
 ```json
@@ -19,6 +9,17 @@ package.json
   "devDependencies": {
     "parcel-bundler": "^1.12.3"
   }
+```
+
+Cargo.toml
+
+```toml
+[dependencies]
+# optional features: actix, warp
+parceljs = { git = "https://github.com/SpiralP/rust-parceljs.git" }
+
+[build-dependencies]
+parceljs-builder = { git = "https://github.com/SpiralP/rust-parceljs.git" }
 ```
 
 build.rs
@@ -42,7 +43,7 @@ fn main() {
 }
 ```
 
-main.rs with [warp](https://github.com/seanmonstar/warp)
+main.rs with [warp](https://github.com/seanmonstar/warp) feature enabled
 
 ```rust
 include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
@@ -56,7 +57,7 @@ async fn main() {
 }
 ```
 
-main.rs with [actix](https://github.com/actix/actix-web)
+main.rs with [actix](https://github.com/actix/actix-web) feature enabled
 
 ```rust
 include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
