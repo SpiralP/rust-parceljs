@@ -26,7 +26,18 @@ include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
 fn main() {
   println!(
     "{}",
-    String::from_utf8_lossy(&PARCELJS::get_file("index.html").unwrap())
+    String::from_utf8_lossy(&PARCELJS.get_file("index.html").unwrap())
   );
 }
+```
+
+package.json
+
+```json
+  "scripts": {
+    "build": "parcel build web/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3"
+  }
 ```
