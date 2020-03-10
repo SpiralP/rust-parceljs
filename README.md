@@ -9,7 +9,7 @@ parceljs = { git = "https://github.com/SpiralP/rust-parceljs.git", branch = "nex
 phf = "0.8.0"
 
 [build-dependencies]
-parceljs-builder = { path = "../builder" }
+parceljs-builder = { git = "https://github.com/SpiralP/rust-parceljs.git", branch = "next" }
 ```
 
 build.rs
