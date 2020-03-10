@@ -1,5 +1,0 @@
-make out own
-include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
-that has WEB_FILES.get_file("index.html")
-
-This will cut down the strange dependencies!
