@@ -6,9 +6,10 @@ edition = "2018"
 
 [dependencies]
 actix-web = { version = "2.0.0", optional = true }
-includedir = { git = "https://github.com/SpiralP/includedir.git" }
+failure = "0.1.7"
+flate2 = "1.0.13"
 phf = "0.8.0"
-warp = { version = "0.2.1", optional = true }
+warp = { version = "0.2.2", optional = true }
 
 [features]
 actix = ["actix-web"]

@@ -4,12 +4,10 @@ Cargo.toml
 
 ```toml
 [dependencies]
-includedir = { git = "https://github.com/SpiralP/includedir.git" }
-parceljs = { git = "https://github.com/SpiralP/rust-parceljs.git", branch = "next" }
-phf = "0.8.0"
+parceljs = { git = "https://github.com/SpiralP/rust-parceljs.git" }
 
 [build-dependencies]
-parceljs-builder = { git = "https://github.com/SpiralP/rust-parceljs.git", branch = "next" }
+parceljs-builder = { git = "https://github.com/SpiralP/rust-parceljs.git" }
 ```
 
 build.rs
@@ -23,12 +21,12 @@ fn main() {
 main.rs
 
 ```rust
-include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
+include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
 
 fn main() {
   println!(
     "{}",
-    String::from_utf8_lossy(&parceljs::get_file(&WEB_FILES, "index.html").unwrap())
+    String::from_utf8_lossy(&PARCELJS::get_file("index.html").unwrap())
   );
 }
 ```

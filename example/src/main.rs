@@ -1,8 +1,6 @@
-include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
+include!(concat!(env!("OUT_DIR"), "/parceljs.rs"));
 
 fn main() {
-  println!(
-    "{}",
-    String::from_utf8_lossy(&parceljs::get_file(&WEB_FILES, "index.html").unwrap())
-  );
+  let data = PARCELJS.get_file("index.html").unwrap();
+  println!("{}", String::from_utf8_lossy(&data));
 }
