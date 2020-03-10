@@ -72,7 +72,19 @@ impl Builder {
       env::set_current_dir(current_dir).expect("changing directory to current_dir");
     }
 
-    fs::metadata("package.json").expect("package.json not found");
+    assert!(
+      fs::metadata("package.json")
+        .map(|meta| meta.is_file())
+        .unwrap_or(false),
+      "package.json not found"
+    );
+
+    assert!(
+      fs::metadata(&web_dir)
+        .map(|meta| meta.is_dir())
+        .unwrap_or(false),
+      "web directory not found"
+    );
 
     if !out_dir.contains("rls") {
       // if no node_modules, run npm install
@@ -96,7 +108,7 @@ impl Builder {
       fs::metadata(&dist_dir)
         .map(|meta| meta.is_dir())
         .unwrap_or(false),
-      "out directory wasn't created"
+      "dist directory wasn't created"
     );
 
     for entry in WalkDir::new(&web_dir) {
