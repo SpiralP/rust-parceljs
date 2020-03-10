@@ -80,24 +80,29 @@ impl ParcelJs {
 
   #[cfg(feature = "warp")]
   pub fn as_filter(&'static self) -> warp::filters::BoxedFilter<(impl warp::Reply,)> {
-    use warp::{filters::path::FullPath, http::Response, Filter};
+    use warp::Filter;
 
     warp::path::full()
-      .map(move |path: FullPath| {
-        let path = path.as_str();
-
-        if let Ok(data) = self.get_file(path) {
-          let mut response = Response::builder();
-
-          if let Some(content_type) = Self::get_content_type(path) {
-            response = response.header("Content-Type", content_type);
-          }
-
-          response.body(data).unwrap()
-        } else {
-          Response::builder().status(404).body(vec![]).unwrap()
-        }
-      })
+      .map(move |path| self.as_reply(path))
       .boxed()
+  }
+
+  #[cfg(feature = "warp")]
+  pub fn as_reply(&'static self, path: warp::filters::path::FullPath) -> impl warp::Reply {
+    use warp::http::Response;
+
+    let path = path.as_str();
+
+    if let Ok(data) = self.get_file(path) {
+      let mut response = Response::builder();
+
+      if let Some(content_type) = Self::get_content_type(path) {
+        response = response.header("Content-Type", content_type);
+      }
+
+      response.body(data).unwrap()
+    } else {
+      Response::builder().status(404).body(vec![]).unwrap()
+    }
   }
 }
