@@ -1,0 +1,9 @@
+[package]
+name = "parceljs-builder"
+version = "0.1.0"
+authors = ["Spiral Palmer <spiral.palmer@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+includedir_codegen = { git = "https://github.com/SpiralP/includedir.git" }
+walkdir = "2.3.1"

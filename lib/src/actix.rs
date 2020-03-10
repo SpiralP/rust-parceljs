@@ -5,7 +5,7 @@ pub fn static_files_route() -> Route {
   web::get().to(move |req: HttpRequest| -> HttpResponse {
     let file_path = req.path();
 
-    match get_file(&file_path) {
+    match get_file(&web_files, &file_path) {
       Ok(bytes) => {
         let mut builder = HttpResponse::Ok();
 

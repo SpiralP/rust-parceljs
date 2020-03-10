@@ -6,11 +6,12 @@ pub mod warp;
 #[cfg(feature = "actix")]
 pub mod actix;
 
-use std::{borrow, io};
+use std::{borrow::Cow, io};
 
-include!(concat!(env!("OUT_DIR"), "/web_files.rs"));
-
-pub fn get_file(mut file_path: &str) -> Result<borrow::Cow<'static, [u8]>, io::Error> {
+pub fn get_file(
+  web_files: &includedir::Files,
+  mut file_path: &str,
+) -> Result<Cow<'static, [u8]>, io::Error> {
   if let Some(c) = file_path.chars().next() {
     if c == '/' {
       file_path = &file_path[1..];
@@ -20,7 +21,8 @@ pub fn get_file(mut file_path: &str) -> Result<borrow::Cow<'static, [u8]>, io::E
     file_path = "index.html";
   }
 
-  WEB_FILES.get(&format!("dist/{}", file_path))
+  // TODO remove "dist" from includedir
+  web_files.get(&format!("dist/{}", file_path))
 }
 
 pub fn get_content_type(file_path: &str) -> Option<String> {

@@ -1,0 +1,13 @@
+[package]
+name = "parceljs-example"
+version = "0.1.0"
+authors = ["SpiralP <spiral.palmer@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+includedir = { git = "https://github.com/SpiralP/includedir.git" }
+parceljs = { path = "../lib" }
+phf = "0.8.0"
+
+[build-dependencies]
+parceljs-builder = { path = "../builder" }
