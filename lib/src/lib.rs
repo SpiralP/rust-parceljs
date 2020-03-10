@@ -1,9 +1,7 @@
 #[cfg(feature = "actix")]
 use actix_web::{http::header::ContentType, web, HttpRequest, HttpResponse, Route};
 use failure::{Error, Fail};
-use flate2::read::GzDecoder;
 pub use phf;
-use std::io::Read;
 
 #[derive(Debug, Fail)]
 pub enum ParcelJsError {
@@ -38,12 +36,7 @@ impl ParcelJs {
       })
     })?;
 
-    let mut decoder = GzDecoder::new(&data[..]);
-
-    let mut decoded = Vec::new();
-    decoder.read_to_end(&mut decoded)?;
-
-    Ok(decoded)
+    Ok(zstd::stream::decode_all(*data)?)
   }
 
   pub fn get_content_type(file_path: &str) -> Option<String> {

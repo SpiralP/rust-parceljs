@@ -1,5 +1,10 @@
+let message;
 if (process.env.NODE_ENV !== "production") {
-  console.log("HELLO DEBUG!");
+  message = "HELLO DEBUG!";
 } else {
-  console.log("HELLO RELEASE!");
+  message = "HELLO RELEASE!";
 }
+
+const el = document.createElement("h1");
+el.innerText = message;
+document.body.appendChild(el);

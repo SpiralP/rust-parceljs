@@ -1,9 +1,7 @@
-use flate2::{write::GzEncoder, Compression};
 use std::{
   env, fs,
   fs::File,
-  io,
-  io::{BufReader, BufWriter, Write},
+  io::Write,
   path::{Path, PathBuf},
   process::Command,
 };
@@ -123,7 +121,7 @@ impl Builder {
     }
 
     let path = Path::new(&out_dir).join("parceljs.rs");
-    let mut file = BufWriter::new(File::create(&path).unwrap());
+    let mut rust_code_file = File::create(&path).unwrap();
 
     let mut phf = phf_codegen::Map::new();
     phf.phf_path("::parceljs::phf");
@@ -142,31 +140,33 @@ impl Builder {
       })
       .collect();
 
-    // gzip files into OUT_DIR
+    // compress files into OUT_DIR
     for (relative_path, path) in &paths {
-      let gzip_path = Path::new(&out_dir).join("parceljs").join(relative_path);
+      let encoded_path = Path::new(&out_dir).join("parceljs").join(relative_path);
 
-      let gzip_path_dir = gzip_path.parent().unwrap();
-      if !gzip_path_dir.exists() {
-        fs::create_dir_all(gzip_path_dir).unwrap();
+      let encoded_path_dir = encoded_path.parent().unwrap();
+      if !encoded_path_dir.exists() {
+        fs::create_dir_all(encoded_path_dir).unwrap();
       }
 
-      let mut encoder = GzEncoder::new(File::create(&gzip_path).unwrap(), Compression::best());
-
-      let mut in_file = BufReader::new(File::open(path).unwrap());
-      io::copy(&mut in_file, &mut encoder).unwrap();
+      zstd::stream::copy_encode(
+        File::open(path).unwrap(),
+        File::create(&encoded_path).unwrap(),
+        zstd::DEFAULT_COMPRESSION_LEVEL,
+      )
+      .unwrap();
 
       let relative_path = relative_path.as_str();
       phf.entry(
         relative_path,
-        &format!("include_bytes!({:?}) as &'static [u8]", gzip_path),
+        &format!("include_bytes!({:?}) as &'static [u8]", encoded_path),
       );
     }
 
-    writeln!(file, "#[allow(clippy::unreadable_literal)]").unwrap();
+    writeln!(rust_code_file, "#[allow(clippy::unreadable_literal)]").unwrap();
 
     writeln!(
-      file,
+      rust_code_file,
       "static PARCELJS: ::parceljs::ParcelJs = ::parceljs::ParcelJs::new({});",
       phf.build()
     )
