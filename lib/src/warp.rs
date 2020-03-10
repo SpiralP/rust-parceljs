@@ -2,12 +2,13 @@ use super::{get_content_type, get_file};
 use warp::{http::Response, path::FullPath, reply, reply::Reply};
 
 pub struct ParceljsResponder {
+  web_files: &'static includedir::Files,
   path: FullPath,
 }
 
 impl ParceljsResponder {
-  pub fn new(path: FullPath) -> Self {
-    Self { path }
+  pub fn new(web_files: &'static includedir::Files, path: FullPath) -> Self {
+    Self { web_files, path }
   }
 }
 
@@ -15,7 +16,7 @@ impl Reply for ParceljsResponder {
   fn into_response(self) -> reply::Response {
     let path = self.path.as_str();
 
-    if let Ok(data) = get_file(path) {
+    if let Ok(data) = get_file(&self.web_files, path) {
       let mut response = Response::builder();
 
       if let Some(content_type) = get_content_type(path) {

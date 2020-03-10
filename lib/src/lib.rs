@@ -9,7 +9,7 @@ pub mod actix;
 use std::{borrow::Cow, io};
 
 pub fn get_file(
-  web_files: &includedir::Files,
+  web_files: &'static includedir::Files,
   mut file_path: &str,
 ) -> Result<Cow<'static, [u8]>, io::Error> {
   if let Some(c) = file_path.chars().next() {

@@ -1,7 +1,7 @@
 use super::{get_content_type, get_file};
 use actix_web::{http::header::ContentType, web, HttpRequest, HttpResponse, Route};
 
-pub fn static_files_route() -> Route {
+pub fn static_files_route(web_files: &'static includedir::Files) -> Route {
   web::get().to(move |req: HttpRequest| -> HttpResponse {
     let file_path = req.path();
 
