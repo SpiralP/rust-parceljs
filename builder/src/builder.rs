@@ -44,19 +44,18 @@ pub struct Builder {
   pub current_dir: Option<PathBuf>,
 
   /// directory containing index.html
-  pub in_dir: PathBuf,
+  pub web_dir: PathBuf,
 
   /// output files go into this directory
-  /// TODO must always be "dist"
-  pub out_dir: PathBuf,
+  pub dist_dir: PathBuf,
 }
 
 impl Default for Builder {
   fn default() -> Self {
     Self {
       current_dir: None,
-      in_dir: "web".into(),
-      out_dir: "dist".into(),
+      web_dir: "web".into(),
+      dist_dir: "dist".into(),
     }
   }
 }
@@ -64,23 +63,24 @@ impl Default for Builder {
 impl Builder {
   pub fn build(self) {
     let last_current_dir = env::current_dir().unwrap();
+    let out_dir = env::var("OUT_DIR").unwrap();
 
-    let in_dir = &self.in_dir;
-    let out_dir = &self.out_dir;
-
-    assert_eq!(format!("{}", out_dir.display()), "dist");
+    let web_dir = &self.web_dir;
+    let dist_dir = &self.dist_dir;
 
     if let Some(current_dir) = self.current_dir {
-      env::set_current_dir(current_dir).unwrap();
+      env::set_current_dir(current_dir).expect("changing directory to current_dir");
     }
 
-    if !env::var("OUT_DIR").unwrap().contains("rls") && fs::metadata("package.json").is_ok() {
+    fs::metadata("package.json").expect("package.json not found");
+
+    if !out_dir.contains("rls") {
       // if no node_modules, run npm install
       if fs::metadata("node_modules").is_err() {
         assert!(run("npm install"));
       }
 
-      let _ = fs::remove_dir_all(&out_dir);
+      let _ = fs::remove_dir_all(&dist_dir);
 
       if cfg!(debug_assertions) {
         assert!(run_envs(
@@ -93,13 +93,13 @@ impl Builder {
     }
 
     assert!(
-      fs::metadata(&out_dir)
+      fs::metadata(&dist_dir)
         .map(|meta| meta.is_dir())
         .unwrap_or(false),
       "out directory wasn't created"
     );
 
-    for entry in WalkDir::new(&in_dir) {
+    for entry in WalkDir::new(&web_dir) {
       match entry {
         Ok(entry) if entry.file_type().is_file() => {
           let path = entry.path().to_path_buf();
@@ -110,18 +110,18 @@ impl Builder {
       }
     }
 
-    let path = Path::new(&env::var("OUT_DIR").unwrap()).join("parceljs.rs");
+    let path = Path::new(&out_dir).join("parceljs.rs");
     let mut file = BufWriter::new(File::create(&path).unwrap());
 
     let mut phf = phf_codegen::Map::new();
     phf.phf_path("::parceljs::phf");
 
-    let paths: Vec<_> = WalkDir::new(&out_dir)
+    let paths: Vec<_> = WalkDir::new(&dist_dir)
       .into_iter()
       .filter_map(|entry| match entry {
         Ok(entry) if entry.file_type().is_file() => {
           let path = entry.path().to_path_buf();
-          let relative_path = path.strip_prefix(out_dir).unwrap();
+          let relative_path = path.strip_prefix(dist_dir).unwrap();
           let relative_path = relative_path.to_str().unwrap().to_string();
           let relative_path = relative_path.replace("\\", "/");
           Some((relative_path, path))
@@ -132,9 +132,7 @@ impl Builder {
 
     // gzip files into OUT_DIR
     for (relative_path, path) in &paths {
-      let gzip_path = Path::new(&env::var("OUT_DIR").unwrap())
-        .join("parceljs")
-        .join(relative_path);
+      let gzip_path = Path::new(&out_dir).join("parceljs").join(relative_path);
 
       let gzip_path_dir = gzip_path.parent().unwrap();
       if !gzip_path_dir.exists() {
