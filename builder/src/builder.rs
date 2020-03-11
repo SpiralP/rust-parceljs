@@ -39,13 +39,24 @@ fn check_command(command: &mut Command) -> bool {
 
 pub struct Builder {
   /// optionally change directory before doing anything
+  ///
+  /// default `None`
   pub current_dir: Option<PathBuf>,
 
   /// directory containing index.html
+  ///
+  /// deafult `"web"`
   pub web_dir: PathBuf,
 
   /// output files go into this directory
+  ///
+  /// default `"dist"`
   pub dist_dir: PathBuf,
+
+  /// use yarn?
+  ///
+  /// default `false`
+  pub yarn: bool,
 }
 
 impl Default for Builder {
@@ -54,6 +65,7 @@ impl Default for Builder {
       current_dir: None,
       web_dir: "web".into(),
       dist_dir: "dist".into(),
+      yarn: false,
     }
   }
 }
@@ -65,6 +77,7 @@ impl Builder {
 
     let web_dir = &self.web_dir;
     let dist_dir = &self.dist_dir;
+    let yarn = self.yarn;
 
     if let Some(current_dir) = self.current_dir {
       env::set_current_dir(current_dir).expect("changing directory to current_dir");
@@ -87,16 +100,29 @@ impl Builder {
     if !out_dir.contains("rls") {
       // if no node_modules, run npm install
       if fs::metadata("node_modules").is_err() {
-        assert!(run("npm install"));
+        if yarn {
+          assert!(run("yarn install"));
+        } else {
+          assert!(run("npm install"));
+        }
       }
 
       let _ = fs::remove_dir_all(&dist_dir);
 
       if cfg!(debug_assertions) {
-        assert!(run_envs(
-          "npm run-script build",
-          vec![("NODE_ENV", "development")]
-        ));
+        if yarn {
+          assert!(run_envs(
+            "yarn run build",
+            vec![("NODE_ENV", "development")]
+          ));
+        } else {
+          assert!(run_envs(
+            "npm run-script build",
+            vec![("NODE_ENV", "development")]
+          ));
+        }
+      } else if yarn {
+        assert!(run("yarn run build"));
       } else {
         assert!(run("npm run-script build"));
       }
