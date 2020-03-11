@@ -3,7 +3,7 @@ name: Rust
 on: [push]
 
 jobs:
-  build_linux:
+  linux:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,11 +19,13 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
+          args: --all-features
 
       - name: Build docs
         uses: actions-rs/cargo@v1
         with:
           command: doc
+          args: --all-features
 
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v3
@@ -31,7 +33,13 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./target/doc
 
-  build_windows:
+      - name: Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features
+
+  windows:
     runs-on: windows-latest
 
     steps:
@@ -47,8 +55,15 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
+          args: --all-features
 
-  build_mac:
+      - name: Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features
+
+  mac:
     runs-on: macOS-latest
 
     steps:
@@ -64,3 +79,10 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
+          args: --all-features
+
+      - name: Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features
