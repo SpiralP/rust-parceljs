@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/arc-swap-0.4.4/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../arc_swap/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/arc-swap-0.4.5/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../arc_swap/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1828,9 +1828,15 @@
 <span id="1828">1828</span>
 <span id="1829">1829</span>
 <span id="1830">1830</span>
+<span id="1831">1831</span>
+<span id="1832">1832</span>
+<span id="1833">1833</span>
+<span id="1834">1834</span>
+<span id="1835">1835</span>
+<span id="1836">1836</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="attribute">#![<span class="ident">doc</span>(
-    <span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/arc-swap/0.4.4/arc-swap/&quot;</span>,
+    <span class="ident">html_root_url</span> <span class="op">=</span> <span class="string">&quot;https://docs.rs/arc-swap/0.4.5/arc-swap/&quot;</span>,
     <span class="ident">test</span>(<span class="ident">attr</span>(<span class="ident">deny</span>(<span class="ident">warnings</span>)))
 )]</span>
 <span class="attribute">#![<span class="ident">deny</span>(<span class="ident">missing_docs</span>, <span class="ident">warnings</span>)]</span>
@@ -2311,12 +2317,23 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span>: <span class="ident">RefCnt</span><span class="op">&gt;</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Turns the given guard into an unprotected, independent one.</span>
+    <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">ptr</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span>::<span class="ident">Base</span>, <span class="ident">protection</span>: <span class="ident">Protection</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+        <span class="ident">Guard</span> {
+            <span class="ident">inner</span>: <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="kw">unsafe</span> { <span class="ident">T</span>::<span class="ident">from_ptr</span>(<span class="ident">ptr</span>) }),
+            <span class="ident">protection</span>,
+        }
+    }
+
+    <span class="doccomment">/// Converts it into the held value.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// It&#39;ll not hold any locks, will have no debts and will contain full-featured value inside</span>
-    <span class="doccomment">/// that even can outlive the ArcSwap it originated from.</span>
+    <span class="doccomment">/// This, on occasion, may be a tiny bit faster than cloning the Arc or whatever is being held</span>
+    <span class="doccomment">/// inside.</span>
+    <span class="comment">// Associated function on purpose, because of deref</span>
+    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">wrong_self_convention</span>))]</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">unprotected</span>(<span class="kw-2">mut</span> <span class="ident">lease</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="kw-2">mut</span> <span class="ident">lease</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
+        <span class="comment">// Drop any debt and release any lock held by the given guard and return a</span>
+        <span class="comment">// full-featured value that even can outlive the ArcSwap it originated from.</span>
         <span class="kw">match</span> <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">lease</span>.<span class="ident">protection</span>, <span class="ident">Protection</span>::<span class="ident">Unprotected</span>) {
             <span class="comment">// Not protected, nothing to unprotect.</span>
             <span class="ident">Protection</span>::<span class="ident">Unprotected</span> <span class="op">=</span><span class="op">&gt;</span> (),
@@ -2336,29 +2353,35 @@
                 <span class="ident">lock</span>.<span class="ident">unlock</span>();
             }
         }
+
         <span class="comment">// The ptr::read &amp; forget is something like a cheating move. We can&#39;t move it out, because</span>
         <span class="comment">// we have a destructor and Rust doesn&#39;t allow us to do that.</span>
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="kw">unsafe</span> { <span class="ident">ptr</span>::<span class="ident">read</span>(<span class="ident">lease</span>.<span class="ident">inner</span>.<span class="ident">deref</span>()) });
+        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ptr</span>::<span class="ident">read</span>(<span class="ident">lease</span>.<span class="ident">inner</span>.<span class="ident">deref</span>()) };
         <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">lease</span>);
-        <span class="ident">Guard</span> {
-            <span class="ident">inner</span>,
-            <span class="ident">protection</span>: <span class="ident">Protection</span>::<span class="ident">Unprotected</span>,
-        }
+        <span class="ident">inner</span>
     }
 
-    <span class="doccomment">/// Converts it into the held value.</span>
+    <span class="doccomment">/// Create a guard for a given value `inner`.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This, on occasion, may be a tiny bit faster than cloning the Arc or whatever is being held</span>
-    <span class="doccomment">/// inside.</span>
-    <span class="comment">// Associated function on purpose, because of deref</span>
-    <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;cargo-clippy&quot;</span>, <span class="ident">allow</span>(<span class="ident">wrong_self_convention</span>))]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="ident">lease</span>: <span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
-        <span class="kw">let</span> <span class="ident">unprotected</span> <span class="op">=</span> <span class="ident">Guard</span>::<span class="ident">unprotected</span>(<span class="ident">lease</span>);
-        <span class="comment">// The ptr::read &amp; forget is something like a cheating move. We can&#39;t move it out, because</span>
-        <span class="comment">// we have a destructor and Rust doesn&#39;t allow us to do that.</span>
-        <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="kw">unsafe</span> { <span class="ident">ptr</span>::<span class="ident">read</span>(<span class="ident">unprotected</span>.<span class="ident">inner</span>.<span class="ident">deref</span>()) };
-        <span class="ident">mem</span>::<span class="ident">forget</span>(<span class="ident">unprotected</span>);
-        <span class="ident">res</span>
+    <span class="doccomment">/// This can be useful on occasion to pass a specific object to code that expects or</span>
+    <span class="doccomment">/// wants to store a Guard.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # use arc_swap::{ArcSwap, Guard};</span>
+    <span class="doccomment">/// # use std::sync::Arc;</span>
+    <span class="doccomment">/// # let p = ArcSwap::from_pointee(42);</span>
+    <span class="doccomment">/// // Create two guards pointing to the same object</span>
+    <span class="doccomment">/// let g1 = p.load();</span>
+    <span class="doccomment">/// let g2 = Guard::from_inner(Arc::clone(&amp;*g1));</span>
+    <span class="doccomment">/// # drop(g2);</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_inner</span>(<span class="ident">inner</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">Guard</span> {
+            <span class="ident">inner</span>: <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="ident">inner</span>),
+            <span class="ident">protection</span>: <span class="ident">Protection</span>::<span class="ident">Unprotected</span>,
+        }
     }
 }
 
@@ -2580,12 +2603,8 @@
     <span class="kw">fn</span> <span class="ident">lock_internal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">signal_safe</span>: <span class="ident">SignalSafety</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">gen</span> <span class="op">=</span> <span class="ident">GenLock</span>::<span class="ident">new</span>(<span class="ident">signal_safe</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">lock_storage</span>);
         <span class="kw">let</span> <span class="ident">ptr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ptr</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">Acquire</span>);
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="kw">unsafe</span> { <span class="ident">T</span>::<span class="ident">from_ptr</span>(<span class="ident">ptr</span>) });
 
-        <span class="ident">Guard</span> {
-            <span class="ident">inner</span>,
-            <span class="ident">protection</span>: <span class="ident">Protection</span>::<span class="ident">Lock</span>(<span class="ident">gen</span>),
-        }
+        <span class="ident">Guard</span>::<span class="ident">new</span>(<span class="ident">ptr</span>, <span class="ident">Protection</span>::<span class="ident">Lock</span>(<span class="ident">gen</span>))
     }
 
     <span class="doccomment">/// An async-signal-safe version of [`load`](#method.load)</span>
@@ -2618,13 +2637,9 @@
         <span class="kw">let</span> <span class="ident">debt</span> <span class="op">=</span> <span class="ident">Debt</span>::<span class="ident">new</span>(<span class="ident">ptr</span> <span class="kw">as</span> <span class="ident">usize</span>)<span class="question-mark">?</span>;
 
         <span class="kw">let</span> <span class="ident">confirm</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">ptr</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">Acquire</span>);
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="kw">unsafe</span> { <span class="ident">T</span>::<span class="ident">from_ptr</span>(<span class="ident">ptr</span>) });
         <span class="kw">if</span> <span class="ident">ptr</span> <span class="op">=</span><span class="op">=</span> <span class="ident">confirm</span> {
             <span class="comment">// Successfully got a debt</span>
-            <span class="prelude-val">Some</span>(<span class="ident">Guard</span> {
-                <span class="ident">inner</span>,
-                <span class="ident">protection</span>: <span class="ident">Protection</span>::<span class="ident">Debt</span>(<span class="ident">debt</span>),
-            })
+            <span class="prelude-val">Some</span>(<span class="ident">Guard</span>::<span class="ident">new</span>(<span class="ident">ptr</span>, <span class="ident">Protection</span>::<span class="ident">Debt</span>(<span class="ident">debt</span>)))
         } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">debt</span>.<span class="ident">pay</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">ptr</span>) {
             <span class="comment">// It changed in the meantime, we return the debt (that is on the outdated pointer,</span>
             <span class="comment">// possibly destroyed) and fail.</span>
@@ -2632,10 +2647,7 @@
         } <span class="kw">else</span> {
             <span class="comment">// It changed in the meantime, but the debt for the previous pointer was already paid</span>
             <span class="comment">// for by someone else, so we are fine using it.</span>
-            <span class="prelude-val">Some</span>(<span class="ident">Guard</span> {
-                <span class="ident">inner</span>,
-                <span class="ident">protection</span>: <span class="ident">Protection</span>::<span class="ident">Unprotected</span>,
-            })
+            <span class="prelude-val">Some</span>(<span class="ident">Guard</span>::<span class="ident">new</span>(<span class="ident">ptr</span>, <span class="ident">Protection</span>::<span class="ident">Unprotected</span>))
         }
     }
 
@@ -2686,8 +2698,12 @@
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">load</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Guard</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">load_fallible</span>()
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Guard</span>::<span class="ident">unprotected</span>(<span class="self">self</span>.<span class="ident">lock_internal</span>(<span class="ident">SignalSafety</span>::<span class="ident">Unsafe</span>)))
+        <span class="self">self</span>.<span class="ident">load_fallible</span>().<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">locked</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">lock_internal</span>(<span class="ident">SignalSafety</span>::<span class="ident">Unsafe</span>);
+            <span class="comment">// Extracting the object into a full-featured value has the</span>
+            <span class="comment">// side effect of dropping the lock.</span>
+            <span class="ident">Guard</span>::<span class="ident">from_inner</span>(<span class="ident">Guard</span>::<span class="ident">into_inner</span>(<span class="ident">locked</span>))
+        })
     }
 
     <span class="doccomment">/// Replaces the value inside this instance.</span>
@@ -2792,11 +2808,7 @@
             <span class="kw">unsafe</span> { <span class="ident">T</span>::<span class="ident">dec</span>(<span class="ident">new</span>) };
         }
 
-        <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">ManuallyDrop</span>::<span class="ident">new</span>(<span class="kw">unsafe</span> { <span class="ident">T</span>::<span class="ident">from_ptr</span>(<span class="ident">previous_ptr</span>) });
-        <span class="ident">Guard</span> {
-            <span class="ident">inner</span>,
-            <span class="ident">protection</span>: <span class="ident">debt</span>.<span class="ident">into</span>(),
-        }
+        <span class="ident">Guard</span>::<span class="ident">new</span>(<span class="ident">previous_ptr</span>, <span class="ident">debt</span>.<span class="ident">into</span>())
     }
 
     <span class="doccomment">/// Wait until all readers go away.</span>
