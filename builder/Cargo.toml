@@ -1,7 +1,7 @@
 [package]
 name = "parceljs-builder"
 version = "0.1.0"
-authors = ["Spiral Palmer <spiral.palmer@gmail.com>"]
+authors = ["SpiralP <spiral.palmer@gmail.com>"]
 edition = "2018"
 
 [dependencies]
