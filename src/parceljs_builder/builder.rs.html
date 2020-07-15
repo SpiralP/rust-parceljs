@@ -206,6 +206,8 @@
 <span id="206">206</span>
 <span id="207">207</span>
 <span id="208">208</span>
+<span id="209">209</span>
+<span id="210">210</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::{
   <span class="ident">env</span>, <span class="ident">fs</span>,
@@ -298,6 +300,8 @@
         .<span class="ident">unwrap_or</span>(<span class="bool-val">false</span>),
       <span class="string">&quot;package.json not found&quot;</span>
     );
+
+    <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;cargo:rerun-if-changed=package.json&quot;</span>);
 
     <span class="macro">assert</span><span class="macro">!</span>(
       <span class="ident">fs</span>::<span class="ident">metadata</span>(<span class="kw-2">&amp;</span><span class="ident">web_dir</span>)
