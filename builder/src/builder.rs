@@ -90,6 +90,8 @@ impl Builder {
       "package.json not found"
     );
 
+    println!("cargo:rerun-if-changed=package.json");
+
     assert!(
       fs::metadata(&web_dir)
         .map(|meta| meta.is_dir())
