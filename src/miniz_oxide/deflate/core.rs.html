@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/miniz_oxide-0.3.6/src/deflate/core.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>core.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../miniz_oxide/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/miniz_oxide-0.4.0/src/deflate/core.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>core.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../miniz_oxide/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -2378,21 +2378,52 @@
 <span id="2378">2378</span>
 <span id="2379">2379</span>
 <span id="2380">2380</span>
+<span id="2381">2381</span>
+<span id="2382">2382</span>
+<span id="2383">2383</span>
+<span id="2384">2384</span>
+<span id="2385">2385</span>
+<span id="2386">2386</span>
+<span id="2387">2387</span>
+<span id="2388">2388</span>
+<span id="2389">2389</span>
+<span id="2390">2390</span>
+<span id="2391">2391</span>
+<span id="2392">2392</span>
+<span id="2393">2393</span>
+<span id="2394">2394</span>
+<span id="2395">2395</span>
+<span id="2396">2396</span>
+<span id="2397">2397</span>
+<span id="2398">2398</span>
+<span id="2399">2399</span>
+<span id="2400">2400</span>
+<span id="2401">2401</span>
+<span id="2402">2402</span>
+<span id="2403">2403</span>
+<span id="2404">2404</span>
+<span id="2405">2405</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Streaming compression functionality.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::{<span class="self">self</span>, <span class="ident">Cursor</span>, <span class="ident">Seek</span>, <span class="ident">SeekFrom</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cmp</span>, <span class="ident">mem</span>};
+<span class="kw">use</span> <span class="ident">alloc</span>::<span class="ident">boxed</span>::<span class="ident">Box</span>;
+<span class="kw">use</span> <span class="ident">core</span>::<span class="ident">convert</span>::<span class="ident">TryInto</span>;
+<span class="kw">use</span> <span class="ident">core</span>::{<span class="ident">cmp</span>, <span class="ident">mem</span>};
 
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">deflate_flags</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="ident">CompressionLevel</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">deflate</span>::<span class="ident">buffer</span>::{
-    <span class="ident">HashBuffers</span>, <span class="ident">LocalBuf</span>, <span class="ident">LZ_CODE_BUF_SIZE</span>, <span class="ident">LZ_DICT_FULL_SIZE</span>, <span class="ident">OUT_BUF_SIZE</span>,
+    <span class="ident">update_hash</span>, <span class="ident">HashBuffers</span>, <span class="ident">LocalBuf</span>, <span class="ident">LZ_CODE_BUF_SIZE</span>, <span class="ident">LZ_DICT_FULL_SIZE</span>, <span class="ident">LZ_HASH_BITS</span>,
+    <span class="ident">LZ_HASH_SHIFT</span>, <span class="ident">LZ_HASH_SIZE</span>, <span class="ident">OUT_BUF_SIZE</span>,
 };
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">shared</span>::{<span class="ident">update_adler32</span>, <span class="ident">HUFFMAN_LENGTH_ORDER</span>, <span class="ident">MZ_ADLER32_INIT</span>};
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">DataFormat</span>;
+
+<span class="comment">// Currently not bubbled up outside this module, so can fill in with more</span>
+<span class="comment">// context eventually if needed.</span>
+<span class="kw">type</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span> <span class="op">=</span> <span class="ident">Error</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">core</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>;
+<span class="kw">struct</span> <span class="ident">Error</span> {}
 
 <span class="kw">const</span> <span class="ident">MAX_PROBES_MASK</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">0xFFF</span>;
 
@@ -2631,15 +2662,8 @@
 }
 
 <span class="kw">const</span> <span class="ident">MAX_HUFF_SYMBOLS</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">288</span>;
-<span class="doccomment">/// Size of hash values in the hash chains.</span>
-<span class="kw">const</span> <span class="ident">LZ_HASH_BITS</span>: <span class="ident">i32</span> <span class="op">=</span> <span class="number">15</span>;
 <span class="doccomment">/// Size of hash chain for fast compression mode.</span>
 <span class="kw">const</span> <span class="ident">LEVEL1_HASH_SIZE_MASK</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">4095</span>;
-<span class="doccomment">/// How many bits to shift when updating the current hash value.</span>
-<span class="kw">const</span> <span class="ident">LZ_HASH_SHIFT</span>: <span class="ident">i32</span> <span class="op">=</span> (<span class="ident">LZ_HASH_BITS</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">/</span> <span class="number">3</span>;
-<span class="doccomment">/// Size of the chained hash tables.</span>
-<span class="kw">const</span> <span class="ident">LZ_HASH_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">LZ_HASH_BITS</span>;
-
 <span class="doccomment">/// The number of huffman tables used by the compressor.</span>
 <span class="doccomment">/// Literal/length, Distances and Length of the huffman codes for the other two tables.</span>
 <span class="kw">const</span> <span class="ident">MAX_HUFF_TABLES</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">3</span>;
@@ -2652,9 +2676,9 @@
 <span class="doccomment">/// Size of the chained hash table.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">LZ_DICT_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">32_768</span>;
 <span class="doccomment">/// Mask used when stepping through the hash chains.</span>
-<span class="kw">const</span> <span class="ident">LZ_DICT_SIZE_MASK</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="number">1</span>;
+<span class="kw">const</span> <span class="ident">LZ_DICT_SIZE_MASK</span>: <span class="ident">usize</span> <span class="op">=</span> (<span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>;
 <span class="doccomment">/// The minimum length of a match.</span>
-<span class="kw">const</span> <span class="ident">MIN_MATCH_LEN</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">3</span>;
+<span class="kw">const</span> <span class="ident">MIN_MATCH_LEN</span>: <span class="ident">u8</span> <span class="op">=</span> <span class="number">3</span>;
 <span class="doccomment">/// The maximum length of a match.</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const</span> <span class="ident">MAX_MATCH_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">258</span>;
 
@@ -2894,7 +2918,7 @@
 
 <span class="doccomment">/// Callback function and user used in `compress_to_output`.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CallbackFunc</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">put_buf_func</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> <span class="op">+</span> <span class="lifetime">&#39;a</span><span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">put_buf_func</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="kw">dyn</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">CallbackFunc</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
@@ -2936,12 +2960,12 @@
                 .<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">params</span>.<span class="ident">local_buf</span>.<span class="ident">b</span>[..<span class="ident">n</span>]);
 
             <span class="ident">params</span>.<span class="ident">out_buf_ofs</span> <span class="op">+</span><span class="op">=</span> <span class="ident">n</span>;
-            <span class="kw">if</span> <span class="ident">saved_output</span>.<span class="ident">pos</span> <span class="op">!</span><span class="op">=</span> <span class="ident">n</span> <span class="kw">as</span> <span class="ident">u64</span> {
+            <span class="kw">if</span> <span class="ident">saved_output</span>.<span class="ident">pos</span> <span class="op">!</span><span class="op">=</span> <span class="ident">n</span> {
                 <span class="ident">params</span>.<span class="ident">flush_ofs</span> <span class="op">=</span> <span class="ident">n</span> <span class="kw">as</span> <span class="ident">u32</span>;
-                <span class="ident">params</span>.<span class="ident">flush_remaining</span> <span class="op">=</span> (<span class="ident">saved_output</span>.<span class="ident">pos</span> <span class="op">-</span> <span class="ident">n</span> <span class="kw">as</span> <span class="ident">u64</span>) <span class="kw">as</span> <span class="ident">u32</span>;
+                <span class="ident">params</span>.<span class="ident">flush_remaining</span> <span class="op">=</span> (<span class="ident">saved_output</span>.<span class="ident">pos</span> <span class="op">-</span> <span class="ident">n</span>) <span class="kw">as</span> <span class="ident">u32</span>;
             }
         } <span class="kw">else</span> {
-            <span class="ident">params</span>.<span class="ident">out_buf_ofs</span> <span class="op">+</span><span class="op">=</span> <span class="ident">saved_output</span>.<span class="ident">pos</span> <span class="kw">as</span> <span class="ident">usize</span>;
+            <span class="ident">params</span>.<span class="ident">out_buf_ofs</span> <span class="op">+</span><span class="op">=</span> <span class="ident">saved_output</span>.<span class="ident">pos</span>;
         }
 
         <span class="ident">params</span>.<span class="ident">flush_remaining</span> <span class="kw">as</span> <span class="ident">i32</span>
@@ -2972,9 +2996,9 @@
             }
         };
 
-        <span class="kw">let</span> <span class="ident">cursor</span> <span class="op">=</span> <span class="ident">Cursor</span>::<span class="ident">new</span>(<span class="ident">chosen_buffer</span>);
         <span class="ident">OutputBufferOxide</span> {
-            <span class="ident">inner</span>: <span class="ident">cursor</span>,
+            <span class="ident">inner</span>: <span class="ident">chosen_buffer</span>,
+            <span class="ident">inner_pos</span>: <span class="number">0</span>,
             <span class="ident">local</span>: <span class="ident">is_local</span>,
             <span class="ident">bit_buffer</span>: <span class="number">0</span>,
             <span class="ident">bits_in</span>: <span class="number">0</span>,
@@ -3036,7 +3060,8 @@
 }
 
 <span class="kw">struct</span> <span class="ident">OutputBufferOxide</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="ident">inner</span>: <span class="ident">Cursor</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>]<span class="op">&gt;</span>,
+    <span class="kw">pub</span> <span class="ident">inner</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> [<span class="ident">u8</span>],
+    <span class="kw">pub</span> <span class="ident">inner_pos</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">local</span>: <span class="ident">bool</span>,
 
     <span class="kw">pub</span> <span class="ident">bit_buffer</span>: <span class="ident">u32</span>,
@@ -3049,9 +3074,8 @@
         <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="op">|</span><span class="op">=</span> <span class="ident">bits</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="self">self</span>.<span class="ident">bits_in</span>;
         <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
         <span class="kw">while</span> <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span> {
-            <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">position</span>();
-            <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>()[<span class="ident">pos</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="kw">as</span> <span class="ident">u8</span>;
-            <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">set_position</span>(<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span>);
+            <span class="self">self</span>.<span class="ident">inner</span>[<span class="self">self</span>.<span class="ident">inner_pos</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="kw">as</span> <span class="ident">u8</span>;
+            <span class="self">self</span>.<span class="ident">inner_pos</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span>;
             <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">-</span><span class="op">=</span> <span class="number">8</span>;
         }
@@ -3059,7 +3083,7 @@
 
     <span class="kw">fn</span> <span class="ident">save</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SavedOutputBufferOxide</span> {
         <span class="ident">SavedOutputBufferOxide</span> {
-            <span class="ident">pos</span>: <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">position</span>(),
+            <span class="ident">pos</span>: <span class="self">self</span>.<span class="ident">inner_pos</span>,
             <span class="ident">bit_buffer</span>: <span class="self">self</span>.<span class="ident">bit_buffer</span>,
             <span class="ident">bits_in</span>: <span class="self">self</span>.<span class="ident">bits_in</span>,
             <span class="ident">local</span>: <span class="self">self</span>.<span class="ident">local</span>,
@@ -3067,7 +3091,7 @@
     }
 
     <span class="kw">fn</span> <span class="ident">load</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">saved</span>: <span class="ident">SavedOutputBufferOxide</span>) {
-        <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">set_position</span>(<span class="ident">saved</span>.<span class="ident">pos</span>);
+        <span class="self">self</span>.<span class="ident">inner_pos</span> <span class="op">=</span> <span class="ident">saved</span>.<span class="ident">pos</span>;
         <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="op">=</span> <span class="ident">saved</span>.<span class="ident">bit_buffer</span>;
         <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">=</span> <span class="ident">saved</span>.<span class="ident">bits_in</span>;
         <span class="self">self</span>.<span class="ident">local</span> <span class="op">=</span> <span class="ident">saved</span>.<span class="ident">local</span>;
@@ -3082,7 +3106,7 @@
 }
 
 <span class="kw">struct</span> <span class="ident">SavedOutputBufferOxide</span> {
-    <span class="kw">pub</span> <span class="ident">pos</span>: <span class="ident">u64</span>,
+    <span class="kw">pub</span> <span class="ident">pos</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">bit_buffer</span>: <span class="ident">u32</span>,
     <span class="kw">pub</span> <span class="ident">bits_in</span>: <span class="ident">u32</span>,
     <span class="kw">pub</span> <span class="ident">local</span>: <span class="ident">bool</span>,
@@ -3099,17 +3123,18 @@
         <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len</span>;
     }
 
-    <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">inner</span>.<span class="ident">position</span>() <span class="kw">as</span> <span class="ident">usize</span>;
+    <span class="kw">fn</span> <span class="ident">flush</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">output</span>.<span class="ident">inner_pos</span>;
         {
             <span class="comment">// isolation to please borrow checker</span>
-            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> (<span class="kw-2">*</span><span class="ident">output</span>.<span class="ident">inner</span>.<span class="ident">get_mut</span>())[<span class="ident">pos</span>..<span class="ident">pos</span> <span class="op">+</span> <span class="number">8</span>];
+            <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">output</span>.<span class="ident">inner</span>[<span class="ident">pos</span>..<span class="ident">pos</span> <span class="op">+</span> <span class="number">8</span>];
             <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">u64</span>::<span class="ident">to_le_bytes</span>(<span class="self">self</span>.<span class="ident">bit_buffer</span>);
             <span class="ident">inner</span>.<span class="ident">copy_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
         }
-        <span class="ident">output</span>
-            .<span class="ident">inner</span>
-            .<span class="ident">seek</span>(<span class="ident">SeekFrom</span>::<span class="ident">Current</span>(<span class="ident">i64</span>::<span class="ident">from</span>(<span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>)))<span class="question-mark">?</span>;
+        <span class="kw">match</span> <span class="ident">output</span>.<span class="ident">inner_pos</span>.<span class="ident">checked_add</span>((<span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>) <span class="kw">as</span> <span class="ident">usize</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">n</span>) <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">output</span>.<span class="ident">inner</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="ident">output</span>.<span class="ident">inner_pos</span> <span class="op">=</span> <span class="ident">n</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span> {}),
+        }
         <span class="self">self</span>.<span class="ident">bit_buffer</span> <span class="op">&gt;</span><span class="op">&gt;</span><span class="op">=</span> <span class="self">self</span>.<span class="ident">bits_in</span> <span class="op">&amp;</span> <span class="op">!</span><span class="number">7</span>;
         <span class="self">self</span>.<span class="ident">bits_in</span> <span class="kw-2">&amp;</span><span class="op">=</span> <span class="number">7</span>;
         <span class="prelude-val">Ok</span>(())
@@ -3147,19 +3172,21 @@
 <span class="kw">impl</span> <span class="ident">RLE</span> {
     <span class="kw">fn</span> <span class="ident">prev_code_size</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">packed_code_sizes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Cursor</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]<span class="op">&gt;</span>,
+        <span class="ident">packed_code_sizes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
+        <span class="ident">packed_pos</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">usize</span>,
         <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HuffmanOxide</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">write</span> <span class="op">=</span> <span class="op">|</span><span class="ident">buf</span><span class="op">|</span> <span class="ident">write</span>(<span class="ident">buf</span>, <span class="ident">packed_code_sizes</span>, <span class="ident">packed_pos</span>);
         <span class="kw">let</span> <span class="ident">counts</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">h</span>.<span class="ident">count</span>[<span class="ident">HUFF_CODES_TABLE</span>];
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">repeat_count</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">repeat_count</span> <span class="op">&lt;</span> <span class="number">3</span> {
                 <span class="ident">counts</span>[<span class="self">self</span>.<span class="ident">prev_code_size</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span>
                     <span class="ident">counts</span>[<span class="self">self</span>.<span class="ident">prev_code_size</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">wrapping_add</span>(<span class="self">self</span>.<span class="ident">repeat_count</span> <span class="kw">as</span> <span class="ident">u16</span>);
                 <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">prev_code_size</span>;
-                <span class="ident">packed_code_sizes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="ident">code</span>, <span class="ident">code</span>, <span class="ident">code</span>][..<span class="self">self</span>.<span class="ident">repeat_count</span> <span class="kw">as</span> <span class="ident">usize</span>])<span class="question-mark">?</span>;
+                <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="ident">code</span>, <span class="ident">code</span>, <span class="ident">code</span>][..<span class="self">self</span>.<span class="ident">repeat_count</span> <span class="kw">as</span> <span class="ident">usize</span>])<span class="question-mark">?</span>;
             } <span class="kw">else</span> {
                 <span class="ident">counts</span>[<span class="number">16</span>] <span class="op">=</span> <span class="ident">counts</span>[<span class="number">16</span>].<span class="ident">wrapping_add</span>(<span class="number">1</span>);
-                <span class="ident">packed_code_sizes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">16</span>, (<span class="self">self</span>.<span class="ident">repeat_count</span> <span class="op">-</span> <span class="number">3</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
+                <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="number">16</span>, (<span class="self">self</span>.<span class="ident">repeat_count</span> <span class="op">-</span> <span class="number">3</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
             }
             <span class="self">self</span>.<span class="ident">repeat_count</span> <span class="op">=</span> <span class="number">0</span>;
         }
@@ -3169,26 +3196,37 @@
 
     <span class="kw">fn</span> <span class="ident">zero_code_size</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">packed_code_sizes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Cursor</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>]<span class="op">&gt;</span>,
+        <span class="ident">packed_code_sizes</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>],
+        <span class="ident">packed_pos</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">usize</span>,
         <span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HuffmanOxide</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">write</span> <span class="op">=</span> <span class="op">|</span><span class="ident">buf</span><span class="op">|</span> <span class="ident">write</span>(<span class="ident">buf</span>, <span class="ident">packed_code_sizes</span>, <span class="ident">packed_pos</span>);
         <span class="kw">let</span> <span class="ident">counts</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">h</span>.<span class="ident">count</span>[<span class="ident">HUFF_CODES_TABLE</span>];
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">z_count</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">if</span> <span class="self">self</span>.<span class="ident">z_count</span> <span class="op">&lt;</span> <span class="number">3</span> {
                 <span class="ident">counts</span>[<span class="number">0</span>] <span class="op">=</span> <span class="ident">counts</span>[<span class="number">0</span>].<span class="ident">wrapping_add</span>(<span class="self">self</span>.<span class="ident">z_count</span> <span class="kw">as</span> <span class="ident">u16</span>);
-                <span class="ident">packed_code_sizes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>][..<span class="self">self</span>.<span class="ident">z_count</span> <span class="kw">as</span> <span class="ident">usize</span>])<span class="question-mark">?</span>;
+                <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>][..<span class="self">self</span>.<span class="ident">z_count</span> <span class="kw">as</span> <span class="ident">usize</span>])<span class="question-mark">?</span>;
             } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">z_count</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">10</span> {
                 <span class="ident">counts</span>[<span class="number">17</span>] <span class="op">=</span> <span class="ident">counts</span>[<span class="number">17</span>].<span class="ident">wrapping_add</span>(<span class="number">1</span>);
-                <span class="ident">packed_code_sizes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">17</span>, (<span class="self">self</span>.<span class="ident">z_count</span> <span class="op">-</span> <span class="number">3</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
+                <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="number">17</span>, (<span class="self">self</span>.<span class="ident">z_count</span> <span class="op">-</span> <span class="number">3</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
             } <span class="kw">else</span> {
                 <span class="ident">counts</span>[<span class="number">18</span>] <span class="op">=</span> <span class="ident">counts</span>[<span class="number">18</span>].<span class="ident">wrapping_add</span>(<span class="number">1</span>);
-                <span class="ident">packed_code_sizes</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="number">18</span>, (<span class="self">self</span>.<span class="ident">z_count</span> <span class="op">-</span> <span class="number">11</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
+                <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="number">18</span>, (<span class="self">self</span>.<span class="ident">z_count</span> <span class="op">-</span> <span class="number">11</span>) <span class="kw">as</span> <span class="ident">u8</span>][..])<span class="question-mark">?</span>;
             }
             <span class="self">self</span>.<span class="ident">z_count</span> <span class="op">=</span> <span class="number">0</span>;
         }
 
         <span class="prelude-val">Ok</span>(())
     }
+}
+
+<span class="kw">fn</span> <span class="ident">write</span>(<span class="ident">src</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="ident">dst</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>], <span class="ident">dst_pos</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">match</span> <span class="ident">dst</span>.<span class="ident">get_mut</span>(<span class="kw-2">*</span><span class="ident">dst_pos</span>..<span class="kw-2">*</span><span class="ident">dst_pos</span> <span class="op">+</span> <span class="ident">src</span>.<span class="ident">len</span>()) {
+        <span class="prelude-val">Some</span>(<span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span>.<span class="ident">copy_from_slice</span>(<span class="ident">src</span>),
+        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">Error</span> {}),
+    }
+    <span class="kw-2">*</span><span class="ident">dst_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">src</span>.<span class="ident">len</span>();
+    <span class="prelude-val">Ok</span>(())
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">HuffmanOxide</span> {
@@ -3423,7 +3461,7 @@
         <span class="ident">output</span>.<span class="ident">put_bits</span>(<span class="number">0b01</span>, <span class="number">2</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">start_dynamic_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">start_dynamic_block</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="comment">// There will always be one, and only one end of block code.</span>
         <span class="self">self</span>.<span class="ident">count</span>[<span class="number">0</span>][<span class="number">256</span>] <span class="op">=</span> <span class="number">1</span>;
 
@@ -3462,25 +3500,25 @@
 
         <span class="ident">memset</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">count</span>[<span class="ident">HUFF_CODES_TABLE</span>][..<span class="ident">MAX_HUFF_SYMBOLS_2</span>], <span class="number">0</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span> <span class="op">=</span> <span class="ident">Cursor</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>[..]);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">packed_pos</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">code_size</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">code_sizes_to_pack</span>[..<span class="ident">total_code_sizes_to_pack</span>] {
             <span class="kw">if</span> <span class="ident">code_size</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-                <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+                <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
                 <span class="ident">rle</span>.<span class="ident">z_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                 <span class="kw">if</span> <span class="ident">rle</span>.<span class="ident">z_count</span> <span class="op">=</span><span class="op">=</span> <span class="number">138</span> {
-                    <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+                    <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
                 }
             } <span class="kw">else</span> {
-                <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+                <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
                 <span class="kw">if</span> <span class="ident">code_size</span> <span class="op">!</span><span class="op">=</span> <span class="ident">rle</span>.<span class="ident">prev_code_size</span> {
-                    <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+                    <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
                     <span class="self">self</span>.<span class="ident">count</span>[<span class="ident">HUFF_CODES_TABLE</span>][<span class="ident">code_size</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span>
                         <span class="self">self</span>.<span class="ident">count</span>[<span class="ident">HUFF_CODES_TABLE</span>][<span class="ident">code_size</span> <span class="kw">as</span> <span class="ident">usize</span>].<span class="ident">wrapping_add</span>(<span class="number">1</span>);
-                    <span class="ident">packed_code_sizes_cursor</span>.<span class="ident">write_all</span>(<span class="kw-2">&amp;</span>[<span class="ident">code_size</span>][..])<span class="question-mark">?</span>;
+                    <span class="ident">write</span>(<span class="kw-2">&amp;</span>[<span class="ident">code_size</span>], <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>)<span class="question-mark">?</span>;
                 } <span class="kw">else</span> {
                     <span class="ident">rle</span>.<span class="ident">repeat_count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     <span class="kw">if</span> <span class="ident">rle</span>.<span class="ident">repeat_count</span> <span class="op">=</span><span class="op">=</span> <span class="number">6</span> {
-                        <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+                        <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
                     }
                 }
             }
@@ -3488,9 +3526,9 @@
         }
 
         <span class="kw">if</span> <span class="ident">rle</span>.<span class="ident">repeat_count</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
-            <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+            <span class="ident">rle</span>.<span class="ident">prev_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
         } <span class="kw">else</span> {
-            <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes_cursor</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
+            <span class="ident">rle</span>.<span class="ident">zero_code_size</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_code_sizes</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">packed_pos</span>, <span class="self">self</span>)<span class="question-mark">?</span>;
         }
 
         <span class="self">self</span>.<span class="ident">optimize_table</span>(<span class="number">2</span>, <span class="ident">MAX_HUFF_SYMBOLS_2</span>, <span class="number">7</span>, <span class="bool-val">false</span>);
@@ -3517,8 +3555,7 @@
         }
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">packed_code_size_index</span> <span class="op">=</span> <span class="number">0</span> <span class="kw">as</span> <span class="ident">usize</span>;
-        <span class="kw">let</span> <span class="ident">packed_code_sizes</span> <span class="op">=</span> <span class="ident">packed_code_sizes_cursor</span>.<span class="ident">get_ref</span>();
-        <span class="kw">while</span> <span class="ident">packed_code_size_index</span> <span class="op">&lt;</span> <span class="ident">packed_code_sizes_cursor</span>.<span class="ident">position</span>() <span class="kw">as</span> <span class="ident">usize</span> {
+        <span class="kw">while</span> <span class="ident">packed_code_size_index</span> <span class="op">&lt;</span> <span class="ident">packed_pos</span> {
             <span class="kw">let</span> <span class="ident">code</span> <span class="op">=</span> <span class="ident">packed_code_sizes</span>[<span class="ident">packed_code_size_index</span>] <span class="kw">as</span> <span class="ident">usize</span>;
             <span class="ident">packed_code_size_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">code</span> <span class="op">&lt;</span> <span class="ident">MAX_HUFF_SYMBOLS_2</span>);
@@ -3547,10 +3584,10 @@
     <span class="doccomment">/// Padded with 1 byte to simplify matching code in `compress_fast`.</span>
     <span class="kw">pub</span> <span class="ident">b</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">HashBuffers</span><span class="op">&gt;</span>,
 
-    <span class="kw">pub</span> <span class="ident">code_buf_dict_pos</span>: <span class="ident">u32</span>,
-    <span class="kw">pub</span> <span class="ident">lookahead_size</span>: <span class="ident">u32</span>,
-    <span class="kw">pub</span> <span class="ident">lookahead_pos</span>: <span class="ident">u32</span>,
-    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">u32</span>,
+    <span class="kw">pub</span> <span class="ident">code_buf_dict_pos</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">lookahead_size</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">lookahead_pos</span>: <span class="ident">usize</span>,
+    <span class="kw">pub</span> <span class="ident">size</span>: <span class="ident">usize</span>,
 }
 
 <span class="kw">fn</span> <span class="ident">probes_from_flags</span>(<span class="ident">flags</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> [<span class="ident">u32</span>; <span class="number">2</span>] {
@@ -3587,7 +3624,7 @@
     <span class="doccomment">/// Do an unaligned read of the data at `pos` in the dictionary and treat it as if it was of</span>
     <span class="doccomment">/// type T.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">read_unaligned_u32</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
+    <span class="kw">fn</span> <span class="ident">read_unaligned_u32</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u32</span> {
         <span class="comment">// Masking the value here helps avoid bounds checks.</span>
         <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> (<span class="ident">pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="ident">end</span> <span class="op">=</span> <span class="ident">pos</span> <span class="op">+</span> <span class="number">4</span>;
@@ -3601,7 +3638,7 @@
     <span class="doccomment">/// Do an unaligned read of the data at `pos` in the dictionary and treat it as if it was of</span>
     <span class="doccomment">/// type T.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">read_unaligned_u64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+    <span class="kw">fn</span> <span class="ident">read_unaligned_u64</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">pos</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
         <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">pos</span> <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="kw">let</span> <span class="ident">bytes</span>: [<span class="ident">u8</span>; <span class="number">8</span>] <span class="op">=</span> <span class="self">self</span>.<span class="ident">b</span>.<span class="ident">dict</span>[<span class="ident">pos</span>..<span class="ident">pos</span> <span class="op">+</span> <span class="number">8</span>].<span class="ident">try_into</span>().<span class="ident">unwrap</span>();
         <span class="ident">u64</span>::<span class="ident">from_le_bytes</span>(<span class="ident">bytes</span>)
@@ -3620,8 +3657,8 @@
     <span class="doccomment">/// values if no better matches were found.</span>
     <span class="kw">fn</span> <span class="ident">find_match</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        <span class="ident">lookahead_pos</span>: <span class="ident">u32</span>,
-        <span class="ident">max_dist</span>: <span class="ident">u32</span>,
+        <span class="ident">lookahead_pos</span>: <span class="ident">usize</span>,
+        <span class="ident">max_dist</span>: <span class="ident">usize</span>,
         <span class="ident">max_match_len</span>: <span class="ident">u32</span>,
         <span class="kw-2">mut</span> <span class="ident">match_dist</span>: <span class="ident">u32</span>,
         <span class="kw-2">mut</span> <span class="ident">match_len</span>: <span class="ident">u32</span>,
@@ -3634,7 +3671,7 @@
         <span class="kw">let</span> <span class="ident">max_match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">MAX_MATCH_LEN</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">max_match_len</span>);
         <span class="ident">match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">max</span>(<span class="ident">match_len</span>, <span class="number">1</span>);
 
-        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
+        <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">probe_pos</span> <span class="op">=</span> <span class="ident">pos</span>;
         <span class="comment">// Number of probes into the hash chains.</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">num_probes_left</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">max_probes</span>[(<span class="ident">match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">32</span>) <span class="kw">as</span> <span class="ident">usize</span>];
@@ -3660,7 +3697,7 @@
                 }
 
                 <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">3</span> {
-                    <span class="kw">let</span> <span class="ident">next_probe_pos</span> <span class="op">=</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="self">self</span>.<span class="ident">b</span>.<span class="ident">next</span>[<span class="ident">probe_pos</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+                    <span class="kw">let</span> <span class="ident">next_probe_pos</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">b</span>.<span class="ident">next</span>[<span class="ident">probe_pos</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="kw">as</span> <span class="ident">usize</span>;
 
                     <span class="ident">dist</span> <span class="op">=</span> (<span class="ident">lookahead_pos</span> <span class="op">-</span> <span class="ident">next_probe_pos</span>) <span class="op">&amp;</span> <span class="number">0xFFFF</span>;
                     <span class="kw">if</span> <span class="ident">next_probe_pos</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> <span class="op">|</span><span class="op">|</span> <span class="ident">dist</span> <span class="op">&gt;</span> <span class="ident">max_dist</span> {
@@ -3674,7 +3711,7 @@
                     <span class="comment">// position to match against.</span>
                     <span class="ident">probe_pos</span> <span class="op">=</span> <span class="ident">next_probe_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
 
-                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">read_as_u16</span>((<span class="ident">probe_pos</span> <span class="op">+</span> <span class="ident">match_len</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">c01</span> {
+                    <span class="kw">if</span> <span class="self">self</span>.<span class="ident">read_as_u16</span>((<span class="ident">probe_pos</span> <span class="op">+</span> <span class="ident">match_len</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">c01</span> {
                         <span class="kw">break</span> <span class="lifetime">&#39;found</span>;
                     }
                 }
@@ -3706,10 +3743,10 @@
                     <span class="comment">// If not all of the last 8 bytes matched, check how may of them did.</span>
                     <span class="kw">let</span> <span class="ident">trailing</span> <span class="op">=</span> <span class="ident">xor_data</span>.<span class="ident">trailing_zeros</span>();
 
-                    <span class="kw">let</span> <span class="ident">probe_len</span> <span class="op">=</span> <span class="ident">p</span> <span class="op">-</span> <span class="ident">pos</span> <span class="op">+</span> (<span class="ident">trailing</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>);
-                    <span class="kw">if</span> <span class="ident">probe_len</span> <span class="op">&gt;</span> <span class="ident">match_len</span> {
-                        <span class="ident">match_dist</span> <span class="op">=</span> <span class="ident">dist</span>;
-                        <span class="ident">match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">max_match_len</span>, <span class="ident">probe_len</span>);
+                    <span class="kw">let</span> <span class="ident">probe_len</span> <span class="op">=</span> <span class="ident">p</span> <span class="op">-</span> <span class="ident">pos</span> <span class="op">+</span> (<span class="ident">trailing</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>);
+                    <span class="kw">if</span> <span class="ident">probe_len</span> <span class="op">&gt;</span> <span class="ident">match_len</span> <span class="kw">as</span> <span class="ident">usize</span> {
+                        <span class="ident">match_dist</span> <span class="op">=</span> <span class="ident">dist</span> <span class="kw">as</span> <span class="ident">u32</span>;
+                        <span class="ident">match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">max_match_len</span>, <span class="ident">probe_len</span> <span class="kw">as</span> <span class="ident">u32</span>);
                         <span class="kw">if</span> <span class="ident">match_len</span> <span class="op">=</span><span class="op">=</span> <span class="ident">max_match_len</span> {
                             <span class="comment">// We found a match that had the maximum allowed length,</span>
                             <span class="comment">// so there is now point searching further.</span>
@@ -3717,13 +3754,13 @@
                         }
                         <span class="comment">// We found a better match, so save the last two bytes for further match</span>
                         <span class="comment">// comparisons.</span>
-                        <span class="ident">c01</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">read_as_u16</span>((<span class="ident">pos</span> <span class="op">+</span> <span class="ident">match_len</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>)
+                        <span class="ident">c01</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">read_as_u16</span>(<span class="ident">pos</span> <span class="op">+</span> <span class="ident">match_len</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">1</span>)
                     }
                     <span class="kw">continue</span> <span class="lifetime">&#39;outer</span>;
                 }
             }
 
-            <span class="kw">return</span> (<span class="ident">dist</span>, <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">max_match_len</span>, <span class="ident">MAX_MATCH_LEN</span> <span class="kw">as</span> <span class="ident">u32</span>));
+            <span class="kw">return</span> (<span class="ident">dist</span> <span class="kw">as</span> <span class="ident">u32</span>, <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">max_match_len</span>, <span class="ident">MAX_MATCH_LEN</span> <span class="kw">as</span> <span class="ident">u32</span>));
         }
     }
 }
@@ -3808,6 +3845,8 @@
     <span class="kw">pub</span> <span class="ident">code_position</span>: <span class="ident">usize</span>,
     <span class="kw">pub</span> <span class="ident">flag_position</span>: <span class="ident">usize</span>,
 
+    <span class="comment">// The total number of bytes in the current block.</span>
+    <span class="comment">// (Could maybe use usize, but it&#39;s not possible to exceed a block size of )</span>
     <span class="kw">pub</span> <span class="ident">total_bytes</span>: <span class="ident">u32</span>,
     <span class="kw">pub</span> <span class="ident">num_flags_left</span>: <span class="ident">u32</span>,
 }
@@ -3859,7 +3898,7 @@
     <span class="ident">huff</span>: <span class="kw-2">&amp;</span><span class="ident">HuffmanOxide</span>,
     <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>,
     <span class="ident">lz_code_buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">flags</span> <span class="op">=</span> <span class="number">1</span>;
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bb</span> <span class="op">=</span> <span class="ident">BitBuffer</span> {
         <span class="ident">bit_buffer</span>: <span class="ident">u64</span>::<span class="ident">from</span>(<span class="ident">output</span>.<span class="ident">bit_buffer</span>),
@@ -3958,7 +3997,7 @@
     <span class="ident">output</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">OutputBufferOxide</span>,
     <span class="ident">lz</span>: <span class="kw-2">&amp;</span><span class="ident">LZOxide</span>,
     <span class="ident">static_block</span>: <span class="ident">bool</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">static_block</span> {
         <span class="ident">huff</span>.<span class="ident">start_static_block</span>(<span class="ident">output</span>);
     } <span class="kw">else</span> {
@@ -3972,7 +4011,7 @@
     <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CompressorOxide</span>,
     <span class="ident">callback</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CallbackOxide</span>,
     <span class="ident">flush</span>: <span class="ident">TDEFLFlush</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
+) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">saved_buffer</span>;
     {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">output</span> <span class="op">=</span> <span class="ident">callback</span>
@@ -4020,7 +4059,7 @@
         <span class="comment">// (as literals are either 8 or 9 bytes), a raw block will</span>
         <span class="comment">// never take up less space if the number of input bytes are less than 32.</span>
         <span class="kw">let</span> <span class="ident">expanded</span> <span class="op">=</span> (<span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="op">&gt;</span> <span class="number">32</span>)
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">output</span>.<span class="ident">inner</span>.<span class="ident">position</span>() <span class="op">-</span> <span class="ident">saved_buffer</span>.<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">u64</span>::<span class="ident">from</span>(<span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span>))
+            <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">output</span>.<span class="ident">inner_pos</span> <span class="op">-</span> <span class="ident">saved_buffer</span>.<span class="ident">pos</span> <span class="op">+</span> <span class="number">1</span> <span class="op">&gt;</span><span class="op">=</span> (<span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="kw">as</span> <span class="ident">usize</span>))
             <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">lookahead_pos</span> <span class="op">-</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">code_buf_dict_pos</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>);
 
         <span class="kw">if</span> <span class="ident">use_raw_block</span> <span class="op">|</span><span class="op">|</span> <span class="ident">expanded</span> {
@@ -4038,7 +4077,7 @@
 
             <span class="comment">// Write the actual bytes.</span>
             <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> {
-                <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> (<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">code_buf_dict_pos</span> <span class="op">+</span> <span class="ident">i</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
+                <span class="kw">let</span> <span class="ident">pos</span> <span class="op">=</span> (<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">code_buf_dict_pos</span> <span class="op">+</span> <span class="ident">i</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
                 <span class="ident">output</span>.<span class="ident">put_bits</span>(<span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>[<span class="ident">pos</span> <span class="kw">as</span> <span class="ident">usize</span>]), <span class="number">8</span>);
             }
         } <span class="kw">else</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">comp_success</span> {
@@ -4072,7 +4111,7 @@
         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">code_position</span> <span class="op">=</span> <span class="number">1</span>;
         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">flag_position</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">num_flags_left</span> <span class="op">=</span> <span class="number">8</span>;
-        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">code_buf_dict_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span>;
+        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">code_buf_dict_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="kw">as</span> <span class="ident">usize</span>;
         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">block_index</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
 
@@ -4096,13 +4135,13 @@
 }
 
 <span class="kw">fn</span> <span class="ident">record_match</span>(<span class="ident">h</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HuffmanOxide</span>, <span class="ident">lz</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">LZOxide</span>, <span class="kw-2">mut</span> <span class="ident">match_len</span>: <span class="ident">u32</span>, <span class="kw-2">mut</span> <span class="ident">match_dist</span>: <span class="ident">u32</span>) {
-    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>);
+    <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>());
     <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>);
     <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">match_dist</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">LZ_DICT_SIZE</span>);
 
     <span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="op">+</span><span class="op">=</span> <span class="ident">match_len</span>;
     <span class="ident">match_dist</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
-    <span class="ident">match_len</span> <span class="op">-</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>;
+    <span class="ident">match_len</span> <span class="op">-</span><span class="op">=</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">MIN_MATCH_LEN</span>);
     <span class="ident">lz</span>.<span class="ident">write_code</span>(<span class="ident">match_len</span> <span class="kw">as</span> <span class="ident">u8</span>);
     <span class="ident">lz</span>.<span class="ident">write_code</span>(<span class="ident">match_dist</span> <span class="kw">as</span> <span class="ident">u8</span>);
     <span class="ident">lz</span>.<span class="ident">write_code</span>((<span class="ident">match_dist</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span>) <span class="kw">as</span> <span class="ident">u8</span>);
@@ -4137,25 +4176,32 @@
         <span class="kw">let</span> <span class="ident">src_buf_left</span> <span class="op">=</span> <span class="ident">in_buf</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">src_pos</span>;
         <span class="kw">let</span> <span class="ident">num_bytes_to_process</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">src_buf_left</span>, <span class="ident">MAX_MATCH_LEN</span> <span class="op">-</span> <span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">usize</span>);
 
-        <span class="kw">if</span> <span class="ident">lookahead_size</span> <span class="op">+</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span> <span class="op">-</span> <span class="number">1</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">num_bytes_to_process</span> <span class="op">&gt;</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="ident">lookahead_size</span> <span class="op">+</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">usize</span>::<span class="ident">from</span>(<span class="ident">MIN_MATCH_LEN</span>) <span class="op">-</span> <span class="number">1</span>
+            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">num_bytes_to_process</span> <span class="op">&gt;</span> <span class="number">0</span>
+        {
             <span class="kw">let</span> <span class="ident">dictb</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>;
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dst_pos</span> <span class="op">=</span> (<span class="ident">lookahead_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ins_pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span> <span class="op">-</span> <span class="number">2</span>;
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hash</span> <span class="op">=</span> (<span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">dictb</span>.<span class="ident">dict</span>[(<span class="ident">ins_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>])
-                <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">LZ_HASH_SHIFT</span>)
-                <span class="op">^</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">dictb</span>.<span class="ident">dict</span>[((<span class="ident">ins_pos</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>]);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dst_pos</span> <span class="op">=</span> (<span class="ident">lookahead_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ins_pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">-</span> <span class="number">2</span>;
+            <span class="comment">// Start the hash value from the first two bytes</span>
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hash</span> <span class="op">=</span> <span class="ident">update_hash</span>(
+                <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">dictb</span>.<span class="ident">dict</span>[(<span class="ident">ins_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>]),
+                <span class="ident">dictb</span>.<span class="ident">dict</span>[((<span class="ident">ins_pos</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>],
+            );
 
-            <span class="ident">lookahead_size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_bytes_to_process</span> <span class="kw">as</span> <span class="ident">u32</span>;
+            <span class="ident">lookahead_size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_bytes_to_process</span>;
+
             <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="ident">c</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">in_buf</span>[<span class="ident">src_pos</span>..<span class="ident">src_pos</span> <span class="op">+</span> <span class="ident">num_bytes_to_process</span>] {
+                <span class="comment">// Add byte to input buffer.</span>
                 <span class="ident">dictb</span>.<span class="ident">dict</span>[<span class="ident">dst_pos</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="ident">c</span>;
                 <span class="kw">if</span> (<span class="ident">dst_pos</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&lt;</span> <span class="ident">MAX_MATCH_LEN</span> <span class="op">-</span> <span class="number">1</span> {
                     <span class="ident">dictb</span>.<span class="ident">dict</span>[<span class="ident">LZ_DICT_SIZE</span> <span class="op">+</span> <span class="ident">dst_pos</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="ident">c</span>;
                 }
 
-                <span class="ident">hash</span> <span class="op">=</span> ((<span class="ident">hash</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="ident">LZ_HASH_SHIFT</span>) <span class="op">^</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">c</span>)) <span class="op">&amp;</span> (<span class="ident">LZ_HASH_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="number">1</span>);
+                <span class="comment">// Generate hash from the current byte,</span>
+                <span class="ident">hash</span> <span class="op">=</span> <span class="ident">update_hash</span>(<span class="ident">hash</span>, <span class="ident">c</span>);
                 <span class="ident">dictb</span>.<span class="ident">next</span>[(<span class="ident">ins_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="ident">dictb</span>.<span class="ident">hash</span>[<span class="ident">hash</span> <span class="kw">as</span> <span class="ident">usize</span>];
-
+                <span class="comment">// and insert it into the hash chain.</span>
                 <span class="ident">dictb</span>.<span class="ident">hash</span>[<span class="ident">hash</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="ident">ins_pos</span> <span class="kw">as</span> <span class="ident">u16</span>;
                 <span class="ident">dst_pos</span> <span class="op">=</span> (<span class="ident">dst_pos</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
                 <span class="ident">ins_pos</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -4171,7 +4217,7 @@
                 }
 
                 <span class="ident">lookahead_size</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-                <span class="kw">if</span> <span class="ident">lookahead_size</span> <span class="op">+</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span> {
+                <span class="kw">if</span> <span class="ident">lookahead_size</span> <span class="op">+</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>() {
                     <span class="kw">let</span> <span class="ident">ins_pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span> <span class="op">-</span> <span class="number">3</span>;
                     <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> ((<span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">dictb</span>.<span class="ident">dict</span>[(<span class="ident">ins_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>])
                         <span class="op">&lt;</span><span class="op">&lt;</span> (<span class="ident">LZ_HASH_SHIFT</span> <span class="op">*</span> <span class="number">2</span>))
@@ -4188,7 +4234,7 @@
             <span class="ident">src_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_bytes_to_process</span>;
         }
 
-        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="ident">lookahead_size</span>, <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>);
+        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">LZ_DICT_SIZE</span> <span class="op">-</span> <span class="ident">lookahead_size</span>, <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>);
         <span class="kw">if</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flush</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TDEFLFlush</span>::<span class="prelude-val">None</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> (<span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&lt;</span> <span class="ident">MAX_MATCH_LEN</span> {
             <span class="kw">break</span>;
         }
@@ -4198,27 +4244,29 @@
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">saved_match_len</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="ident">saved_match_len</span>
         } <span class="kw">else</span> {
-            <span class="ident">MIN_MATCH_LEN</span> <span class="op">-</span> <span class="number">1</span>
+            <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">MIN_MATCH_LEN</span>) <span class="op">-</span> <span class="number">1</span>
         };
         <span class="kw">let</span> <span class="ident">cur_pos</span> <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
         <span class="kw">if</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flags</span> <span class="op">&amp;</span> (<span class="ident">TDEFL_RLE_MATCHES</span> <span class="op">|</span> <span class="ident">TDEFL_FORCE_ALL_RAW_BLOCKS</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="comment">// If TDEFL_RLE_MATCHES is set, we only look for repeating sequences of the current byte.</span>
             <span class="kw">if</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">TDEFL_FORCE_ALL_RAW_BLOCKS</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                 <span class="kw">let</span> <span class="ident">c</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>[((<span class="ident">cur_pos</span>.<span class="ident">wrapping_sub</span>(<span class="number">1</span>)) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>) <span class="kw">as</span> <span class="ident">usize</span>];
                 <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>[<span class="ident">cur_pos</span> <span class="kw">as</span> <span class="ident">usize</span>..(<span class="ident">cur_pos</span> <span class="op">+</span> <span class="ident">lookahead_size</span>) <span class="kw">as</span> <span class="ident">usize</span>]
                     .<span class="ident">iter</span>()
                     .<span class="ident">take_while</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">x</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">x</span> <span class="op">=</span><span class="op">=</span> <span class="ident">c</span>)
                     .<span class="ident">count</span>() <span class="kw">as</span> <span class="ident">u32</span>;
-                <span class="kw">if</span> <span class="ident">cur_match_len</span> <span class="op">&lt;</span> <span class="ident">MIN_MATCH_LEN</span> {
+                <span class="kw">if</span> <span class="ident">cur_match_len</span> <span class="op">&lt;</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>() {
                     <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="number">0</span>
                 } <span class="kw">else</span> {
                     <span class="ident">cur_match_dist</span> <span class="op">=</span> <span class="number">1</span>
                 }
             }
         } <span class="kw">else</span> {
+            <span class="comment">// Try to find a match for the bytes at the current position.</span>
             <span class="kw">let</span> <span class="ident">dist_len</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">find_match</span>(
                 <span class="ident">lookahead_pos</span>,
                 <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>,
-                <span class="ident">lookahead_size</span>,
+                <span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">u32</span>,
                 <span class="ident">cur_match_dist</span>,
                 <span class="ident">cur_match_len</span>,
             );
@@ -4226,9 +4274,9 @@
             <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="ident">dist_len</span>.<span class="number">1</span>;
         }
 
-        <span class="kw">let</span> <span class="ident">far_and_small</span> <span class="op">=</span> <span class="ident">cur_match_len</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>;
+        <span class="kw">let</span> <span class="ident">far_and_small</span> <span class="op">=</span> <span class="ident">cur_match_len</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>;
         <span class="kw">let</span> <span class="ident">filter_small</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">TDEFL_FILTER_MATCHES</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cur_match_len</span> <span class="op">&lt;</span><span class="op">=</span> <span class="number">5</span>;
-        <span class="kw">if</span> <span class="ident">far_and_small</span> <span class="op">|</span><span class="op">|</span> <span class="ident">filter_small</span> <span class="op">|</span><span class="op">|</span> <span class="ident">cur_pos</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cur_match_dist</span> {
+        <span class="kw">if</span> <span class="ident">far_and_small</span> <span class="op">|</span><span class="op">|</span> <span class="ident">filter_small</span> <span class="op">|</span><span class="op">|</span> <span class="ident">cur_pos</span> <span class="op">=</span><span class="op">=</span> <span class="ident">cur_match_dist</span> <span class="kw">as</span> <span class="ident">usize</span> {
             <span class="ident">cur_match_dist</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="number">0</span>;
         }
@@ -4239,7 +4287,7 @@
                 <span class="kw">if</span> <span class="ident">cur_match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">128</span> {
                     <span class="ident">record_match</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">huff</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">lz</span>, <span class="ident">cur_match_len</span>, <span class="ident">cur_match_dist</span>);
                     <span class="ident">saved_match_len</span> <span class="op">=</span> <span class="number">0</span>;
-                    <span class="ident">len_to_move</span> <span class="op">=</span> <span class="ident">cur_match_len</span>;
+                    <span class="ident">len_to_move</span> <span class="op">=</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>;
                 } <span class="kw">else</span> {
                     <span class="ident">saved_lit</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>[<span class="ident">cur_pos</span> <span class="kw">as</span> <span class="ident">usize</span>];
                     <span class="ident">saved_match_dist</span> <span class="op">=</span> <span class="ident">cur_match_dist</span>;
@@ -4247,7 +4295,7 @@
                 }
             } <span class="kw">else</span> {
                 <span class="ident">record_match</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">huff</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">lz</span>, <span class="ident">saved_match_len</span>, <span class="ident">saved_match_dist</span>);
-                <span class="ident">len_to_move</span> <span class="op">=</span> <span class="ident">saved_match_len</span> <span class="op">-</span> <span class="number">1</span>;
+                <span class="ident">len_to_move</span> <span class="op">=</span> (<span class="ident">saved_match_len</span> <span class="op">-</span> <span class="number">1</span>) <span class="kw">as</span> <span class="ident">usize</span>;
                 <span class="ident">saved_match_len</span> <span class="op">=</span> <span class="number">0</span>;
             }
         } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">cur_match_dist</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
@@ -4263,7 +4311,7 @@
             <span class="comment">// If we are using lazy matching, check for matches at the next byte if the current</span>
             <span class="comment">// match was shorter than 128 bytes.</span>
             <span class="ident">record_match</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">huff</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>.<span class="ident">lz</span>, <span class="ident">cur_match_len</span>, <span class="ident">cur_match_dist</span>);
-            <span class="ident">len_to_move</span> <span class="op">=</span> <span class="ident">cur_match_len</span>;
+            <span class="ident">len_to_move</span> <span class="op">=</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>;
         } <span class="kw">else</span> {
             <span class="ident">saved_lit</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>[<span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">cur_pos</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">dict</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>)];
             <span class="ident">saved_match_dist</span> <span class="op">=</span> <span class="ident">cur_match_dist</span>;
@@ -4273,7 +4321,7 @@
         <span class="ident">lookahead_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">len_to_move</span>;
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lookahead_size</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">len_to_move</span>);
         <span class="ident">lookahead_size</span> <span class="op">-</span><span class="op">=</span> <span class="ident">len_to_move</span>;
-        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="ident">len_to_move</span>, <span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span>);
+        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="ident">len_to_move</span>, <span class="ident">LZ_DICT_SIZE</span>);
 
         <span class="kw">let</span> <span class="ident">lz_buf_tight</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">code_position</span> <span class="op">&gt;</span> <span class="ident">LZ_CODE_BUF_SIZE</span> <span class="op">-</span> <span class="number">8</span>;
         <span class="kw">let</span> <span class="ident">raw</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flags</span> <span class="op">&amp;</span> <span class="ident">TDEFL_FORCE_ALL_RAW_BLOCKS</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>;
@@ -4306,7 +4354,7 @@
     <span class="bool-val">true</span>
 }
 
-<span class="kw">const</span> <span class="ident">COMP_FAST_LOOKAHEAD_SIZE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">4096</span>;
+<span class="kw">const</span> <span class="ident">COMP_FAST_LOOKAHEAD_SIZE</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">4096</span>;
 
 <span class="kw">fn</span> <span class="ident">compress_fast</span>(<span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CompressorOxide</span>, <span class="ident">callback</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CallbackOxide</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">src_pos</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">src_pos</span>;
@@ -4327,7 +4375,7 @@
             <span class="ident">in_buf</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">src_pos</span>,
             (<span class="ident">COMP_FAST_LOOKAHEAD_SIZE</span> <span class="op">-</span> <span class="ident">lookahead_size</span>) <span class="kw">as</span> <span class="ident">usize</span>,
         );
-        <span class="ident">lookahead_size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_bytes_to_process</span> <span class="kw">as</span> <span class="ident">u32</span>;
+        <span class="ident">lookahead_size</span> <span class="op">+</span><span class="op">=</span> <span class="ident">num_bytes_to_process</span>;
 
         <span class="kw">while</span> <span class="ident">num_bytes_to_process</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span> {
             <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">LZ_DICT_SIZE</span> <span class="op">-</span> <span class="ident">dst_pos</span>, <span class="ident">num_bytes_to_process</span>);
@@ -4344,7 +4392,7 @@
             <span class="ident">num_bytes_to_process</span> <span class="op">-</span><span class="op">=</span> <span class="ident">n</span>;
         }
 
-        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="ident">lookahead_size</span>, <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>);
+        <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">LZ_DICT_SIZE</span> <span class="op">-</span> <span class="ident">lookahead_size</span>, <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span>);
         <span class="kw">if</span> <span class="ident">d</span>.<span class="ident">params</span>.<span class="ident">flush</span> <span class="op">=</span><span class="op">=</span> <span class="ident">TDEFLFlush</span>::<span class="prelude-val">None</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">lookahead_size</span> <span class="op">&lt;</span> <span class="ident">COMP_FAST_LOOKAHEAD_SIZE</span> {
             <span class="kw">break</span>;
         }
@@ -4357,11 +4405,11 @@
             <span class="kw">let</span> <span class="ident">hash</span> <span class="op">=</span> (<span class="ident">first_trigram</span> <span class="op">^</span> (<span class="ident">first_trigram</span> <span class="op">&gt;</span><span class="op">&gt;</span> (<span class="number">24</span> <span class="op">-</span> (<span class="ident">LZ_HASH_BITS</span> <span class="op">-</span> <span class="number">8</span>))))
                 <span class="op">&amp;</span> <span class="ident">LEVEL1_HASH_SIZE_MASK</span>;
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">probe_pos</span> <span class="op">=</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">hash</span>[<span class="ident">hash</span> <span class="kw">as</span> <span class="ident">usize</span>]);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">probe_pos</span> <span class="op">=</span> <span class="ident">usize</span>::<span class="ident">from</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">hash</span>[<span class="ident">hash</span> <span class="kw">as</span> <span class="ident">usize</span>]);
             <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">b</span>.<span class="ident">hash</span>[<span class="ident">hash</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">=</span> <span class="ident">lookahead_pos</span> <span class="kw">as</span> <span class="ident">u16</span>;
 
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur_match_dist</span> <span class="op">=</span> (<span class="ident">lookahead_pos</span> <span class="op">-</span> <span class="ident">probe_pos</span>) <span class="kw">as</span> <span class="ident">u16</span>;
-            <span class="kw">if</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">cur_match_dist</span>) <span class="op">&lt;</span><span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">cur_match_dist</span> <span class="op">=</span> (<span class="ident">lookahead_pos</span> <span class="op">-</span> <span class="ident">probe_pos</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="kw">as</span> <span class="ident">u16</span>;
+            <span class="kw">if</span> <span class="ident">cur_match_dist</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> {
                 <span class="ident">probe_pos</span> <span class="kw-2">&amp;</span><span class="op">=</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
 
                 <span class="kw">let</span> <span class="ident">trigram</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">read_unaligned_u32</span>(<span class="ident">probe_pos</span>) <span class="op">&amp;</span> <span class="number">0xFF_FFFF</span>;
@@ -4380,7 +4428,7 @@
                                 <span class="ident">q</span> <span class="op">+</span><span class="op">=</span> <span class="number">8</span>;
                             } <span class="kw">else</span> {
                                 <span class="kw">let</span> <span class="ident">trailing</span> <span class="op">=</span> <span class="ident">xor_data</span>.<span class="ident">trailing_zeros</span>();
-                                <span class="kw">break</span> <span class="lifetime">&#39;find_match</span> <span class="ident">p</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="ident">cur_pos</span> <span class="op">+</span> (<span class="ident">trailing</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>);
+                                <span class="kw">break</span> <span class="lifetime">&#39;find_match</span> <span class="ident">p</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">-</span> <span class="ident">cur_pos</span> <span class="kw">as</span> <span class="ident">u32</span> <span class="op">+</span> (<span class="ident">trailing</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">3</span>);
                             }
                         }
 
@@ -4391,8 +4439,8 @@
                         };
                     };
 
-                    <span class="kw">if</span> <span class="ident">cur_match_len</span> <span class="op">&lt;</span> <span class="ident">MIN_MATCH_LEN</span>
-                        <span class="op">|</span><span class="op">|</span> (<span class="ident">cur_match_len</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span> <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>)
+                    <span class="kw">if</span> <span class="ident">cur_match_len</span> <span class="op">&lt;</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>()
+                        <span class="op">|</span><span class="op">|</span> (<span class="ident">cur_match_len</span> <span class="op">=</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>() <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">8</span> <span class="op">*</span> <span class="number">1024</span>)
                     {
                         <span class="kw">let</span> <span class="ident">lit</span> <span class="op">=</span> <span class="ident">first_trigram</span> <span class="kw">as</span> <span class="ident">u8</span>;
                         <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="number">1</span>;
@@ -4402,13 +4450,13 @@
                     } <span class="kw">else</span> {
                         <span class="comment">// Limit the match to the length of the lookahead so we don&#39;t create a match</span>
                         <span class="comment">// that ends after the end of the input data.</span>
-                        <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">cur_match_len</span>, <span class="ident">lookahead_size</span>);
-                        <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">cur_match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>);
+                        <span class="ident">cur_match_len</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">cur_match_len</span>, <span class="ident">lookahead_size</span> <span class="kw">as</span> <span class="ident">u32</span>);
+                        <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">cur_match_len</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">MIN_MATCH_LEN</span>.<span class="ident">into</span>());
                         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">=</span> <span class="number">1</span>);
                         <span class="macro">debug_assert</span><span class="macro">!</span>(<span class="ident">cur_match_dist</span> <span class="kw">as</span> <span class="ident">usize</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">LZ_DICT_SIZE</span>);
                         <span class="ident">cur_match_dist</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
 
-                        <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">write_code</span>((<span class="ident">cur_match_len</span> <span class="op">-</span> <span class="ident">MIN_MATCH_LEN</span>) <span class="kw">as</span> <span class="ident">u8</span>);
+                        <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">write_code</span>((<span class="ident">cur_match_len</span> <span class="op">-</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">MIN_MATCH_LEN</span>)) <span class="kw">as</span> <span class="ident">u8</span>);
                         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">write_code</span>(<span class="ident">cur_match_dist</span> <span class="kw">as</span> <span class="ident">u8</span>);
                         <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">write_code</span>((<span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span>) <span class="kw">as</span> <span class="ident">u8</span>);
 
@@ -4421,8 +4469,8 @@
                                 [<span class="ident">LARGE_DIST_SYM</span>[(<span class="ident">cur_match_dist</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span>) <span class="kw">as</span> <span class="ident">usize</span>] <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                         }
 
-                        <span class="ident">d</span>.<span class="ident">huff</span>.<span class="ident">count</span>[<span class="number">0</span>]
-                            [<span class="ident">LEN_SYM</span>[(<span class="ident">cur_match_len</span> <span class="op">-</span> <span class="ident">MIN_MATCH_LEN</span>) <span class="kw">as</span> <span class="ident">usize</span>] <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                        <span class="ident">d</span>.<span class="ident">huff</span>.<span class="ident">count</span>[<span class="number">0</span>][<span class="ident">LEN_SYM</span>[(<span class="ident">cur_match_len</span> <span class="op">-</span> <span class="ident">u32</span>::<span class="ident">from</span>(<span class="ident">MIN_MATCH_LEN</span>)) <span class="kw">as</span> <span class="ident">usize</span>]
+                            <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
                     }
                 } <span class="kw">else</span> {
                     <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">write_code</span>(<span class="ident">first_trigram</span> <span class="kw">as</span> <span class="ident">u8</span>);
@@ -4432,10 +4480,10 @@
 
                 <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">consume_flag</span>();
                 <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">total_bytes</span> <span class="op">+</span><span class="op">=</span> <span class="ident">cur_match_len</span>;
-                <span class="ident">lookahead_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">cur_match_len</span>;
-                <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="ident">cur_match_len</span>, <span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span>);
-                <span class="ident">cur_pos</span> <span class="op">=</span> (<span class="ident">cur_pos</span> <span class="op">+</span> <span class="ident">cur_match_len</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
-                <span class="ident">lookahead_size</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cur_match_len</span>;
+                <span class="ident">lookahead_pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>;
+                <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">LZ_DICT_SIZE</span>);
+                <span class="ident">cur_pos</span> <span class="op">=</span> (<span class="ident">cur_pos</span> <span class="op">+</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
+                <span class="ident">lookahead_size</span> <span class="op">-</span><span class="op">=</span> <span class="ident">cur_match_len</span> <span class="kw">as</span> <span class="ident">usize</span>;
 
                 <span class="kw">if</span> <span class="ident">d</span>.<span class="ident">lz</span>.<span class="ident">code_position</span> <span class="op">&gt;</span> <span class="ident">LZ_CODE_BUF_SIZE</span> <span class="op">-</span> <span class="number">8</span> {
                     <span class="comment">// These values are used in flush_block, so we need to write them back here.</span>
@@ -4471,7 +4519,7 @@
 
             <span class="ident">d</span>.<span class="ident">huff</span>.<span class="ident">count</span>[<span class="number">0</span>][<span class="ident">lit</span> <span class="kw">as</span> <span class="ident">usize</span>] <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
             <span class="ident">lookahead_pos</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
-            <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">LZ_DICT_SIZE</span> <span class="kw">as</span> <span class="ident">u32</span>);
+            <span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">=</span> <span class="ident">cmp</span>::<span class="ident">min</span>(<span class="ident">d</span>.<span class="ident">dict</span>.<span class="ident">size</span> <span class="op">+</span> <span class="number">1</span>, <span class="ident">LZ_DICT_SIZE</span>);
             <span class="ident">cur_pos</span> <span class="op">=</span> (<span class="ident">cur_pos</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&amp;</span> <span class="ident">LZ_DICT_SIZE_MASK</span>;
             <span class="ident">lookahead_size</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
 
@@ -4560,14 +4608,14 @@
     <span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CompressorOxide</span>,
     <span class="ident">in_buf</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>],
     <span class="ident">flush</span>: <span class="ident">TDEFLFlush</span>,
-    <span class="ident">callback_func</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>,
+    <span class="kw-2">mut</span> <span class="ident">callback_func</span>: <span class="kw">impl</span> <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>,
 ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">TDEFLStatus</span>, <span class="ident">usize</span>) {
     <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">compress_inner</span>(
         <span class="ident">d</span>,
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">CallbackOxide</span>::<span class="ident">new_callback_func</span>(
             <span class="ident">in_buf</span>,
             <span class="ident">CallbackFunc</span> {
-                <span class="ident">put_buf_func</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">callback_func</span>),
+                <span class="ident">put_buf_func</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">callback_func</span>,
             },
         ),
         <span class="ident">flush</span>,
@@ -4715,6 +4763,8 @@
         <span class="ident">MZ_DEFAULT_WINDOW_BITS</span>,
     };
     <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">inflate</span>::<span class="ident">decompress_to_vec</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">prelude</span>::<span class="ident">v1</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">vec</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">u16_to_slice</span>() {
@@ -4760,4 +4810,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "miniz_oxide";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "miniz_oxide";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

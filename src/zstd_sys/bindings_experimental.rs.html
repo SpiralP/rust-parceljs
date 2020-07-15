@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/zstd-sys-1.4.15+zstd.1.4.4/src/bindings_experimental.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bindings_experimental.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../zstd_sys/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/zstd-sys-1.4.17+zstd.1.4.5/src/bindings_experimental.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>bindings_experimental.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../zstd_sys/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -2917,12 +2917,205 @@
 <span id="2917">2917</span>
 <span id="2918">2918</span>
 <span id="2919">2919</span>
+<span id="2920">2920</span>
+<span id="2921">2921</span>
+<span id="2922">2922</span>
+<span id="2923">2923</span>
+<span id="2924">2924</span>
+<span id="2925">2925</span>
+<span id="2926">2926</span>
+<span id="2927">2927</span>
+<span id="2928">2928</span>
+<span id="2929">2929</span>
+<span id="2930">2930</span>
+<span id="2931">2931</span>
+<span id="2932">2932</span>
+<span id="2933">2933</span>
+<span id="2934">2934</span>
+<span id="2935">2935</span>
+<span id="2936">2936</span>
+<span id="2937">2937</span>
+<span id="2938">2938</span>
+<span id="2939">2939</span>
+<span id="2940">2940</span>
+<span id="2941">2941</span>
+<span id="2942">2942</span>
+<span id="2943">2943</span>
+<span id="2944">2944</span>
+<span id="2945">2945</span>
+<span id="2946">2946</span>
+<span id="2947">2947</span>
+<span id="2948">2948</span>
+<span id="2949">2949</span>
+<span id="2950">2950</span>
+<span id="2951">2951</span>
+<span id="2952">2952</span>
+<span id="2953">2953</span>
+<span id="2954">2954</span>
+<span id="2955">2955</span>
+<span id="2956">2956</span>
+<span id="2957">2957</span>
+<span id="2958">2958</span>
+<span id="2959">2959</span>
+<span id="2960">2960</span>
+<span id="2961">2961</span>
+<span id="2962">2962</span>
+<span id="2963">2963</span>
+<span id="2964">2964</span>
+<span id="2965">2965</span>
+<span id="2966">2966</span>
+<span id="2967">2967</span>
+<span id="2968">2968</span>
+<span id="2969">2969</span>
+<span id="2970">2970</span>
+<span id="2971">2971</span>
+<span id="2972">2972</span>
+<span id="2973">2973</span>
+<span id="2974">2974</span>
+<span id="2975">2975</span>
+<span id="2976">2976</span>
+<span id="2977">2977</span>
+<span id="2978">2978</span>
+<span id="2979">2979</span>
+<span id="2980">2980</span>
+<span id="2981">2981</span>
+<span id="2982">2982</span>
+<span id="2983">2983</span>
+<span id="2984">2984</span>
+<span id="2985">2985</span>
+<span id="2986">2986</span>
+<span id="2987">2987</span>
+<span id="2988">2988</span>
+<span id="2989">2989</span>
+<span id="2990">2990</span>
+<span id="2991">2991</span>
+<span id="2992">2992</span>
+<span id="2993">2993</span>
+<span id="2994">2994</span>
+<span id="2995">2995</span>
+<span id="2996">2996</span>
+<span id="2997">2997</span>
+<span id="2998">2998</span>
+<span id="2999">2999</span>
+<span id="3000">3000</span>
+<span id="3001">3001</span>
+<span id="3002">3002</span>
+<span id="3003">3003</span>
+<span id="3004">3004</span>
+<span id="3005">3005</span>
+<span id="3006">3006</span>
+<span id="3007">3007</span>
+<span id="3008">3008</span>
+<span id="3009">3009</span>
+<span id="3010">3010</span>
+<span id="3011">3011</span>
+<span id="3012">3012</span>
+<span id="3013">3013</span>
+<span id="3014">3014</span>
+<span id="3015">3015</span>
+<span id="3016">3016</span>
+<span id="3017">3017</span>
+<span id="3018">3018</span>
+<span id="3019">3019</span>
+<span id="3020">3020</span>
+<span id="3021">3021</span>
+<span id="3022">3022</span>
+<span id="3023">3023</span>
+<span id="3024">3024</span>
+<span id="3025">3025</span>
+<span id="3026">3026</span>
+<span id="3027">3027</span>
+<span id="3028">3028</span>
+<span id="3029">3029</span>
+<span id="3030">3030</span>
+<span id="3031">3031</span>
+<span id="3032">3032</span>
+<span id="3033">3033</span>
+<span id="3034">3034</span>
+<span id="3035">3035</span>
+<span id="3036">3036</span>
+<span id="3037">3037</span>
+<span id="3038">3038</span>
+<span id="3039">3039</span>
+<span id="3040">3040</span>
+<span id="3041">3041</span>
+<span id="3042">3042</span>
+<span id="3043">3043</span>
+<span id="3044">3044</span>
+<span id="3045">3045</span>
+<span id="3046">3046</span>
+<span id="3047">3047</span>
+<span id="3048">3048</span>
+<span id="3049">3049</span>
+<span id="3050">3050</span>
+<span id="3051">3051</span>
+<span id="3052">3052</span>
+<span id="3053">3053</span>
+<span id="3054">3054</span>
+<span id="3055">3055</span>
+<span id="3056">3056</span>
+<span id="3057">3057</span>
+<span id="3058">3058</span>
+<span id="3059">3059</span>
+<span id="3060">3060</span>
+<span id="3061">3061</span>
+<span id="3062">3062</span>
+<span id="3063">3063</span>
+<span id="3064">3064</span>
+<span id="3065">3065</span>
+<span id="3066">3066</span>
+<span id="3067">3067</span>
+<span id="3068">3068</span>
+<span id="3069">3069</span>
+<span id="3070">3070</span>
+<span id="3071">3071</span>
+<span id="3072">3072</span>
+<span id="3073">3073</span>
+<span id="3074">3074</span>
+<span id="3075">3075</span>
+<span id="3076">3076</span>
 </pre><div class="example-wrap"><pre class="rust ">
+<span class="comment">/*
+This file is auto-generated from the public API of the zstd library.
+It is released under the same BSD license.
+
+BSD License
+
+For Zstandard software
+
+Copyright (c) 2016-present, Facebook, Inc. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+ * Neither the name Facebook nor the names of its contributors may be used to
+   endorse or promote products derived from this software without specific
+   prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/</span>
 <span class="comment">/* automatically generated by rust-bindgen */</span>
 
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">_LIBC_LIMITS_H_</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">_FEATURES_H</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">_DEFAULT_SOURCE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_ISOC2X</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__USE_ISOC11</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__USE_ISOC99</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__USE_ISOC95</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
@@ -2947,16 +3140,19 @@
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__STDC_ISO_10646__</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">201706</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GNU_LIBRARY__</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">6</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC__</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">2</span>;
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_MINOR__</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">30</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_MINOR__</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">31</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">_SYS_CDEFS_H</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__glibc_c99_flexarr_available</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__WORDSIZE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">64</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__WORDSIZE_TIME64_COMPAT32</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__SYSCALL_WORDSIZE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">64</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__LONG_DOUBLE_USES_FLOAT128</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__HAVE_GENERIC_SELECTION</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_LIB_EXT2</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_IEC_60559_BFP_EXT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_IEC_60559_BFP_EXT_C2X</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_IEC_60559_FUNCS_EXT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_IEC_60559_FUNCS_EXT_C2X</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">__GLIBC_USE_IEC_60559_TYPES_EXT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">0</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">MB_LEN_MAX</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">16</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">_BITS_POSIX1_LIM_H</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
@@ -3037,8 +3233,8 @@
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">RE_DUP_MAX</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">32767</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_MAJOR</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">1</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_MINOR</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">4</span>;
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_RELEASE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">4</span>;
-<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_NUMBER</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">10404</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_RELEASE</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">5</span>;
+<span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_VERSION_NUMBER</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">10405</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_CLEVEL_DEFAULT</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">3</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_MAGICNUMBER</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">4247762216</span>;
 <span class="kw">pub</span> <span class="kw">const</span> <span class="ident">ZSTD_MAGIC_DICTIONARY</span>: <span class="ident">u32</span> <span class="op">=</span> <span class="number">3962610743</span>;
@@ -3409,6 +3605,7 @@
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ZSTD_dParameter</span> {
     <span class="ident">ZSTD_d_windowLogMax</span> <span class="op">=</span> <span class="number">100</span>,
     <span class="ident">ZSTD_d_experimentalParam1</span> <span class="op">=</span> <span class="number">1000</span>,
+    <span class="ident">ZSTD_d_experimentalParam2</span> <span class="op">=</span> <span class="number">1001</span>,
 }
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; ZSTD_dParam_getBounds() :&quot;</span>]</span>
@@ -3506,6 +3703,7 @@
         )
     );
 }
+<span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  Streaming&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ZSTD_inBuffer</span> <span class="op">=</span> <span class="ident">ZSTD_inBuffer_s</span>;
 <span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
@@ -4404,23 +4602,27 @@
 }
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; ZSTD_estimate*() :&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  These functions make it possible to estimate memory usage of a future&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  {D,C}Ctx, before its creation.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  These functions make it possible to estimate memory usage&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  of a future {D,C}Ctx, before its creation.&quot;</span>]</span>
     <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize() will provide a budget large enough for any&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  compression level up to selected one. Unlike ZSTD_estimateCStreamSize*(),&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  this estimate does not include space for a window buffer, so this estimate&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  is guaranteed to be enough for single-shot compressions, but not streaming&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  compressions. It will however assume the input may be arbitrarily large,&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  which is the worst case. If srcSize is known to always be small,&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize_usingCParams() can provide a tighter estimation.&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize_usingCParams() can be used in tandem with&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_getCParams() to create cParams from compressionLevel.&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize_usingCCtxParams() can be used in tandem with&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_CCtxParams_setParameter().&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize() will provide a memory budget large enough&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  for any compression level up to selected one.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  Note : Unlike ZSTD_estimateCStreamSize*(), this estimate&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         does not include space for a window buffer.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         Therefore, the estimation is only guaranteed for single-shot compressions, not streaming.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  The estimate will assume the input may be arbitrarily large,&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  which is the worst case.&quot;</span>]</span>
     <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  Note: only single-threaded compression is supported. This function will&quot;</span>]</span>
-    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  return an error code if ZSTD_c_nbWorkers is &gt;= 1.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  When srcSize can be bound by a known and rather \&quot;small\&quot; value,&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  this fact can be used to provide a tighter estimation&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  because the CCtx compression context will need less memory.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  This tighter estimation can be provided by more advanced functions&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize_usingCParams(), which can be used in tandem with ZSTD_getCParams(),&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  and ZSTD_estimateCCtxSize_usingCCtxParams(), which can be used in tandem with ZSTD_CCtxParams_setParameter().&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  Both can be used to estimate memory using custom compression parameters and arbitrary srcSize limits.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  Note 2 : only single-threaded compression is supported.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;  ZSTD_estimateCCtxSize_usingCCtxParams() will return an error code if ZSTD_c_nbWorkers is &gt;= 1.&quot;</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ZSTD_estimateCCtxSize</span>(<span class="ident">compressionLevel</span>: <span class="ident">libc</span>::<span class="ident">c_int</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
 }
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
@@ -5635,11 +5837,123 @@
         <span class="ident">nbSamples</span>: <span class="ident">libc</span>::<span class="ident">c_uint</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
 }
+<span class="attribute">#[<span class="ident">repr</span>(<span class="ident">C</span>)]</span>
+<span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Copy</span>, <span class="ident">Clone</span>)]</span>
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ZDICT_params_t</span> {
+    <span class="kw">pub</span> <span class="ident">compressionLevel</span>: <span class="ident">libc</span>::<span class="ident">c_int</span>,
+    <span class="kw">pub</span> <span class="ident">notificationLevel</span>: <span class="ident">libc</span>::<span class="ident">c_uint</span>,
+    <span class="kw">pub</span> <span class="ident">dictID</span>: <span class="ident">libc</span>::<span class="ident">c_uint</span>,
+}
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">bindgen_test_layout_ZDICT_params_t</span>() {
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        ::<span class="ident">core</span>::<span class="ident">mem</span>::<span class="ident">size_of</span>::<span class="op">&lt;</span><span class="ident">ZDICT_params_t</span><span class="op">&gt;</span>(),
+        <span class="number">12usize</span>,
+        <span class="macro">concat</span><span class="macro">!</span>(<span class="string">&quot;Size of: &quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">ZDICT_params_t</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        ::<span class="ident">core</span>::<span class="ident">mem</span>::<span class="ident">align_of</span>::<span class="op">&lt;</span><span class="ident">ZDICT_params_t</span><span class="op">&gt;</span>(),
+        <span class="number">4usize</span>,
+        <span class="macro">concat</span><span class="macro">!</span>(<span class="string">&quot;Alignment of &quot;</span>, <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">ZDICT_params_t</span>))
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="kw">unsafe</span> {
+            <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::<span class="ident">core</span>::<span class="ident">ptr</span>::<span class="ident">null</span>::<span class="op">&lt;</span><span class="ident">ZDICT_params_t</span><span class="op">&gt;</span>())).<span class="ident">compressionLevel</span>
+                <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="ident">usize</span>
+        },
+        <span class="number">0usize</span>,
+        <span class="macro">concat</span><span class="macro">!</span>(
+            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">ZDICT_params_t</span>),
+            <span class="string">&quot;::&quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">compressionLevel</span>)
+        )
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="kw">unsafe</span> {
+            <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::<span class="ident">core</span>::<span class="ident">ptr</span>::<span class="ident">null</span>::<span class="op">&lt;</span><span class="ident">ZDICT_params_t</span><span class="op">&gt;</span>())).<span class="ident">notificationLevel</span>
+                <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span> <span class="kw">as</span> <span class="ident">usize</span>
+        },
+        <span class="number">4usize</span>,
+        <span class="macro">concat</span><span class="macro">!</span>(
+            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">ZDICT_params_t</span>),
+            <span class="string">&quot;::&quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">notificationLevel</span>)
+        )
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="kw">unsafe</span> {
+            <span class="kw-2">&amp;</span>(<span class="kw-2">*</span>(::<span class="ident">core</span>::<span class="ident">ptr</span>::<span class="ident">null</span>::<span class="op">&lt;</span><span class="ident">ZDICT_params_t</span><span class="op">&gt;</span>())).<span class="ident">dictID</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">_</span>
+                <span class="kw">as</span> <span class="ident">usize</span>
+        },
+        <span class="number">8usize</span>,
+        <span class="macro">concat</span><span class="macro">!</span>(
+            <span class="string">&quot;Offset of field: &quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">ZDICT_params_t</span>),
+            <span class="string">&quot;::&quot;</span>,
+            <span class="macro">stringify</span><span class="macro">!</span>(<span class="ident">dictID</span>)
+        )
+    );
+}
+<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; ZDICT_finalizeDictionary():&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Given a custom content as a basis for dictionary, and a set of samples,&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; finalize dictionary by adding headers and statistics according to the zstd&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; dictionary format.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Samples must be stored concatenated in a flat buffer `samplesBuffer`,&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; supplied with an array of sizes `samplesSizes`, providing the size of each&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; sample in order. The samples are used to construct the statistics, so they&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; should be representative of what you will compress with this dictionary.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; The compression level can be set in `parameters`. You should pass the&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; compression level you expect to use in production. The statistics for each&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; compression level differ, so tuning the dictionary for the compression level&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; can help quite a bit.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; You can set an explicit dictionary ID in `parameters`, or allow us to pick&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; a random dictionary ID for you, but we can&#39;t guarantee no collisions.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; The dstDictBuffer and the dictContent may overlap, and the content will be&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; appended to the end of the header. If the header + the content doesn&#39;t fit in&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; maxDictSize the beginning of the content is truncated to make room, since it&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; is presumed that the most profitable content is at the end of the dictionary,&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; since that is the cheapest to reference.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; `dictContentSize` must be &gt;= ZDICT_CONTENTSIZE_MIN bytes.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; `maxDictSize` must be &gt;= max(dictContentSize, ZSTD_DICTSIZE_MIN).&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; @return: size of dictionary stored into `dstDictBuffer` (&lt;= `maxDictSize`),&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;          or an error code, which can be tested by ZDICT_isError().&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; Note: ZDICT_finalizeDictionary() will push notifications into stderr if&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;       instructed to, using notificationLevel&gt;0.&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; NOTE: This function currently may fail in several edge cases including:&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         * Not enough samples&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         * Samples are uncompressible&quot;</span>]</span>
+    <span class="attribute">#[<span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;         * Samples are all exactly the same&quot;</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ZDICT_finalizeDictionary</span>(
+        <span class="ident">dstDictBuffer</span>: <span class="kw-2">*</span><span class="kw-2">mut</span> <span class="ident">libc</span>::<span class="ident">c_void</span>,
+        <span class="ident">maxDictSize</span>: <span class="ident">usize</span>,
+        <span class="ident">dictContent</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">libc</span>::<span class="ident">c_void</span>,
+        <span class="ident">dictContentSize</span>: <span class="ident">usize</span>,
+        <span class="ident">samplesBuffer</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">libc</span>::<span class="ident">c_void</span>,
+        <span class="ident">samplesSizes</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">usize</span>,
+        <span class="ident">nbSamples</span>: <span class="ident">libc</span>::<span class="ident">c_uint</span>,
+        <span class="ident">parameters</span>: <span class="ident">ZDICT_params_t</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
+}
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ZDICT_getDictID</span>(
         <span class="ident">dictBuffer</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">libc</span>::<span class="ident">c_void</span>,
         <span class="ident">dictSize</span>: <span class="ident">usize</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">libc</span>::<span class="ident">c_uint</span>;
+}
+<span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ZDICT_getDictHeaderSize</span>(
+        <span class="ident">dictBuffer</span>: <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">libc</span>::<span class="ident">c_void</span>,
+        <span class="ident">dictSize</span>: <span class="ident">usize</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
 }
 <span class="kw">extern</span> <span class="string">&quot;C&quot;</span> {
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ZDICT_isError</span>(<span class="ident">errorCode</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">libc</span>::<span class="ident">c_uint</span>;
@@ -5838,4 +6152,4 @@
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span>;
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "zstd_sys";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "zstd_sys";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
