@@ -14,17 +14,17 @@ as shown below.</p>
 <span class="kw">use</span> <span class="ident">warp</span>::{<span class="ident">Filter</span>, <span class="ident">Stream</span>, <span class="ident">sse</span>::<span class="ident">ServerSentEvent</span>};
 
 <span class="comment">// create server-sent event</span>
-<span class="kw">fn</span> <span class="ident">sse_counter</span>(<span class="ident">counter</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span>  <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">ServerSentEvent</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">sse_counter</span>(<span class="ident">counter</span>: <span class="ident">u64</span>) <span class="op">-&gt;</span>  <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="kw">impl</span> <span class="ident">ServerSentEvent</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">warp</span>::<span class="ident">sse</span>::<span class="ident">data</span>(<span class="ident">counter</span>))
 }
 
 <span class="kw">fn</span> <span class="ident">main</span>() {
     <span class="kw">let</span> <span class="ident">routes</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>(<span class="string">&quot;ticks&quot;</span>)
         .<span class="ident">and</span>(<span class="ident">warp</span>::<span class="ident">get</span>())
-        .<span class="ident">map</span>(<span class="op">|</span><span class="op">|</span> {
+        .<span class="ident">map</span>(<span class="op">||</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">counter</span>: <span class="ident">u64</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="ident">event_stream</span> <span class="op">=</span> <span class="ident">interval</span>(<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">15</span>)).<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
-                <span class="ident">counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                <span class="ident">counter</span> <span class="op">+=</span> <span class="number">1</span>;
                 <span class="ident">sse_counter</span>(<span class="ident">counter</span>)
             });
             <span class="comment">// reply using server-sent events</span>

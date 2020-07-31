@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-http-1.0.1/src/response.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>response.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/actix-http-1.0.1/src/response.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>response.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1119,19 +1119,19 @@
 <span class="kw">impl</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create http response builder with specific status.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">ResponseBuilder</span>::<span class="ident">new</span>(<span class="ident">status</span>)
     }
 
     <span class="doccomment">/// Create http response builder</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_from</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">source</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build_from</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;&gt;</span>(<span class="ident">source</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">source</span>.<span class="ident">into</span>()
     }
 
     <span class="doccomment">/// Constructs a response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="ident">BoxedResponseHead</span>::<span class="ident">new</span>(<span class="ident">status</span>),
             <span class="ident">body</span>: <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(<span class="ident">Body</span>::<span class="ident">Empty</span>),
@@ -1141,9 +1141,9 @@
 
     <span class="doccomment">/// Constructs an error response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_error</span>(<span class="ident">error</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">error</span>.<span class="ident">as_response_error</span>().<span class="ident">error_response</span>();
-        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">head</span>.<span class="ident">status</span> <span class="op">=</span><span class="op">=</span> <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span> {
+        <span class="kw">if</span> <span class="ident">resp</span>.<span class="ident">head</span>.<span class="ident">status</span> <span class="op">==</span> <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span> {
             <span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;Internal Server Error: {:?}&quot;</span>, <span class="ident">error</span>);
         }
         <span class="ident">resp</span>.<span class="ident">error</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">error</span>);
@@ -1151,10 +1151,10 @@
     }
 
     <span class="doccomment">/// Convert response to response with body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">body</span> {
-            <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
-            <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>,
+            <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="ident">b</span>,
+            <span class="ident">ResponseBody</span>::<span class="ident">Other</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="ident">b</span>,
         };
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
@@ -1167,7 +1167,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Constructs a response with body</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_body</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_body</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="ident">BoxedResponseHead</span>::<span class="ident">new</span>(<span class="ident">status</span>),
             <span class="ident">body</span>: <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(<span class="ident">body</span>),
@@ -1177,49 +1177,49 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Http message part of the response</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseHead</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Mutable reference to a http message part of the response</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">head_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">head</span>
     }
 
     <span class="doccomment">/// The source `error` for this response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">error</span>.<span class="ident">as_ref</span>()
     }
 
     <span class="doccomment">/// Get the response status code</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">status</span>
     }
 
     <span class="doccomment">/// Set the `StatusCode` for this response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StatusCode</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">StatusCode</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">status</span>
     }
 
     <span class="doccomment">/// Get the headers from the response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>
     }
 
     <span class="doccomment">/// Get a mutable reference to the headers</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>
     }
 
     <span class="doccomment">/// Get an iterator for the cookies set by this response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CookieIter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookies</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">CookieIter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
         <span class="ident">CookieIter</span> {
             <span class="ident">iter</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>.<span class="ident">get_all</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>),
         }
@@ -1227,7 +1227,7 @@
 
     <span class="doccomment">/// Add a cookie to this response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_cookie</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="kw-2">&amp;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HttpError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add_cookie</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="kw-2">&amp;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">HttpError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>;
         <span class="ident">HeaderValue</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">cookie</span>.<span class="ident">to_string</span>())
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">c</span><span class="op">|</span> {
@@ -1239,7 +1239,7 @@
     <span class="doccomment">/// Remove all cookies with the given name from this response. Returns</span>
     <span class="doccomment">/// the number of cookies removed.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_cookie</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">usize</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_cookie</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">usize</span> {
         <span class="kw">let</span> <span class="ident">h</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">headers</span>;
         <span class="kw">let</span> <span class="ident">vals</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">HeaderValue</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">h</span>
             .<span class="ident">get_all</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>)
@@ -1251,8 +1251,8 @@
         <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="ident">vals</span> {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">v</span>.<span class="ident">to_str</span>() {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">Cookie</span>::<span class="ident">parse_encoded</span>(<span class="ident">s</span>) {
-                    <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">name</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">name</span> {
-                        <span class="ident">count</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    <span class="kw">if</span> <span class="ident">c</span>.<span class="ident">name</span>() <span class="op">==</span> <span class="ident">name</span> {
+                        <span class="ident">count</span> <span class="op">+=</span> <span class="number">1</span>;
                         <span class="kw">continue</span>;
                     }
                 }
@@ -1264,35 +1264,35 @@
 
     <span class="doccomment">/// Connection upgrade status</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">upgrade</span>()
     }
 
     <span class="doccomment">/// Keep-alive status for this connection</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">keep_alive</span>()
     }
 
     <span class="doccomment">/// Responses extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
     }
 
     <span class="doccomment">/// Mutable reference to a the response&#39;s extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
     }
 
     <span class="doccomment">/// Get body of this response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">body</span>
     }
 
     <span class="doccomment">/// Set a body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
             <span class="ident">body</span>: <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(<span class="ident">body</span>),
@@ -1301,7 +1301,7 @@
     }
 
     <span class="doccomment">/// Split response and body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_parts</span>(<span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
         (
             <span class="ident">Response</span> {
                 <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
@@ -1313,7 +1313,7 @@
     }
 
     <span class="doccomment">/// Drop request&#39;s body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">drop_body</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">drop_body</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
             <span class="ident">body</span>: <span class="ident">ResponseBody</span>::<span class="ident">Body</span>(()),
@@ -1322,7 +1322,7 @@
     }
 
     <span class="doccomment">/// Set a body and return previous body value</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">replace_body</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B2</span>) <span class="op">-&gt;</span> (<span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) {
         (
             <span class="ident">Response</span> {
                 <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>,
@@ -1334,9 +1334,9 @@
     }
 
     <span class="doccomment">/// Set a body and return previous body value</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_body</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B2</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">map_body</span><span class="op">&lt;</span><span class="ident">F</span>, <span class="ident">B2</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseHead</span>, <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B2</span><span class="op">&gt;</span>,
     {
         <span class="kw">let</span> <span class="ident">body</span> <span class="op">=</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="self">self</span>.<span class="ident">body</span>);
 
@@ -1348,13 +1348,13 @@
     }
 
     <span class="doccomment">/// Extract response body</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take_body</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take_body</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBody</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">body</span>.<span class="ident">take_body</span>()
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">MessageBody</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="macro">writeln</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;\nResponse {:?} {}{}&quot;</span>,
@@ -1374,7 +1374,7 @@
 <span class="kw">impl</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Response</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">Response</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">take</span>(),
             <span class="ident">body</span>: <span class="self">self</span>.<span class="ident">body</span>.<span class="ident">take_body</span>(),
@@ -1391,7 +1391,7 @@
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;&gt;</span> {
         <span class="kw">for</span> <span class="ident">v</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">iter</span>.<span class="ident">by_ref</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">c</span>) <span class="op">=</span> <span class="ident">Cookie</span>::<span class="ident">parse_encoded</span>(<span class="ident">v</span>.<span class="ident">to_str</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>) {
                 <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">c</span>);
@@ -1414,7 +1414,7 @@
 <span class="kw">impl</span> <span class="ident">ResponseBuilder</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Create response builder</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">ResponseBuilder</span> {
             <span class="ident">head</span>: <span class="prelude-val">Some</span>(<span class="ident">BoxedResponseHead</span>::<span class="ident">new</span>(<span class="ident">status</span>)),
             <span class="ident">err</span>: <span class="prelude-val">None</span>,
@@ -1424,7 +1424,7 @@
 
     <span class="doccomment">/// Set HTTP status code of this response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">status</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">status</span>;
         }
@@ -1445,13 +1445,13 @@
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Header</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hdr</span>: <span class="ident">H</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set</span><span class="op">&lt;</span><span class="ident">H</span>: <span class="ident">Header</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">hdr</span>: <span class="ident">H</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="kw">match</span> <span class="ident">hdr</span>.<span class="ident">try_into</span>() {
-                <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=&gt;</span> {
                     <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">H</span>::<span class="ident">name</span>(), <span class="ident">value</span>);
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             }
         }
         <span class="self">self</span>
@@ -1469,21 +1469,21 @@
     <span class="doccomment">///         .finish()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">HeaderName</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
-        <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
+        <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
         <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="kw">match</span> <span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">key</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">key</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into</span>() {
+                    <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=&gt;</span> {
                         <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">key</span>, <span class="ident">value</span>);
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
                 },
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             };
         }
         <span class="self">self</span>
@@ -1501,21 +1501,21 @@
     <span class="doccomment">///         .finish()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_header</span><span class="op">&lt;</span><span class="ident">K</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">key</span>: <span class="ident">K</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">HeaderName</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span>,
-        <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
+        <span class="op">&lt;</span><span class="ident">HeaderName</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">K</span><span class="op">&gt;&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
         <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="kw">match</span> <span class="ident">HeaderName</span>::<span class="ident">try_from</span>(<span class="ident">key</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">key</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into</span>() {
-                    <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">key</span>) <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">value</span>.<span class="ident">try_into</span>() {
+                    <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=&gt;</span> {
                         <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">key</span>, <span class="ident">value</span>);
                     }
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
                 },
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             };
         }
         <span class="self">self</span>
@@ -1523,7 +1523,7 @@
 
     <span class="doccomment">/// Set the custom reason for the response.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reason</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reason</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">reason</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">reason</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">reason</span>);
         }
@@ -1532,7 +1532,7 @@
 
     <span class="doccomment">/// Set connection type to KeepAlive</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">set_connection_type</span>(<span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span>);
         }
@@ -1541,7 +1541,7 @@
 
     <span class="doccomment">/// Set connection type to Upgrade</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">V</span>: <span class="ident">IntoHeaderValue</span>,
     {
@@ -1553,7 +1553,7 @@
 
     <span class="doccomment">/// Force close connection, even if it is marked as keep-alive</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_close</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">force_close</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">set_connection_type</span>(<span class="ident">ConnectionType</span>::<span class="ident">Close</span>);
         }
@@ -1562,7 +1562,7 @@
 
     <span class="doccomment">/// Disable chunked transfer encoding for HTTP/1.1 streaming responses.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">no_chunking</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="ident">parts</span>.<span class="ident">no_chunking</span>(<span class="bool-val">true</span>);
         }
@@ -1571,17 +1571,17 @@
 
     <span class="doccomment">/// Set response content type</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_type</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_type</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">V</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">HeaderValue</span>: <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span>,
-        <span class="op">&lt;</span><span class="ident">HeaderValue</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
+        <span class="op">&lt;</span><span class="ident">HeaderValue</span> <span class="kw">as</span> <span class="ident">TryFrom</span><span class="op">&lt;</span><span class="ident">V</span><span class="op">&gt;&gt;</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
     {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
             <span class="kw">match</span> <span class="ident">HeaderValue</span>::<span class="ident">try_from</span>(<span class="ident">value</span>) {
-                <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Ok</span>(<span class="ident">value</span>) <span class="op">=&gt;</span> {
                     <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">insert</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>, <span class="ident">value</span>);
                 }
-                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
+                <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">err</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>.<span class="ident">into</span>()),
             };
         }
         <span class="self">self</span>
@@ -1589,7 +1589,7 @@
 
     <span class="doccomment">/// Set content length</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_length</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">u64</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">content_length</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">len</span>: <span class="ident">u64</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">header</span>(<span class="ident">header</span>::<span class="ident">CONTENT_LENGTH</span>, <span class="ident">len</span>)
     }
 
@@ -1611,7 +1611,7 @@
     <span class="doccomment">///         .finish()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;c</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;c</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;c</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;c</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cookies</span>.<span class="ident">is_none</span>() {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jar</span> <span class="op">=</span> <span class="ident">CookieJar</span>::<span class="ident">new</span>();
             <span class="ident">jar</span>.<span class="ident">add</span>(<span class="ident">cookie</span>.<span class="ident">into_owned</span>());
@@ -1637,7 +1637,7 @@
     <span class="doccomment">///     builder.finish()</span>
     <span class="doccomment">/// }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="kw-2">&amp;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">del_cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cookie</span>: <span class="kw-2">&amp;</span><span class="ident">Cookie</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">cookies</span>.<span class="ident">is_none</span>() {
             <span class="self">self</span>.<span class="ident">cookies</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">CookieJar</span>::<span class="ident">new</span>())
         }
@@ -1650,7 +1650,7 @@
 
     <span class="doccomment">/// This method calls provided closure with builder reference if value is</span>
     <span class="doccomment">/// true.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">if_true</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">bool</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">if_true</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">bool</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseBuilder</span>),
     {
@@ -1662,7 +1662,7 @@
 
     <span class="doccomment">/// This method calls provided closure with builder reference if value is</span>
     <span class="doccomment">/// Some.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">if_some</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">if_some</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="ident">T</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ResponseBuilder</span>),
     {
@@ -1674,14 +1674,14 @@
 
     <span class="doccomment">/// Responses extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;cannot reuse response builder&quot;</span>);
         <span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
     }
 
     <span class="doccomment">/// Mutable reference to a the response&#39;s extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">expect</span>(<span class="string">&quot;cannot reuse response builder&quot;</span>);
         <span class="ident">head</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
     }
@@ -1690,14 +1690,14 @@
     <span class="doccomment">/// Set a body and generate `Response`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">body</span><span class="op">&lt;</span><span class="ident">B</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="self">self</span>.<span class="ident">message_body</span>(<span class="ident">body</span>.<span class="ident">into</span>())
     }
 
     <span class="doccomment">/// Set a body and generate `Response`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">message_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">message_body</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">body</span>: <span class="ident">B</span>) <span class="op">-&gt;</span> <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">e</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">err</span>.<span class="ident">take</span>() {
             <span class="kw">return</span> <span class="ident">Response</span>::<span class="ident">from</span>(<span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">e</span>)).<span class="ident">into_body</span>();
         }
@@ -1707,8 +1707,8 @@
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">jar</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">cookies</span> {
             <span class="kw">for</span> <span class="ident">cookie</span> <span class="kw">in</span> <span class="ident">jar</span>.<span class="ident">delta</span>() {
                 <span class="kw">match</span> <span class="ident">HeaderValue</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">cookie</span>.<span class="ident">to_string</span>()) {
-                    <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>, <span class="ident">val</span>),
-                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Response</span>::<span class="ident">from</span>(<span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">e</span>)).<span class="ident">into_body</span>(),
+                    <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">response</span>.<span class="ident">headers</span>.<span class="ident">append</span>(<span class="ident">header</span>::<span class="ident">SET_COOKIE</span>, <span class="ident">val</span>),
+                    <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">Response</span>::<span class="ident">from</span>(<span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">e</span>)).<span class="ident">into_body</span>(),
                 };
             }
         }
@@ -1724,9 +1724,9 @@
     <span class="doccomment">/// Set a streaming body and generate `Response`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">streaming</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">streaming</span><span class="op">&lt;</span><span class="ident">S</span>, <span class="ident">E</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="ident">Response</span>
     <span class="kw">where</span>
-        <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">S</span>: <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Bytes</span>, <span class="ident">E</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
         <span class="self">self</span>.<span class="ident">body</span>(<span class="ident">Body</span>::<span class="ident">from_message</span>(<span class="ident">BodyStream</span>::<span class="ident">new</span>(<span class="ident">stream</span>)))
@@ -1736,16 +1736,16 @@
     <span class="doccomment">/// Set a json body and generate `Response`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="self">self</span>.<span class="ident">json2</span>(<span class="kw-2">&amp;</span><span class="ident">value</span>)
     }
 
     <span class="doccomment">/// Set a json body and generate `Response`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json2</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="kw">match</span> <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="ident">value</span>) {
-            <span class="prelude-val">Ok</span>(<span class="ident">body</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-val">Ok</span>(<span class="ident">body</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">contains</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">parts</span>) <span class="op">=</span> <span class="ident">parts</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">err</span>) {
                     <span class="ident">parts</span>.<span class="ident">headers</span>.<span class="ident">contains_key</span>(<span class="ident">header</span>::<span class="ident">CONTENT_TYPE</span>)
                 } <span class="kw">else</span> {
@@ -1757,7 +1757,7 @@
 
                 <span class="self">self</span>.<span class="ident">body</span>(<span class="ident">Body</span>::<span class="ident">from</span>(<span class="ident">body</span>))
             }
-            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">e</span>).<span class="ident">into</span>(),
+            <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">e</span>).<span class="ident">into</span>(),
         }
     }
 
@@ -1765,12 +1765,12 @@
     <span class="doccomment">/// Set an empty body and generate `Response`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `ResponseBuilder` can not be used after this call.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">finish</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
         <span class="self">self</span>.<span class="ident">body</span>(<span class="ident">Body</span>::<span class="ident">Empty</span>)
     }
 
     <span class="doccomment">/// This method construct new `ResponseBuilder`</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="ident">ResponseBuilder</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">take</span>(),
             <span class="ident">err</span>: <span class="self">self</span>.<span class="ident">err</span>.<span class="ident">take</span>(),
@@ -1783,7 +1783,7 @@
 <span class="kw">fn</span> <span class="ident">parts</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(
     <span class="ident">parts</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">BoxedResponseHead</span><span class="op">&gt;</span>,
     <span class="ident">err</span>: <span class="kw-2">&amp;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">HttpError</span><span class="op">&gt;</span>,
-) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">ResponseHead</span><span class="op">&gt;</span> {
+) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="kw-2">mut</span> <span class="ident">ResponseHead</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">err</span>.<span class="ident">is_some</span>() {
         <span class="kw">return</span> <span class="prelude-val">None</span>;
     }
@@ -1791,8 +1791,8 @@
 }
 
 <span class="doccomment">/// Convert `Response` to a `ResponseBuilder`. Body get dropped.</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="comment">// If this response has cookies, load them into a jar</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jar</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CookieJar</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
         <span class="kw">for</span> <span class="ident">c</span> <span class="kw">in</span> <span class="ident">res</span>.<span class="ident">cookies</span>() {
@@ -1815,7 +1815,7 @@
 
 <span class="doccomment">/// Convert `ResponseHead` to a `ResponseBuilder`</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ResponseHead</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">head</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ResponseHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseBuilder</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">head</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">ResponseHead</span>) <span class="op">-&gt;</span> <span class="ident">ResponseBuilder</span> {
         <span class="comment">// If this response has cookies, load them into a jar</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">jar</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CookieJar</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
@@ -1851,13 +1851,13 @@
 <span class="kw">impl</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span>, <span class="ident">Error</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">finish</span>()))
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">ResponseBuilder</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">let</span> <span class="ident">head</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="macro">writeln</span><span class="macro">!</span>(
@@ -1876,23 +1876,23 @@
 }
 
 <span class="doccomment">/// Helper converters</span>
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span>, <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span>, <span class="ident">E</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">I</span>, <span class="ident">E</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">res</span> {
-            <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>.<span class="ident">into</span>(),
-            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>(),
+            <span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">val</span>.<span class="ident">into</span>(),
+            <span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> <span class="ident">err</span>.<span class="ident">into</span>().<span class="ident">into</span>(),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">builder</span>: <span class="ident">ResponseBuilder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">builder</span>: <span class="ident">ResponseBuilder</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">builder</span>.<span class="ident">finish</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;text/plain; charset=utf-8&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
@@ -1900,7 +1900,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;application/octet-stream&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
@@ -1908,7 +1908,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;text/plain; charset=utf-8&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
@@ -1916,7 +1916,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">String</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;text/plain; charset=utf-8&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
@@ -1924,7 +1924,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">Bytes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">Bytes</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;application/octet-stream&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)
@@ -1932,7 +1932,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BytesMut</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">BytesMut</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">val</span>: <span class="ident">BytesMut</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="prelude-val">Ok</span>()
             .<span class="ident">content_type</span>(<span class="string">&quot;application/octet-stream&quot;</span>)
             .<span class="ident">body</span>(<span class="ident">val</span>)

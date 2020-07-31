@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/mime_guess-1.8.8/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../mime_guess/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/mime_guess-1.8.8/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../mime_guess/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -308,10 +308,10 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">try_opt</span> (
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> (
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> (
         <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span> {
-            <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>,
+            <span class="prelude-val">Some</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">val</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>,
         }
     )
 );
@@ -330,7 +330,7 @@
 <span class="doccomment">/// that `path` points to match the MIME type associated with the path&#39;s extension.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Take care when processing files with assumptions based on the return value of this function.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guess_mime_type</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Mime</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guess_mime_type</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="ident">Mime</span> {
     <span class="ident">guess_mime_type_opt</span>(<span class="ident">path</span>)
         .<span class="ident">unwrap_or_else</span>(<span class="ident">octet_stream</span>)
 }
@@ -345,7 +345,7 @@
 <span class="doccomment">/// that `path` points to match the MIME type associated with the path&#39;s extension.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Take care when processing files with assumptions based on the return value of this function.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guess_mime_type_opt</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">guess_mime_type_opt</span><span class="op">&lt;</span><span class="ident">P</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Path</span><span class="op">&gt;&gt;</span>(<span class="ident">path</span>: <span class="ident">P</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="ident">ext</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">as_ref</span>().<span class="ident">extension</span>().<span class="ident">and_then</span>(<span class="ident">OsStr</span>::<span class="ident">to_str</span>).<span class="ident">unwrap_or</span>(<span class="string">&quot;&quot;</span>);
 
     <span class="ident">get_mime_type_opt</span>(<span class="ident">ext</span>)
@@ -355,7 +355,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If there is no association for the extension, or `ext` is empty,</span>
 <span class="doccomment">/// `application/octet-stream` is returned.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Mime</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="ident">Mime</span> {
     <span class="ident">get_mime_type_opt</span>(<span class="ident">search_ext</span>)
         .<span class="ident">unwrap_or_else</span>(<span class="ident">octet_stream</span>)
 }
@@ -364,7 +364,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// If there is no association for the extension, or `ext` is empty,</span>
 <span class="doccomment">/// `None` is returned.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type_opt</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type_opt</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span> {
     <span class="ident">get_mime_type_str</span>(<span class="ident">search_ext</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">mime</span><span class="op">|</span> <span class="ident">mime</span>.<span class="ident">parse</span>::<span class="op">&lt;</span><span class="ident">Mime</span><span class="op">&gt;</span>().<span class="ident">unwrap</span>())
 }
@@ -375,7 +375,7 @@
 <span class="doccomment">/// it will be converted to lowercase to facilitate the search.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// Returns `None` if `search_ext` is empty or an associated extension was not found.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type_str</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_type_str</span>(<span class="ident">search_ext</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span> {
     <span class="kw">if</span> <span class="ident">search_ext</span>.<span class="ident">is_empty</span>() { <span class="kw">return</span> <span class="prelude-val">None</span>; }
 
     <span class="ident">map_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">MIME_TYPES</span>, <span class="ident">search_ext</span>).<span class="ident">cloned</span>()
@@ -391,7 +391,7 @@
 <span class="doccomment">/// If the top-level of the MIME type is a wildcard (`*`), returns all extensions.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the sub-level of the MIME type is a wildcard, returns all extensions for the top-level.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_extensions</span>(<span class="ident">mime</span>: <span class="kw-2">&amp;</span><span class="ident">Mime</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {    
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_extensions</span>(<span class="ident">mime</span>: <span class="kw-2">&amp;</span><span class="ident">Mime</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {    
     <span class="ident">get_extensions</span>(<span class="kw-2">&amp;</span><span class="ident">mime</span>.<span class="number">0</span>, <span class="kw-2">&amp;</span><span class="ident">mime</span>.<span class="number">1</span>)
 }
 
@@ -408,7 +408,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// ### Panics</span>
 <span class="doccomment">/// If `mime_str` is not a valid MIME type specifier (naive).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_extensions_str</span>(<span class="kw-2">mut</span> <span class="ident">mime_str</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mime_extensions_str</span>(<span class="kw-2">mut</span> <span class="ident">mime_str</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {
     <span class="ident">mime_str</span> <span class="op">=</span> <span class="ident">mime_str</span>.<span class="ident">trim</span>();
 
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">sep_idx</span>) <span class="op">=</span> <span class="ident">mime_str</span>.<span class="ident">find</span>(<span class="string">&#39;;&#39;</span>) {
@@ -432,14 +432,14 @@
 <span class="doccomment">/// If the top-level of the MIME type is a wildcard (`*`), returns all extensions.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// If the sub-level of the MIME type is a wildcard, returns all extensions for the top-level.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_extensions</span>(<span class="ident">toplevel</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">sublevel</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">toplevel</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;*&quot;</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_extensions</span>(<span class="ident">toplevel</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">sublevel</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> [<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span>]<span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">toplevel</span> <span class="op">==</span> <span class="string">&quot;*&quot;</span> {
         <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">EXTS</span>);
     } 
     
     <span class="kw">let</span> <span class="ident">top</span> <span class="op">=</span> <span class="macro">try_opt</span><span class="macro">!</span>(<span class="ident">map_lookup</span>(<span class="kw-2">&amp;</span><span class="ident">REV_MAPPINGS</span>, <span class="ident">toplevel</span>));
 
-    <span class="kw">if</span> <span class="ident">sublevel</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;*&quot;</span> {
+    <span class="kw">if</span> <span class="ident">sublevel</span> <span class="op">==</span> <span class="string">&quot;*&quot;</span> {
         <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="ident">EXTS</span>[<span class="ident">top</span>.<span class="ident">start</span> .. <span class="ident">top</span>.<span class="ident">end</span>]);
     } 
     
@@ -448,11 +448,11 @@
 }
 
 <span class="doccomment">/// Get the MIME type for `application/octet-stream` (generic binary stream)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">octet_stream</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Mime</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">octet_stream</span>() <span class="op">-&gt;</span> <span class="ident">Mime</span> {
     <span class="string">&quot;application/octet-stream&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>()    
 }
 
-<span class="kw">fn</span> <span class="ident">map_lookup</span><span class="op">&lt;</span><span class="lifetime">&#39;map</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;map</span> <span class="ident">phf</span>::<span class="ident">Map</span><span class="op">&lt;</span><span class="ident">UniCase</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;map</span> <span class="ident">V</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">map_lookup</span><span class="op">&lt;</span><span class="lifetime">&#39;map</span>, <span class="ident">V</span><span class="op">&gt;</span>(<span class="ident">map</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;map</span> <span class="ident">phf</span>::<span class="ident">Map</span><span class="op">&lt;</span><span class="ident">UniCase</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span><span class="op">&gt;</span>, <span class="ident">V</span><span class="op">&gt;</span>, <span class="ident">key</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;map</span> <span class="ident">V</span><span class="op">&gt;</span> {
     <span class="comment">// This transmute should be safe as `get` will not store the reference with</span>
     <span class="comment">// the expanded lifetime. This is due to `Borrow` being overly strict and</span>
     <span class="comment">// can&#39;t have an impl for `&amp;&#39;static str` to `Borrow&lt;&amp;&#39;a str&gt;`.</span>
@@ -512,7 +512,7 @@
 
         <span class="kw">for</span> (<span class="kw-2">&amp;</span>(<span class="ident">ext</span>, <span class="kw">_</span>), <span class="kw-2">&amp;</span>(<span class="ident">n_ext</span>, <span class="kw">_</span>)) <span class="kw">in</span> <span class="ident">MIME_TYPES</span>.<span class="ident">iter</span>().<span class="ident">zip</span>(<span class="ident">MIME_TYPES</span>.<span class="ident">iter</span>().<span class="ident">skip</span>(<span class="number">1</span>)) {
             <span class="macro">assert</span><span class="macro">!</span>(
-                <span class="ident">ext</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">n_ext</span>,
+                <span class="ident">ext</span> <span class="op">&lt;=</span> <span class="ident">n_ext</span>,
                 <span class="string">&quot;Extensions in src/mime_types should be sorted alphabetically
                 in ascending order. Failed assert: {:?} &lt;= {:?}&quot;</span>,
                 <span class="ident">ext</span>, <span class="ident">n_ext</span>
@@ -534,7 +534,7 @@
     <span class="attribute">#[<span class="ident">bench</span>]</span>
     <span class="kw">fn</span> <span class="ident">bench_mime_str</span>(<span class="ident">b</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Bencher</span>) {
         <span class="kw">for</span> (<span class="ident">mime_ext</span>, <span class="kw">_</span>) <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">MIME_TYPES</span> {
-            <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
                 <span class="ident">get_mime_type_str</span>(<span class="ident">mime_ext</span>).<span class="ident">expect</span>(<span class="ident">mime_ext</span>);
             });
         }
@@ -545,7 +545,7 @@
         <span class="kw">let</span> <span class="ident">uppercased</span> : <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">MIME_TYPES</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">s</span>, <span class="kw">_</span>)<span class="op">|</span> <span class="ident">s</span>.<span class="ident">to_uppercase</span>()).<span class="ident">collect</span>();
 
         <span class="kw">for</span> <span class="ident">mime_ext</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="ident">uppercased</span> {
-            <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">|</span><span class="op">|</span> {
+            <span class="ident">b</span>.<span class="ident">iter</span>(<span class="op">||</span> {
                 <span class="ident">get_mime_type_str</span>(<span class="ident">mime_ext</span>).<span class="ident">expect</span>(<span class="ident">mime_ext</span>);
             });
         }

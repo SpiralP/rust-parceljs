@@ -15,7 +15,7 @@ matchable in the case a predicate doesn't hold.</p>
 <span class="comment">// Filter on `/:id`, but reject with 404 if the `id` is `0`.</span>
 <span class="kw">let</span> <span class="ident">route</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>::<span class="ident">param</span>()
     .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">id</span>: <span class="ident">u32</span><span class="op">|</span> <span class="kw">async</span> <span class="kw">move</span> {
-        <span class="kw">if</span> <span class="ident">id</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+        <span class="kw">if</span> <span class="ident">id</span> <span class="op">==</span> <span class="number">0</span> {
             <span class="prelude-val">Err</span>(<span class="ident">warp</span>::<span class="ident">reject</span>::<span class="ident">not_found</span>())
         } <span class="kw">else</span> {
             <span class="prelude-val">Ok</span>(<span class="string">&quot;something since id is valid&quot;</span>)

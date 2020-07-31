@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `sync` mod in crate `tokio`."><meta name="keywords" content="rust, rustlang, rust-lang, sync"><title>tokio::sync - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../tokio/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module sync</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>tokio</a></p><script>window.sidebarCurrent = {name: 'sync', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/tokio/sync/mod.rs.html#1-482' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>tokio</a>::<wbr><a class="mod" href=''>sync</a></span></h1><div class='docblock'><p>Synchronization primitives for use in asynchronous contexts.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `sync` mod in crate `tokio`."><meta name="keywords" content="rust, rustlang, rust-lang, sync"><title>tokio::sync - Rust</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc mod"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../tokio/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a><p class='location'>Module sync</p><div class="sidebar-elems"><div class="block items"><ul><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li></ul></div><p class='location'><a href='../index.html'>tokio</a></p><script>window.sidebarCurrent = {name: 'sync', ty: 'mod', relpath: '../'};</script><script defer src="../sidebar-items.js"></script></div></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><h1 class='fqn'><span class='out-of-band'><span id='render-detail'><a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">[<span class='inner'>&#x2212;</span>]</a></span><a class='srclink' href='../../src/tokio/sync/mod.rs.html#1-486' title='goto source code'>[src]</a></span><span class='in-band'>Module <a href='../index.html'>tokio</a>::<wbr><a class="mod" href=''>sync</a></span></h1><div class='docblock'><p>Synchronization primitives for use in asynchronous contexts.</p>
 <p>Tokio programs tend to be organized as a set of <a href="../../tokio/task/index.html">tasks</a> where each task
 operates independently and may be executed on separate physical threads. The
 synchronization primitives provided in this module permit these independent
@@ -17,16 +17,16 @@ messages.</p>
 <p>Tokio provides many different channel flavors as different message passing
 patterns are best handled with different implementations.</p>
 <h2 id="oneshot-channel" class="section-header"><a href="#oneshot-channel"><code>oneshot</code> channel</a></h2>
-<p>The <a href="../../tokio/sync/oneshot/index.html" title="oneshot"><code>oneshot</code> channel</a> supports sending a <strong>single</strong> value from a
+<p>The <a href="../../tokio/sync/oneshot/index.html"><code>oneshot</code> channel</a> supports sending a <strong>single</strong> value from a
 single producer to a single consumer. This channel is usually used to send
 the result of a computation to a waiter.</p>
-<p><strong>Example:</strong> using a <a href="../../tokio/sync/oneshot/index.html" title="oneshot"><code>oneshot</code> channel</a> to receive the result of a
+<p><strong>Example:</strong> using a <a href="../../tokio/sync/oneshot/index.html"><code>oneshot</code> channel</a> to receive the result of a
 computation.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">sync</span>::<span class="ident">oneshot</span>;
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>() <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="string">&quot;represents the result of the computation&quot;</span>.<span class="ident">to_string</span>()
 }
 
@@ -44,15 +44,16 @@ computation.</p>
     <span class="comment">// Wait for the computation result</span>
     <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">rx</span>.<span class="kw">await</span>.<span class="ident">unwrap</span>();
 }</pre></div>
-<p>Note, if the task produces the the computation result as its final action
-before terminating, the <a href="../../tokio/task/struct.JoinHandle.html"><code>JoinHandle</code></a> can be used to receive the
-computation result instead of allocating resources for the <code>oneshot</code>
-channel. Awaiting on <a href="../../tokio/task/struct.JoinHandle.html"><code>JoinHandle</code></a> returns <code>Result</code>. If the task panics,
-the <code>Joinhandle</code> yields <code>Err</code> with the panic cause.</p>
+<p>Note, if the task produces a computation result as its final
+action before terminating, the <a href="../../tokio/task/struct.JoinHandle.html"><code>JoinHandle</code></a> can be used to
+receive that value instead of allocating resources for the
+<code>oneshot</code> channel. Awaiting on <a href="../../tokio/task/struct.JoinHandle.html"><code>JoinHandle</code></a> returns <code>Result</code>. If
+the task panics, the <code>Joinhandle</code> yields <code>Err</code> with the panic
+cause.</p>
 <p><strong>Example:</strong></p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>() <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="string">&quot;the result of the computation&quot;</span>.<span class="ident">to_string</span>()
 }
 
@@ -68,7 +69,7 @@ the <code>Joinhandle</code> yields <code>Err</code> with the panic cause.</p>
     <span class="kw">let</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">join_handle</span>.<span class="kw">await</span>.<span class="ident">unwrap</span>();
 }</pre></div>
 <h2 id="mpsc-channel" class="section-header"><a href="#mpsc-channel"><code>mpsc</code> channel</a></h2>
-<p>The <a href="../../tokio/sync/mpsc/index.html" title="mpsc"><code>mpsc</code> channel</a> supports sending <strong>many</strong> values from <strong>many</strong>
+<p>The <a href="../../tokio/sync/mpsc/index.html"><code>mpsc</code> channel</a> supports sending <strong>many</strong> values from <strong>many</strong>
 producers to a single consumer. This channel is often used to send work to a
 task or to receive the result of many computations.</p>
 <p><strong>Example:</strong> using an mpsc to incrementally stream the results of a series
@@ -77,7 +78,7 @@ of computations.</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">sync</span>::<span class="ident">mpsc</span>;
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>(<span class="ident">input</span>: <span class="ident">u32</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">some_computation</span>(<span class="ident">input</span>: <span class="ident">u32</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;the result of computation {}&quot;</span>, <span class="ident">input</span>)
 }
 
@@ -116,7 +117,7 @@ passing.</p>
 <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">sync</span>::<span class="ident">mpsc</span>;
 
 <span class="attribute">#[<span class="ident">tokio</span>::<span class="ident">main</span>]</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">main</span>() <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">socket</span> <span class="op">=</span> <span class="ident">TcpStream</span>::<span class="ident">connect</span>(<span class="string">&quot;www.example.com:1234&quot;</span>).<span class="kw">await</span><span class="question-mark">?</span>;
     <span class="kw">let</span> (<span class="ident">tx</span>, <span class="kw-2">mut</span> <span class="ident">rx</span>) <span class="op">=</span> <span class="ident">mpsc</span>::<span class="ident">channel</span>(<span class="number">100</span>);
 
@@ -142,11 +143,11 @@ passing.</p>
 
     <span class="prelude-val">Ok</span>(())
 }</pre></div>
-<p>The <a href="../../tokio/sync/mpsc/index.html" title="mpsc"><code>mpsc</code></a> and <a href="../../tokio/sync/oneshot/index.html" title="oneshot"><code>oneshot</code></a> channels can be combined to
+<p>The <a href="../../tokio/sync/mpsc/index.html"><code>mpsc</code></a> and <a href="../../tokio/sync/oneshot/index.html"><code>oneshot</code></a> channels can be combined to
 provide a request / response type synchronization pattern with a shared
 resource. A task is spawned to synchronize a resource and waits on commands
-received on a <a href="../../tokio/sync/mpsc/index.html" title="mpsc"><code>mpsc</code></a> channel. Each command includes a
-<a href="../../tokio/sync/oneshot/index.html" title="oneshot"><code>oneshot</code></a> <code>Sender</code> on which the result of the command is sent.</p>
+received on a <a href="../../tokio/sync/mpsc/index.html"><code>mpsc</code></a> channel. Each command includes a
+<a href="../../tokio/sync/oneshot/index.html"><code>oneshot</code></a> <code>Sender</code> on which the result of the command is sent.</p>
 <p><strong>Example:</strong> use a task to synchronize a <code>u64</code> counter. Each task sends an
 &quot;fetch and increment&quot; command. The counter value <strong>before</strong> the increment is
 sent over the provided <code>oneshot</code> channel.</p>
@@ -170,9 +171,9 @@ sent over the provided <code>oneshot</code> channel.</p>
 
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>((<span class="ident">cmd</span>, <span class="ident">response</span>)) <span class="op">=</span> <span class="ident">cmd_rx</span>.<span class="ident">recv</span>().<span class="kw">await</span> {
             <span class="kw">match</span> <span class="ident">cmd</span> {
-                <span class="ident">Increment</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">Increment</span> <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">prev</span> <span class="op">=</span> <span class="ident">counter</span>;
-                    <span class="ident">counter</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                    <span class="ident">counter</span> <span class="op">+=</span> <span class="number">1</span>;
                     <span class="ident">response</span>.<span class="ident">send</span>(<span class="ident">prev</span>).<span class="ident">unwrap</span>();
                 }
             }
@@ -255,7 +256,7 @@ the file changes, the configuration changes are signalled to consumers.</p>
 }
 
 <span class="kw">impl</span> <span class="ident">Config</span> {
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">load_from_file</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span> {
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">load_from_file</span>() <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Config</span><span class="op">&gt;</span> {
         <span class="comment">// file loading and deserialization logic here</span>
     }
 }
@@ -283,7 +284,7 @@ the file changes, the configuration changes are signalled to consumers.</p>
 
             <span class="comment">// If the configuration changed, send the new config value</span>
             <span class="comment">// on the watch channel.</span>
-            <span class="kw">if</span> <span class="ident">new_config</span> <span class="op">!</span><span class="op">=</span> <span class="ident">config</span> {
+            <span class="kw">if</span> <span class="ident">new_config</span> <span class="op">!=</span> <span class="ident">config</span> {
                 <span class="ident">tx</span>.<span class="ident">broadcast</span>(<span class="ident">new_config</span>.<span class="ident">clone</span>()).<span class="ident">unwrap</span>();
                 <span class="ident">config</span> <span class="op">=</span> <span class="ident">new_config</span>;
             }
@@ -319,7 +320,7 @@ the file changes, the configuration changes are signalled to consumers.</p>
 
             <span class="kw">loop</span> {
                 <span class="ident">tokio</span>::<span class="macro">select</span><span class="macro">!</span> {
-                    <span class="kw">_</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">delay</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">delay</span> <span class="op">=&gt;</span> {
                         <span class="comment">// The operation elapsed. Restart it</span>
                         <span class="ident">op</span>.<span class="ident">set</span>(<span class="ident">my_async_operation</span>());
 
@@ -329,14 +330,14 @@ the file changes, the configuration changes are signalled to consumers.</p>
                         <span class="comment">// Restart the timeout</span>
                         <span class="ident">delay</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">delay_until</span>(<span class="ident">op_start</span> <span class="op">+</span> <span class="ident">conf</span>.<span class="ident">timeout</span>);
                     }
-                    <span class="ident">new_conf</span> <span class="op">=</span> <span class="ident">rx</span>.<span class="ident">recv</span>() <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">new_conf</span> <span class="op">=</span> <span class="ident">rx</span>.<span class="ident">recv</span>() <span class="op">=&gt;</span> {
                         <span class="ident">conf</span> <span class="op">=</span> <span class="ident">new_conf</span>.<span class="ident">unwrap</span>();
 
                         <span class="comment">// The configuration has been updated. Update the</span>
                         <span class="comment">// `delay` using the new `timeout` value.</span>
                         <span class="ident">delay</span>.<span class="ident">reset</span>(<span class="ident">op_start</span> <span class="op">+</span> <span class="ident">conf</span>.<span class="ident">timeout</span>);
                     }
-                    <span class="kw">_</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">op</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="kw">_</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">op</span> <span class="op">=&gt;</span> {
                         <span class="comment">// The operation completed!</span>
                         <span class="kw">return</span>
                     }
@@ -358,27 +359,27 @@ operate in a similar way as their <code>std</code> counterparts parts but will w
 asynchronously instead of blocking the thread.</p>
 <ul>
 <li>
-<p><a href="../../tokio/sync/struct.Barrier.html" title="Barrier"><code>Barrier</code></a> Ensures multiple tasks will wait for each other to
+<p><a href="../../tokio/sync/struct.Barrier.html"><code>Barrier</code></a> Ensures multiple tasks will wait for each other to
 reach a point in the program, before continuing execution all together.</p>
 </li>
 <li>
-<p><a href="../../tokio/sync/struct.Mutex.html" title="Mutex"><code>Mutex</code></a> Mutual Exclusion mechanism, which ensures that at most
+<p><a href="../../tokio/sync/struct.Mutex.html"><code>Mutex</code></a> Mutual Exclusion mechanism, which ensures that at most
 one thread at a time is able to access some data.</p>
 </li>
 <li>
-<p><a href="../../tokio/sync/struct.Notify.html" title="Notify"><code>Notify</code></a> Basic task notification. <code>Notify</code> supports notifying a
+<p><a href="../../tokio/sync/struct.Notify.html"><code>Notify</code></a> Basic task notification. <code>Notify</code> supports notifying a
 receiving task without sending data. In this case, the task wakes up and
 resumes processing.</p>
 </li>
 <li>
-<p><a href="../../tokio/sync/struct.RwLock.html" title="RwLock"><code>RwLock</code></a> Provides a mutual exclusion mechanism which allows
+<p><a href="../../tokio/sync/struct.RwLock.html"><code>RwLock</code></a> Provides a mutual exclusion mechanism which allows
 multiple readers at the same time, while allowing only one writer at a
 time. In some cases, this can be more efficient than a mutex.</p>
 </li>
 <li>
-<p><a href="../../tokio/sync/struct.Semaphore.html" title="Semaphore"><code>Semaphore</code></a> Limits the amount of concurrency. A semaphore
+<p><a href="../../tokio/sync/struct.Semaphore.html"><code>Semaphore</code></a> Limits the amount of concurrency. A semaphore
 holds a number of permits, which tasks may request in order to enter a
-critical section. Semaphores are useful for implementing limiting of
+critical section. Semaphores are useful for implementing limiting or
 bounding of any kind.</p>
 </li>
 </ul>

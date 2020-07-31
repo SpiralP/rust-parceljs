@@ -4,7 +4,7 @@
 <span class="kw">use</span> <span class="ident">warp</span>::{<span class="ident">http</span>::<span class="ident">Uri</span>, <span class="ident">Filter</span>};
 
 <span class="kw">let</span> <span class="ident">route</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>(<span class="string">&quot;v1&quot;</span>)
-    .<span class="ident">map</span>(<span class="op">|</span><span class="op">|</span> {
+    .<span class="ident">map</span>(<span class="op">||</span> {
         <span class="ident">warp</span>::<span class="ident">redirect</span>::<span class="ident">temporary</span>(<span class="ident">Uri</span>::<span class="ident">from_static</span>(<span class="string">&quot;/v2&quot;</span>))
     });</pre></div>
 </div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "warp";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

@@ -9,7 +9,7 @@ up your full set. Consider these example filters:</p>
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="kw">use</span> <span class="ident">warp</span>::<span class="ident">Filter</span>;
 
-<span class="kw">fn</span> <span class="ident">sum</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> (<span class="ident">u32</span>,), <span class="ident">Error</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> {
+<span class="kw">fn</span> <span class="ident">sum</span>() <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> (<span class="ident">u32</span>,), <span class="ident">Error</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> {
     <span class="ident">warp</span>::<span class="ident">path</span>::<span class="ident">param</span>()
         .<span class="ident">and</span>(<span class="ident">warp</span>::<span class="ident">path</span>::<span class="ident">param</span>())
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">x</span>: <span class="ident">u32</span>, <span class="ident">y</span>: <span class="ident">u32</span><span class="op">|</span> {
@@ -17,7 +17,7 @@ up your full set. Consider these example filters:</p>
         })
 }
 
-<span class="kw">fn</span> <span class="ident">math</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> (<span class="ident">String</span>,), <span class="ident">Error</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> {
+<span class="kw">fn</span> <span class="ident">math</span>() <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> (<span class="ident">String</span>,), <span class="ident">Error</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span> {
     <span class="ident">warp</span>::<span class="ident">post</span>()
         .<span class="ident">and</span>(<span class="ident">sum</span>())
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">z</span>: <span class="ident">u32</span><span class="op">|</span> {

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-proto-0.18.0-alpha.2/src/xfer/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/trust-dns-proto-0.18.0-alpha.2/src/xfer/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -385,10 +385,10 @@
 
 <span class="doccomment">/// A non-multiplexed stream of Serialized DNS messages</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DnsClientStream</span>:
-    <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SerialMessage</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span>
+    <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SerialMessage</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span>
 {
     <span class="doccomment">/// The remote name server address</span>
-    <span class="kw">fn</span> <span class="ident">name_server_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SocketAddr</span>;
+    <span class="kw">fn</span> <span class="ident">name_server_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SocketAddr</span>;
 }
 
 <span class="comment">// TODO: change to Sink</span>
@@ -400,12 +400,12 @@
 
 <span class="kw">impl</span> <span class="ident">BufStreamHandle</span> {
     <span class="doccomment">/// Constructs a new BufStreamHandle with the associated ProtoError</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BufStreamHandle</span> { <span class="ident">sender</span> }
     }
 
     <span class="doccomment">/// see [`futures::sync::mpsc::UnboundedSender`]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unbounded_send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">SerialMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TrySendError</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unbounded_send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">msg</span>: <span class="ident">SerialMessage</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TrySendError</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">unbounded_send</span>(<span class="ident">msg</span>)
     }
 }
@@ -427,7 +427,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `name_server` - the address of the DNS server</span>
     <span class="doccomment">/// * `sender` - the handle being used to send data to the server</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">name_server</span>: <span class="ident">SocketAddr</span>, <span class="ident">sender</span>: <span class="ident">BufStreamHandle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">name_server</span>: <span class="ident">SocketAddr</span>, <span class="ident">sender</span>: <span class="ident">BufStreamHandle</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BufDnsStreamHandle</span> {
             <span class="ident">name_server</span>,
             <span class="ident">sender</span>,
@@ -436,7 +436,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">DnsStreamHandle</span> <span class="kw">for</span> <span class="ident">BufDnsStreamHandle</span> {
-    <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">buffer</span>: <span class="ident">SerialMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">buffer</span>: <span class="ident">SerialMessage</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name_server</span>: <span class="ident">SocketAddr</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">name_server</span>;
         <span class="kw">let</span> <span class="ident">sender</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw">_</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">sender</span>;
         <span class="ident">sender</span>
@@ -450,17 +450,17 @@
 <span class="doccomment">/// A sender to which serialized DNS Messages can be sent</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
-    <span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
     <span class="doccomment">/// Constructs a new BufStreamHandle with the associated ProtoError</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">UnboundedSender</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">DnsRequestStreamHandle</span> { <span class="ident">sender</span> }
     }
 
@@ -468,16 +468,16 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">unbounded_send</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">msg</span>: <span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TrySendError</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">TrySendError</span><span class="op">&lt;</span><span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">unbounded_send</span>(<span class="ident">msg</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">DnsRequestStreamHandle</span> {
             <span class="ident">sender</span>: <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">clone</span>(),
         }
@@ -490,10 +490,10 @@
 <span class="doccomment">///   NotReady, if it is not ready to send a message, and `Err` or `None` in the case that the stream is</span>
 <span class="doccomment">///   done, and should be shutdown.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DnsRequestSender</span>:
-    <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>
+    <span class="ident">Stream</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>
 {
     <span class="doccomment">/// A future that resolves to a response serial message</span>
-    <span class="kw">type</span> <span class="ident">DnsResponseFuture</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">type</span> <span class="ident">DnsResponseFuture</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span>
         <span class="op">+</span> <span class="lifetime">&#39;static</span>
         <span class="op">+</span> <span class="ident">Send</span>
         <span class="op">+</span> <span class="ident">Unpin</span>;
@@ -503,10 +503,10 @@
     <span class="doccomment">/// # Return</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// A future which will resolve to a SerialMessage response</span>
-    <span class="kw">fn</span> <span class="ident">send_message</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="ident">DnsRequest</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">DnsResponseFuture</span>;
+    <span class="kw">fn</span> <span class="ident">send_message</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">message</span>: <span class="ident">DnsRequest</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">DnsResponseFuture</span>;
 
     <span class="doccomment">/// Constructs an error response</span>
-    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="ident">error</span>: <span class="ident">ProtoError</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">DnsResponseFuture</span>;
+    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="ident">error</span>: <span class="ident">ProtoError</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">DnsResponseFuture</span>;
 
     <span class="doccomment">/// Allows the upstream user to inform the underling stream that it should shutdown.</span>
     <span class="doccomment">///</span>
@@ -514,32 +514,32 @@
     <span class="kw">fn</span> <span class="ident">shutdown</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>);
 
     <span class="doccomment">/// Returns true if the stream has been shutdown with `shutdown`</span>
-    <span class="kw">fn</span> <span class="ident">is_shutdown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span>;
+    <span class="kw">fn</span> <span class="ident">is_shutdown</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span>;
 }
 
 <span class="doccomment">/// Used for associating a name_server to a DnsRequestStreamHandle</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BufDnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
     <span class="ident">sender</span>: <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">BufDnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
     <span class="doccomment">/// Construct a new BufDnsRequestStreamHandle</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">sender</span>: <span class="ident">DnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BufDnsRequestStreamHandle</span> { <span class="ident">sender</span> }
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">BufDnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BufDnsRequestStreamHandle</span> {
             <span class="ident">sender</span>: <span class="self">self</span>.<span class="ident">sender</span>.<span class="ident">clone</span>(),
         }
@@ -547,28 +547,28 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">try_oneshot</span> {
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>) <span class="op">=</span><span class="op">&gt;</span> {{
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>) <span class="op">=&gt;</span> {{
         <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">result</span>::<span class="prelude-ty">Result</span>;
 
         <span class="kw">match</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span> {
-            <span class="prelude-ty">Result</span>::<span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">val</span>,
-            <span class="prelude-ty">Result</span>::<span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="prelude-ty">Result</span>::<span class="prelude-val">Ok</span>(<span class="ident">val</span>) <span class="op">=&gt;</span> <span class="ident">val</span>,
+            <span class="prelude-ty">Result</span>::<span class="prelude-val">Err</span>(<span class="ident">err</span>) <span class="op">=&gt;</span> {
                 <span class="kw">return</span> <span class="ident">OneshotDnsResponseReceiver</span>::<span class="prelude-val">Err</span>(<span class="prelude-val">Some</span>(<span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="ident">err</span>)))
             }
         }
     }};
-    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>,) <span class="op">=</span><span class="op">&gt;</span> {
+    (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span>:<span class="ident">expr</span>,) <span class="op">=&gt;</span> {
         <span class="macro-nonterminal">$</span><span class="macro-nonterminal">expr</span><span class="question-mark">?</span>
     };
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">DnsHandle</span> <span class="kw">for</span> <span class="ident">BufDnsRequestStreamHandle</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">OneshotDnsResponseReceiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
         <span class="kw">let</span> <span class="ident">request</span>: <span class="ident">DnsRequest</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">into</span>();
         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;enqueueing message: {:?}&quot;</span>, <span class="ident">request</span>.<span class="ident">queries</span>());
 
@@ -586,7 +586,7 @@
 <span class="doccomment">/// A OneshotDnsRequest creates a channel for a response to message</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
     <span class="ident">dns_request</span>: <span class="ident">DnsRequest</span>,
     <span class="ident">sender_for_response</span>: <span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>,
@@ -594,9 +594,9 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
-    <span class="kw">fn</span> <span class="ident">oneshot</span>(<span class="ident">dns_request</span>: <span class="ident">DnsRequest</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>, <span class="ident">oneshot</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">oneshot</span>(<span class="ident">dns_request</span>: <span class="ident">DnsRequest</span>) <span class="op">-&gt;</span> (<span class="ident">OneshotDnsRequest</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>, <span class="ident">oneshot</span>::<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) {
         <span class="kw">let</span> (<span class="ident">sender_for_response</span>, <span class="ident">receiver</span>) <span class="op">=</span> <span class="ident">oneshot</span>::<span class="ident">channel</span>();
 
         (
@@ -608,7 +608,7 @@
         )
     }
 
-    <span class="kw">fn</span> <span class="ident">unwrap</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">DnsRequest</span>, <span class="ident">OneshotDnsResponse</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) {
+    <span class="kw">fn</span> <span class="ident">unwrap</span>(<span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">DnsRequest</span>, <span class="ident">OneshotDnsResponse</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>) {
         (
             <span class="self">self</span>.<span class="ident">dns_request</span>,
             <span class="ident">OneshotDnsResponse</span>(<span class="self">self</span>.<span class="ident">sender_for_response</span>),
@@ -618,13 +618,13 @@
 
 <span class="kw">struct</span> <span class="ident">OneshotDnsResponse</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">oneshot</span>::<span class="ident">Sender</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>)
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>;
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">OneshotDnsResponse</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
 {
-    <span class="kw">fn</span> <span class="ident">send_response</span>(<span class="self">self</span>, <span class="ident">serial_response</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">F</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">send_response</span>(<span class="self">self</span>, <span class="ident">serial_response</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">F</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">send</span>(<span class="ident">serial_response</span>)
     }
 }
@@ -632,7 +632,7 @@
 <span class="doccomment">/// A Future that wraps a oneshot::Receiver and resolves to the final value</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">OneshotDnsResponseReceiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="doccomment">/// The receiver</span>
     <span class="ident">Receiver</span>(<span class="ident">Receiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>),
@@ -644,25 +644,25 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">OneshotDnsResponseReceiver</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>,
+    <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">F</span> <span class="kw">as</span> <span class="ident">Future</span><span class="op">&gt;</span>::<span class="ident">Output</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="kw">loop</span> {
             <span class="kw-2">*</span><span class="self">self</span> <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span>.<span class="ident">as_mut</span>() {
-                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="ident">Receiver</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">receiver</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="ident">Receiver</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">receiver</span>) <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">receiver</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">receiver</span>);
                     <span class="kw">let</span> <span class="ident">future</span> <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">receiver</span>
                         .<span class="ident">poll</span>(<span class="ident">cx</span>)
                         .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="string">&quot;receiver was canceled&quot;</span>)))<span class="question-mark">?</span>;
                     <span class="ident">OneshotDnsResponseReceiver</span>::<span class="ident">Received</span>(<span class="ident">future</span>)
                 }
-                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="ident">Received</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">future</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="ident">Received</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">future</span>) <span class="op">=&gt;</span> {
                     <span class="kw">let</span> <span class="ident">future</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">future</span>);
                     <span class="kw">return</span> <span class="ident">future</span>.<span class="ident">poll</span>(<span class="ident">cx</span>);
                 }
-                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">err</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">OneshotDnsResponseReceiver</span>::<span class="prelude-val">Err</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">err</span>) <span class="op">=&gt;</span> {
                     <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>
                         .<span class="ident">take</span>()
                         .<span class="ident">expect</span>(<span class="string">&quot;futures should not be polled after complete&quot;</span>)))

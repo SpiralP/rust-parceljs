@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-http-1.0.1/src/service.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>service.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/actix-http-1.0.1/src/service.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>service.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -707,12 +707,12 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{<span class="ident">h1</span>, <span class="ident">h2</span>::<span class="ident">Dispatcher</span>, <span class="ident">Protocol</span>};
 
 <span class="doccomment">/// `ServiceFactory` HTTP1.1/HTTP2 transport implementation</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span> <span class="op">=</span> <span class="ident">h1</span>::<span class="ident">ExpectHandler</span>, <span class="ident">U</span> <span class="op">=</span> <span class="ident">h1</span>::<span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span> <span class="op">=</span> <span class="ident">h1</span>::<span class="ident">ExpectHandler</span>, <span class="ident">U</span> <span class="op">=</span> <span class="ident">h1</span>::<span class="ident">UpgradeHandler</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span> {
     <span class="ident">srv</span>: <span class="ident">S</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">expect</span>: <span class="ident">X</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
 
@@ -721,12 +721,12 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="doccomment">/// Create builder for `HttpService` instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpServiceBuilder</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>() <span class="op">-&gt;</span> <span class="ident">HttpServiceBuilder</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span><span class="op">&gt;</span> {
         <span class="ident">HttpServiceBuilder</span>::<span class="ident">new</span>()
     }
 }
@@ -736,12 +736,12 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="doccomment">/// Create new `HttpService` instance.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">service</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;&gt;</span>(<span class="ident">service</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">let</span> <span class="ident">cfg</span> <span class="op">=</span> <span class="ident">ServiceConfig</span>::<span class="ident">new</span>(<span class="ident">KeepAlive</span>::<span class="ident">Timeout</span>(<span class="number">5</span>), <span class="number">5000</span>, <span class="number">0</span>, <span class="bool-val">false</span>, <span class="prelude-val">None</span>);
 
         <span class="ident">HttpService</span> {
@@ -755,10 +755,10 @@
     }
 
     <span class="doccomment">/// Create new `HttpService` instance with config.</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_config</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">with_config</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">IntoServiceFactory</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;&gt;</span>(
         <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
         <span class="ident">service</span>: <span class="ident">F</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">HttpService</span> {
             <span class="ident">cfg</span>,
             <span class="ident">srv</span>: <span class="ident">service</span>.<span class="ident">into_factory</span>(),
@@ -775,7 +775,7 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
 {
@@ -784,7 +784,7 @@
     <span class="doccomment">/// Service get called with request that contains `EXPECT` header.</span>
     <span class="doccomment">/// Service must return request in case of success, in that case</span>
     <span class="doccomment">/// request will be forwarded to main service.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span><span class="op">&lt;</span><span class="ident">X1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">expect</span>: <span class="ident">X1</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X1</span>, <span class="ident">U</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span><span class="op">&lt;</span><span class="ident">X1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">expect</span>: <span class="ident">X1</span>) <span class="op">-&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X1</span>, <span class="ident">U</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">X1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
         <span class="ident">X1</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -805,7 +805,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If service is provided then normal requests handling get halted</span>
     <span class="doccomment">/// and this service get called with original request and framed object.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U1</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U1</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">HttpService</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U1</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">U1</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">Config</span> <span class="op">=</span> (),
@@ -829,8 +829,8 @@
     <span class="doccomment">/// Set on connect callback.</span>
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">on_connect</span>(
         <span class="kw-2">mut</span> <span class="self">self</span>,
-        <span class="ident">f</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="ident">f</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">on_connect</span> <span class="op">=</span> <span class="ident">f</span>;
         <span class="self">self</span>
     }
@@ -841,7 +841,7 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -860,7 +860,7 @@
     <span class="doccomment">/// Create simple tcp stream service</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">tcp</span>(
         <span class="self">self</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+    ) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
         <span class="ident">Config</span> <span class="op">=</span> (),
         <span class="ident">Request</span> <span class="op">=</span> <span class="ident">TcpStream</span>,
         <span class="ident">Response</span> <span class="op">=</span> (),
@@ -886,7 +886,7 @@
         <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
         <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-        <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
         <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">X</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -906,7 +906,7 @@
         <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">openssl</span>(
             <span class="self">self</span>,
             <span class="ident">acceptor</span>: <span class="ident">SslAcceptor</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+        ) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">Config</span> <span class="op">=</span> (),
             <span class="ident">Request</span> <span class="op">=</span> <span class="ident">TcpStream</span>,
             <span class="ident">Response</span> <span class="op">=</span> (),
@@ -920,7 +920,7 @@
             )
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">SslStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">proto</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">protos</span>) <span class="op">=</span> <span class="ident">io</span>.<span class="ident">ssl</span>().<span class="ident">selected_alpn_protocol</span>() {
-                    <span class="kw">if</span> <span class="ident">protos</span>.<span class="ident">windows</span>(<span class="number">2</span>).<span class="ident">any</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> <span class="ident">window</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&quot;h2&quot;</span>) {
+                    <span class="kw">if</span> <span class="ident">protos</span>.<span class="ident">windows</span>(<span class="number">2</span>).<span class="ident">any</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> <span class="ident">window</span> <span class="op">==</span> <span class="string">b&quot;h2&quot;</span>) {
                         <span class="ident">Protocol</span>::<span class="ident">Http2</span>
                     } <span class="kw">else</span> {
                         <span class="ident">Protocol</span>::<span class="ident">Http1</span>
@@ -948,7 +948,7 @@
         <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
         <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-        <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+        <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
         <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">X</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -968,7 +968,7 @@
         <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rustls</span>(
             <span class="self">self</span>,
             <span class="kw-2">mut</span> <span class="ident">config</span>: <span class="ident">ServerConfig</span>,
-        ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
+        ) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServiceFactory</span><span class="op">&lt;</span>
             <span class="ident">Config</span> <span class="op">=</span> (),
             <span class="ident">Request</span> <span class="op">=</span> <span class="ident">TcpStream</span>,
             <span class="ident">Response</span> <span class="op">=</span> (),
@@ -985,7 +985,7 @@
             )
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">io</span>: <span class="ident">TlsStream</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&gt;</span><span class="op">|</span> {
                 <span class="kw">let</span> <span class="ident">proto</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">protos</span>) <span class="op">=</span> <span class="ident">io</span>.<span class="ident">get_ref</span>().<span class="number">1</span>.<span class="ident">get_alpn_protocol</span>() {
-                    <span class="kw">if</span> <span class="ident">protos</span>.<span class="ident">windows</span>(<span class="number">2</span>).<span class="ident">any</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> <span class="ident">window</span> <span class="op">=</span><span class="op">=</span> <span class="string">b&quot;h2&quot;</span>) {
+                    <span class="kw">if</span> <span class="ident">protos</span>.<span class="ident">windows</span>(<span class="number">2</span>).<span class="ident">any</span>(<span class="op">|</span><span class="ident">window</span><span class="op">|</span> <span class="ident">window</span> <span class="op">==</span> <span class="string">b&quot;h2&quot;</span>) {
                         <span class="ident">Protocol</span>::<span class="ident">Http2</span>
                     } <span class="kw">else</span> {
                         <span class="ident">Protocol</span>::<span class="ident">Http1</span>
@@ -1007,7 +1007,7 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Config</span> <span class="op">=</span> (), <span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -1031,7 +1031,7 @@
     <span class="kw">type</span> <span class="ident">Service</span> <span class="op">=</span> <span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>::<span class="ident">Service</span>, <span class="ident">B</span>, <span class="ident">X</span>::<span class="ident">Service</span>, <span class="ident">U</span>::<span class="ident">Service</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">HttpServiceResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">new_service</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: ()) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">new_service</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: ()) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="ident">HttpServiceResponse</span> {
             <span class="ident">fut</span>: <span class="self">self</span>.<span class="ident">srv</span>.<span class="ident">new_service</span>(()),
             <span class="ident">fut_ex</span>: <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">expect</span>.<span class="ident">new_service</span>(())),
@@ -1062,7 +1062,7 @@
     <span class="ident">fut_upg</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span>::<span class="ident">Future</span><span class="op">&gt;</span>,
     <span class="ident">expect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">X</span>::<span class="ident">Service</span><span class="op">&gt;</span>,
     <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span>::<span class="ident">Service</span><span class="op">&gt;</span>,
-    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>)<span class="op">&gt;</span>,
 }
@@ -1073,7 +1073,7 @@
     <span class="ident">S</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">InitError</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Service</span> <span class="kw">as</span> <span class="ident">Service</span><span class="op">&gt;</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">ServiceFactory</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
@@ -1088,7 +1088,7 @@
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span>
         <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>::<span class="ident">Service</span>, <span class="ident">B</span>, <span class="ident">X</span>::<span class="ident">Service</span>, <span class="ident">U</span>::<span class="ident">Service</span><span class="op">&gt;</span>, ()<span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>();
 
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">fut</span>) <span class="op">=</span> <span class="ident">this</span>.<span class="ident">fut_ex</span>.<span class="ident">as_pin_mut</span>() {
@@ -1130,9 +1130,9 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> {
     <span class="ident">srv</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
     <span class="ident">expect</span>: <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">X</span><span class="op">&gt;</span>,
-    <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;&gt;</span>,
     <span class="ident">cfg</span>: <span class="ident">ServiceConfig</span>,
-    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
     <span class="ident">_t</span>: <span class="ident">PhantomData</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">B</span>, <span class="ident">X</span>)<span class="op">&gt;</span>,
 }
 
@@ -1141,7 +1141,7 @@
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -1153,8 +1153,8 @@
         <span class="ident">srv</span>: <span class="ident">S</span>,
         <span class="ident">expect</span>: <span class="ident">X</span>,
         <span class="ident">upgrade</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">U</span><span class="op">&gt;</span>,
-        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> {
+        <span class="ident">on_connect</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">rc</span>::<span class="ident">Rc</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    ) <span class="op">-&gt;</span> <span class="ident">HttpServiceHandler</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span> {
         <span class="ident">HttpServiceHandler</span> {
             <span class="ident">cfg</span>,
             <span class="ident">on_connect</span>,
@@ -1172,7 +1172,7 @@
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -1184,7 +1184,7 @@
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">DispatchError</span>;
     <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">HttpServiceHandlerResponse</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">S</span>, <span class="ident">B</span>, <span class="ident">X</span>, <span class="ident">U</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_ready</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> {
         <span class="kw">let</span> <span class="ident">ready</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">expect</span>
             .<span class="ident">poll_ready</span>(<span class="ident">cx</span>)
@@ -1204,7 +1204,7 @@
                 <span class="ident">DispatchError</span>::<span class="ident">Service</span>(<span class="ident">e</span>)
             })<span class="question-mark">?</span>
             .<span class="ident">is_ready</span>()
-            <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">ready</span>;
+            <span class="op">&amp;&amp;</span> <span class="ident">ready</span>;
 
         <span class="kw">let</span> <span class="ident">ready</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">upg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">upgrade</span> {
             <span class="ident">upg</span>.<span class="ident">poll_ready</span>(<span class="ident">cx</span>)
@@ -1214,7 +1214,7 @@
                     <span class="ident">DispatchError</span>::<span class="ident">Service</span>(<span class="ident">e</span>)
                 })<span class="question-mark">?</span>
                 .<span class="ident">is_ready</span>()
-                <span class="kw-2">&amp;</span><span class="op">&amp;</span> <span class="ident">ready</span>
+                <span class="op">&amp;&amp;</span> <span class="ident">ready</span>
         } <span class="kw">else</span> {
             <span class="ident">ready</span>
         };
@@ -1226,7 +1226,7 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, (<span class="ident">io</span>, <span class="ident">proto</span>, <span class="ident">peer_addr</span>): <span class="self">Self</span>::<span class="ident">Request</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">call</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, (<span class="ident">io</span>, <span class="ident">proto</span>, <span class="ident">peer_addr</span>): <span class="self">Self</span>::<span class="ident">Request</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">let</span> <span class="ident">on_connect</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">on_connect</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">on_connect</span> {
             <span class="prelude-val">Some</span>(<span class="ident">on_connect</span>(<span class="kw-2">&amp;</span><span class="ident">io</span>))
         } <span class="kw">else</span> {
@@ -1234,7 +1234,7 @@
         };
 
         <span class="kw">match</span> <span class="ident">proto</span> {
-            <span class="ident">Protocol</span>::<span class="ident">Http2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HttpServiceHandlerResponse</span> {
+            <span class="ident">Protocol</span>::<span class="ident">Http2</span> <span class="op">=&gt;</span> <span class="ident">HttpServiceHandlerResponse</span> {
                 <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">H2Handshake</span>(<span class="prelude-val">Some</span>((
                     <span class="ident">server</span>::<span class="ident">handshake</span>(<span class="ident">io</span>),
                     <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>(),
@@ -1243,7 +1243,7 @@
                     <span class="ident">peer_addr</span>,
                 ))),
             },
-            <span class="ident">Protocol</span>::<span class="ident">Http1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HttpServiceHandlerResponse</span> {
+            <span class="ident">Protocol</span>::<span class="ident">Http1</span> <span class="op">=&gt;</span> <span class="ident">HttpServiceHandlerResponse</span> {
                 <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">H1</span>(<span class="ident">h1</span>::<span class="ident">Dispatcher</span>::<span class="ident">new</span>(
                     <span class="ident">io</span>,
                     <span class="self">self</span>.<span class="ident">cfg</span>.<span class="ident">clone</span>(),
@@ -1278,7 +1278,7 @@
             <span class="ident">Handshake</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">Bytes</span><span class="op">&gt;</span>,
             <span class="ident">ServiceConfig</span>,
             <span class="ident">CloneableService</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>,
-            <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+            <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">DataFactory</span><span class="op">&gt;&gt;</span>,
             <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">net</span>::<span class="ident">SocketAddr</span><span class="op">&gt;</span>,
         )<span class="op">&gt;</span>,
     ),
@@ -1291,7 +1291,7 @@
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -1308,7 +1308,7 @@
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="ident">Future</span>: <span class="lifetime">&#39;static</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span>,
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -1317,7 +1317,7 @@
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">project</span>().<span class="ident">state</span>.<span class="ident">poll</span>(<span class="ident">cx</span>)
     }
 }
@@ -1327,7 +1327,7 @@
     <span class="ident">T</span>: <span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span>,
     <span class="ident">S</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
-    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>::<span class="ident">Response</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">B</span>: <span class="ident">MessageBody</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">X</span>: <span class="ident">Service</span><span class="op">&lt;</span><span class="ident">Request</span> <span class="op">=</span> <span class="ident">Request</span>, <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Request</span><span class="op">&gt;</span>,
     <span class="ident">X</span>::<span class="ident">Error</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
@@ -1338,20 +1338,20 @@
     <span class="kw">fn</span> <span class="ident">poll</span>(
         <span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>,
         <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    ) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">DispatchError</span><span class="op">&gt;&gt;</span> {
         <span class="attribute">#[<span class="ident">project</span>]</span>
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">as_mut</span>().<span class="ident">project</span>() {
-            <span class="ident">State</span>::<span class="ident">H1</span>(<span class="ident">disp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">disp</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
-            <span class="ident">State</span>::<span class="ident">H2</span>(<span class="ident">disp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">disp</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
-            <span class="ident">State</span>::<span class="ident">H2Handshake</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">data</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">State</span>::<span class="ident">H1</span>(<span class="ident">disp</span>) <span class="op">=&gt;</span> <span class="ident">disp</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
+            <span class="ident">State</span>::<span class="ident">H2</span>(<span class="ident">disp</span>) <span class="op">=&gt;</span> <span class="ident">disp</span>.<span class="ident">poll</span>(<span class="ident">cx</span>),
+            <span class="ident">State</span>::<span class="ident">H2Handshake</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">data</span>) <span class="op">=&gt;</span> {
                 <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">item</span>) <span class="op">=</span> <span class="ident">data</span> {
                     <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">item</span>.<span class="number">0</span>).<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">conn</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">conn</span>,
-                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">conn</span>)) <span class="op">=&gt;</span> <span class="ident">conn</span>,
+                        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>)) <span class="op">=&gt;</span> {
                             <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;H2 handshake error: {}&quot;</span>, <span class="ident">err</span>);
                             <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Err</span>(<span class="ident">err</span>.<span class="ident">into</span>()));
                         }
-                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
+                        <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
                     }
                 } <span class="kw">else</span> {
                     <span class="macro">panic</span><span class="macro">!</span>()

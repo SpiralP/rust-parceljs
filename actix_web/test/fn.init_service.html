@@ -9,7 +9,7 @@ service.</p>
 <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">test_init_service</span>() {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">app</span> <span class="op">=</span> <span class="ident">test</span>::<span class="ident">init_service</span>(
         <span class="ident">App</span>::<span class="ident">new</span>()
-            .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> { <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>() }))
+            .<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/test&quot;</span>).<span class="ident">to</span>(<span class="op">||</span> <span class="kw">async</span> { <span class="ident">HttpResponse</span>::<span class="prelude-val">Ok</span>() }))
     ).<span class="kw">await</span>;
 
     <span class="comment">// Create request object</span>

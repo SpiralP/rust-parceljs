@@ -37,10 +37,10 @@
 
 <span class="kw">impl</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">Thing</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span>;
     <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
 
-    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dev</span>::<span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dev</span>::<span class="ident">Payload</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">if</span> <span class="ident">rand</span>::<span class="ident">random</span>() {
             <span class="ident">ok</span>(<span class="ident">Thing</span> { <span class="ident">name</span>: <span class="string">&quot;thingy&quot;</span>.<span class="ident">into</span>() })
         } <span class="kw">else</span> {
@@ -51,11 +51,11 @@
 }
 
 <span class="doccomment">/// extract `Thing` from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">supplied_thing</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Thing</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">supplied_thing</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Thing</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="kw">match</span> <span class="ident">supplied_thing</span> {
         <span class="comment">// Puns not intended</span>
-        <span class="prelude-val">Some</span>(<span class="ident">thing</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Got something: {:?}&quot;</span>, <span class="ident">thing</span>),
-        <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;No thing!&quot;</span>)
+        <span class="prelude-val">Some</span>(<span class="ident">thing</span>) <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Got something: {:?}&quot;</span>, <span class="ident">thing</span>),
+        <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;No thing!&quot;</span>)
     }
 }
 
@@ -82,10 +82,10 @@
 
 <span class="kw">impl</span> <span class="ident">FromRequest</span> <span class="kw">for</span> <span class="ident">Thing</span> {
     <span class="kw">type</span> <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Error</span>;
-    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Thing</span>, <span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Future</span> <span class="op">=</span> <span class="ident">Ready</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Thing</span>, <span class="ident">Error</span><span class="op">&gt;&gt;</span>;
     <span class="kw">type</span> <span class="ident">Config</span> <span class="op">=</span> ();
 
-    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dev</span>::<span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
+    <span class="kw">fn</span> <span class="ident">from_request</span>(<span class="ident">req</span>: <span class="kw-2">&amp;</span><span class="ident">HttpRequest</span>, <span class="ident">payload</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">dev</span>::<span class="ident">Payload</span>) <span class="op">-&gt;</span> <span class="self">Self</span>::<span class="ident">Future</span> {
         <span class="kw">if</span> <span class="ident">rand</span>::<span class="ident">random</span>() {
             <span class="ident">ok</span>(<span class="ident">Thing</span> { <span class="ident">name</span>: <span class="string">&quot;thingy&quot;</span>.<span class="ident">into</span>() })
         } <span class="kw">else</span> {
@@ -95,10 +95,10 @@
 }
 
 <span class="doccomment">/// extract `Thing` from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">supplied_thing</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Thing</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">supplied_thing</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Thing</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="kw">match</span> <span class="ident">supplied_thing</span> {
-        <span class="prelude-val">Ok</span>(<span class="ident">thing</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Got thing: {:?}&quot;</span>, <span class="ident">thing</span>),
-        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Error extracting thing: {}&quot;</span>, <span class="ident">e</span>)
+        <span class="prelude-val">Ok</span>(<span class="ident">thing</span>) <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Got thing: {:?}&quot;</span>, <span class="ident">thing</span>),
+        <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Error extracting thing: {}&quot;</span>, <span class="ident">e</span>)
     }
 }
 
@@ -116,7 +116,7 @@ extraction process.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>, <span class="ident">FromRequest</span>};
 
 <span class="doccomment">/// extract text data from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">text</span>: <span class="ident">String</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">text</span>: <span class="ident">String</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Body {}!&quot;</span>, <span class="ident">text</span>)
 }
 
@@ -137,7 +137,7 @@ extraction process.</p>
 <span class="kw">use</span> <span class="ident">serde_derive</span>::<span class="ident">Deserialize</span>;
 
 <span class="doccomment">/// extract `Thing` from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">req</span>: <span class="ident">HttpRequest</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
    <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Got thing: {:?}&quot;</span>, <span class="ident">req</span>)
 }
 
@@ -157,7 +157,7 @@ extraction process.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">App</span>};
 
 <span class="doccomment">/// extract binary data from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">body</span>: <span class="ident">Bytes</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">body</span>: <span class="ident">Bytes</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Body {:?}!&quot;</span>, <span class="ident">body</span>)
 }
 
@@ -174,7 +174,7 @@ extraction process.</p>
 <span class="kw">use</span> <span class="ident">actix_web</span>::{<span class="ident">web</span>, <span class="ident">error</span>, <span class="ident">App</span>, <span class="ident">Error</span>, <span class="ident">HttpResponse</span>};
 
 <span class="doccomment">/// extract binary data from request</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="kw-2">mut</span> <span class="ident">body</span>: <span class="ident">web</span>::<span class="ident">Payload</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="kw-2">mut</span> <span class="ident">body</span>: <span class="ident">web</span>::<span class="ident">Payload</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">HttpResponse</span>, <span class="ident">Error</span><span class="op">&gt;</span>
 {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">web</span>::<span class="ident">BytesMut</span>::<span class="ident">new</span>();
     <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">item</span>) <span class="op">=</span> <span class="ident">body</span>.<span class="ident">next</span>().<span class="kw">await</span> {
@@ -208,7 +208,7 @@ process.</p>
 }
 
 <span class="doccomment">/// deserialize `Info` from request&#39;s body</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Json</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">info</span>.<span class="ident">username</span>)
 }
 
@@ -226,7 +226,7 @@ process.</p>
 <span class="doccomment">/// extract path info from &quot;/{username}/{count}/index.html&quot; url</span>
 <span class="doccomment">/// {username} - deserializes to a String</span>
 <span class="doccomment">/// {count} -  - deserializes to a u32</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span>(<span class="ident">String</span>, <span class="ident">u32</span>)<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}! {}&quot;</span>, <span class="ident">info</span>.<span class="number">0</span>, <span class="ident">info</span>.<span class="number">1</span>)
 }
 
@@ -249,7 +249,7 @@ implements <code>Deserialize</code> trait from <em>serde</em>.</p>
 }
 
 <span class="doccomment">/// extract `Info` from a path using serde</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Path</span><span class="op">&lt;</span><span class="ident">Info</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Welcome {}!&quot;</span>, <span class="ident">info</span>.<span class="ident">username</span>))
 }
 
@@ -280,7 +280,7 @@ implements <code>Deserialize</code> trait from <em>serde</em>.</p>
 <span class="comment">// Use `Query` extractor for query information.</span>
 <span class="comment">// This handler get called only if request&#39;s query contains `username` field</span>
 <span class="comment">// The correct request for this handler would be `/index.html?id=64&amp;response_type=Code&quot;`</span>
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">AuthRequest</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">index</span>(<span class="ident">info</span>: <span class="ident">web</span>::<span class="ident">Query</span><span class="op">&lt;</span><span class="ident">AuthRequest</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
     <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;Authorization request for client with id={} and type={:?}!&quot;</span>, <span class="ident">info</span>.<span class="ident">id</span>, <span class="ident">info</span>.<span class="ident">response_type</span>)
 }
 

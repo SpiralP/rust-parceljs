@@ -17,8 +17,8 @@ Extensions containers are available via the <code>RequestHead::extensions()</cod
     <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
         <span class="ident">web</span>::<span class="ident">route</span>()
              .<span class="ident">guard</span>(<span class="ident">guard</span>::<span class="ident">Post</span>())
-             .<span class="ident">guard</span>(<span class="ident">guard</span>::<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">head</span><span class="op">|</span> <span class="ident">head</span>.<span class="ident">method</span> <span class="op">=</span><span class="op">=</span> <span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">GET</span>))
-             .<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+             .<span class="ident">guard</span>(<span class="ident">guard</span>::<span class="ident">fn_guard</span>(<span class="op">|</span><span class="ident">head</span><span class="op">|</span> <span class="ident">head</span>.<span class="ident">method</span> <span class="op">==</span> <span class="ident">http</span>::<span class="ident">Method</span>::<span class="ident">GET</span>))
+             .<span class="ident">to</span>(<span class="op">||</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
     );
 }</pre></div>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>

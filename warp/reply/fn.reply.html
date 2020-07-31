@@ -5,7 +5,7 @@
 
 <span class="comment">// GET /just-ok returns an empty `200 OK`.</span>
 <span class="kw">let</span> <span class="ident">route</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>(<span class="string">&quot;just-ok&quot;</span>)
-    .<span class="ident">map</span>(<span class="op">|</span><span class="op">|</span> {
+    .<span class="ident">map</span>(<span class="op">||</span> {
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;got a /just-ok request!&quot;</span>);
         <span class="ident">warp</span>::<span class="ident">reply</span>()
     });</pre></div>

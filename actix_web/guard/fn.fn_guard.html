@@ -10,7 +10,7 @@
                 <span class="ident">guard</span>::<span class="ident">fn_guard</span>(
                     <span class="op">|</span><span class="ident">req</span><span class="op">|</span> <span class="ident">req</span>.<span class="ident">headers</span>()
                              .<span class="ident">contains_key</span>(<span class="string">&quot;content-type&quot;</span>)))
-            .<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+            .<span class="ident">to</span>(<span class="op">||</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
     );
 }</pre></div>
 </div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "actix_web";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

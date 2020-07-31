@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tungstenite-0.10.1/src/protocol/frame/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script src="../../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../../tungstenite/index.html'><div class='logo-container'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/tungstenite-0.10.1/src/protocol/frame/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script src="../../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../../tungstenite/index.html'><div class='logo-container'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -312,7 +312,7 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span> <span class="ident">FrameSocket</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create a new frame socket.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="ident">Stream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">stream</span>: <span class="ident">Stream</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">FrameSocket</span> {
             <span class="ident">stream</span>,
             <span class="ident">codec</span>: <span class="ident">FrameCodec</span>::<span class="ident">new</span>(),
@@ -320,7 +320,7 @@
     }
 
     <span class="doccomment">/// Create a new frame socket from partially read data.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_partially_read</span>(<span class="ident">stream</span>: <span class="ident">Stream</span>, <span class="ident">part</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_partially_read</span>(<span class="ident">stream</span>: <span class="ident">Stream</span>, <span class="ident">part</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">FrameSocket</span> {
             <span class="ident">stream</span>,
             <span class="ident">codec</span>: <span class="ident">FrameCodec</span>::<span class="ident">from_partially_read</span>(<span class="ident">part</span>),
@@ -328,17 +328,17 @@
     }
 
     <span class="doccomment">/// Extract a stream from the socket.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">Stream</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_inner</span>(<span class="self">self</span>) <span class="op">-&gt;</span> (<span class="ident">Stream</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) {
         (<span class="self">self</span>.<span class="ident">stream</span>, <span class="self">self</span>.<span class="ident">codec</span>.<span class="ident">in_buffer</span>.<span class="ident">into_vec</span>())
     }
 
     <span class="doccomment">/// Returns a shared reference to the inner stream.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Stream</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Stream</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stream</span>
     }
 
     <span class="doccomment">/// Returns a mutable reference to the inner stream.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">stream</span>
     }
 }
@@ -348,7 +348,7 @@
     <span class="ident">Stream</span>: <span class="ident">Read</span>,
 {
     <span class="doccomment">/// Read a frame from stream.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Frame</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">read_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">max_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Frame</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">codec</span>.<span class="ident">read_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">stream</span>, <span class="ident">max_size</span>)
     }
 }
@@ -362,12 +362,12 @@
     <span class="doccomment">/// This function guarantees that the frame is queued regardless of any errors.</span>
     <span class="doccomment">/// There is no need to resend the frame. In order to handle WouldBlock or Incomplete,</span>
     <span class="doccomment">/// call write_pending() afterwards.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">frame</span>: <span class="ident">Frame</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">frame</span>: <span class="ident">Frame</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">codec</span>.<span class="ident">write_frame</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">stream</span>, <span class="ident">frame</span>)
     }
 
     <span class="doccomment">/// Complete pending write, if any.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">write_pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">codec</span>.<span class="ident">write_pending</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">stream</span>)
     }
 }
@@ -385,7 +385,7 @@
 
 <span class="kw">impl</span> <span class="ident">FrameCodec</span> {
     <span class="doccomment">/// Create a new frame codec.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">in_buffer</span>: <span class="ident">InputBuffer</span>::<span class="ident">with_capacity</span>(<span class="ident">MIN_READ</span>),
             <span class="ident">out_buffer</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
@@ -394,7 +394,7 @@
     }
 
     <span class="doccomment">/// Create a new frame codec from partially read data.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">from_partially_read</span>(<span class="ident">part</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">from_partially_read</span>(<span class="ident">part</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">in_buffer</span>: <span class="ident">InputBuffer</span>::<span class="ident">from_partially_read</span>(<span class="ident">part</span>),
             <span class="ident">out_buffer</span>: <span class="ident">Vec</span>::<span class="ident">new</span>(),
@@ -407,7 +407,7 @@
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span>,
         <span class="ident">max_size</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Frame</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Frame</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Stream</span>: <span class="ident">Read</span>,
     {
@@ -433,7 +433,7 @@
                     }
 
                     <span class="kw">let</span> <span class="ident">input_size</span> <span class="op">=</span> <span class="ident">cursor</span>.<span class="ident">get_ref</span>().<span class="ident">len</span>() <span class="kw">as</span> <span class="ident">u64</span> <span class="op">-</span> <span class="ident">cursor</span>.<span class="ident">position</span>();
-                    <span class="kw">if</span> <span class="ident">length</span> <span class="op">&lt;</span><span class="op">=</span> <span class="ident">input_size</span> {
+                    <span class="kw">if</span> <span class="ident">length</span> <span class="op">&lt;=</span> <span class="ident">input_size</span> {
                         <span class="comment">// No truncation here since `length` is checked above</span>
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">payload</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">length</span> <span class="kw">as</span> <span class="ident">usize</span>);
                         <span class="kw">if</span> <span class="ident">length</span> <span class="op">&gt;</span> <span class="number">0</span> {
@@ -451,7 +451,7 @@
                 .<span class="ident">with_limit</span>(<span class="ident">usize</span>::<span class="ident">max_value</span>())
                 .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">Error</span>::<span class="ident">Capacity</span>(<span class="string">&quot;Incoming TCP buffer is full&quot;</span>.<span class="ident">into</span>()))<span class="question-mark">?</span>
                 .<span class="ident">read_from</span>(<span class="ident">stream</span>)<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">size</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">size</span> <span class="op">==</span> <span class="number">0</span> {
                 <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;no frame received&quot;</span>);
                 <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
             }
@@ -465,7 +465,7 @@
     }
 
     <span class="doccomment">/// Write a frame to the provided stream.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">write_frame</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span>, <span class="ident">frame</span>: <span class="ident">Frame</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">write_frame</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span>, <span class="ident">frame</span>: <span class="ident">Frame</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Stream</span>: <span class="ident">Write</span>,
     {
@@ -478,13 +478,13 @@
     }
 
     <span class="doccomment">/// Complete pending write, if any.</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">write_pending</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">write_pending</span><span class="op">&lt;</span><span class="ident">Stream</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">stream</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Stream</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">Stream</span>: <span class="ident">Write</span>,
     {
         <span class="kw">while</span> <span class="op">!</span><span class="self">self</span>.<span class="ident">out_buffer</span>.<span class="ident">is_empty</span>() {
             <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">stream</span>.<span class="ident">write</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">out_buffer</span>)<span class="question-mark">?</span>;
-            <span class="kw">if</span> <span class="ident">len</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">if</span> <span class="ident">len</span> <span class="op">==</span> <span class="number">0</span> {
                 <span class="comment">// This is the same as &quot;Connection reset by peer&quot;</span>
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">IoError</span>::<span class="ident">new</span>(
                     <span class="ident">IoErrorKind</span>::<span class="ident">ConnectionReset</span>,

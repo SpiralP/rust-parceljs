@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-http-1.0.1/src/message.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>message.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/actix-http-1.0.1/src/message.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>message.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -531,7 +531,7 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Head</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
     <span class="kw">fn</span> <span class="ident">clear</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>);
 
-    <span class="kw">fn</span> <span class="ident">pool</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">pool</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>;
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
@@ -546,7 +546,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">RequestHead</span> {
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RequestHead</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">RequestHead</span> {
         <span class="ident">RequestHead</span> {
             <span class="ident">uri</span>: <span class="ident">Uri</span>::<span class="ident">default</span>(),
             <span class="ident">method</span>: <span class="ident">Method</span>::<span class="ident">default</span>(),
@@ -566,7 +566,7 @@
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>().<span class="ident">clear</span>();
     }
 
-    <span class="kw">fn</span> <span class="ident">pool</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">pool</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">REQUEST_POOL</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="kw-2">*</span><span class="ident">p</span>)
     }
 }
@@ -574,30 +574,30 @@
 <span class="kw">impl</span> <span class="ident">RequestHead</span> {
     <span class="doccomment">/// Message extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
     }
 
     <span class="doccomment">/// Mutable reference to a the message&#39;s extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
     }
 
     <span class="doccomment">/// Read the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">headers</span>
     }
 
     <span class="doccomment">/// Mutable reference to the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">headers</span>
     }
 
     <span class="doccomment">/// Is to uppercase headers with Camel-Case.</span>
     <span class="doccomment">/// Befault is `false`</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">camel_case_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">camel_case_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CAMEL_CASE</span>)
     }
 
@@ -615,15 +615,15 @@
     <span class="doccomment">/// Set connection type of the message</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
         <span class="kw">match</span> <span class="ident">ctype</span> {
-            <span class="ident">ConnectionType</span>::<span class="ident">Close</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>),
-            <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>),
-            <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">UPGRADE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">Close</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">UPGRADE</span>),
         }
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Connection type</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnectionType</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ConnectionType</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>) {
             <span class="ident">ConnectionType</span>::<span class="ident">Close</span>
         } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>) {
@@ -638,7 +638,7 @@
     }
 
     <span class="doccomment">/// Connection upgrade status</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">hdr</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">headers</span>().<span class="ident">get</span>(<span class="ident">header</span>::<span class="ident">CONNECTION</span>) {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Ok</span>(<span class="ident">s</span>) <span class="op">=</span> <span class="ident">hdr</span>.<span class="ident">to_str</span>() {
                 <span class="ident">s</span>.<span class="ident">to_ascii_lowercase</span>().<span class="ident">contains</span>(<span class="string">&quot;upgrade&quot;</span>)
@@ -652,7 +652,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Get response body chunking state</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chunked</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chunked</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">NO_CHUNKING</span>)
     }
 
@@ -667,7 +667,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Request contains `EXPECT` header</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">expect</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">EXPECT</span>)
     }
 
@@ -684,25 +684,25 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RequestHeadType</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extra_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">HeaderMap</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extra_headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">HeaderMap</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">RequestHeadType</span>::<span class="ident">Owned</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            <span class="ident">RequestHeadType</span>::<span class="ident">Rc</span>(<span class="kw">_</span>, <span class="ident">headers</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">headers</span>.<span class="ident">as_ref</span>(),
+            <span class="ident">RequestHeadType</span>::<span class="ident">Owned</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">RequestHeadType</span>::<span class="ident">Rc</span>(<span class="kw">_</span>, <span class="ident">headers</span>) <span class="op">=&gt;</span> <span class="ident">headers</span>.<span class="ident">as_ref</span>(),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">RequestHeadType</span> {
-    <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">RequestHead</span> {
+    <span class="kw">fn</span> <span class="ident">as_ref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">RequestHead</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">RequestHeadType</span>::<span class="ident">Owned</span>(<span class="ident">head</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">head</span>,
-            <span class="ident">RequestHeadType</span>::<span class="ident">Rc</span>(<span class="ident">head</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">head</span>.<span class="ident">as_ref</span>(),
+            <span class="ident">RequestHeadType</span>::<span class="ident">Owned</span>(<span class="ident">head</span>) <span class="op">=&gt;</span> <span class="kw-2">&amp;</span><span class="ident">head</span>,
+            <span class="ident">RequestHeadType</span>::<span class="ident">Rc</span>(<span class="ident">head</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">head</span>.<span class="ident">as_ref</span>(),
         }
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">RequestHeadType</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">head</span>: <span class="ident">RequestHead</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">head</span>: <span class="ident">RequestHead</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">RequestHeadType</span>::<span class="ident">Owned</span>(<span class="ident">head</span>)
     }
 }
@@ -720,7 +720,7 @@
 <span class="kw">impl</span> <span class="ident">ResponseHead</span> {
     <span class="doccomment">/// Create new instance of `ResponseHead` type</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ResponseHead</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="ident">ResponseHead</span> {
         <span class="ident">ResponseHead</span> {
             <span class="ident">status</span>,
             <span class="ident">version</span>: <span class="ident">Version</span>::<span class="ident">default</span>(),
@@ -733,25 +733,25 @@
 
     <span class="doccomment">/// Message extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Ref</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow</span>()
     }
 
     <span class="doccomment">/// Mutable reference to a the message&#39;s extensions</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">extensions_mut</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span>, <span class="ident">Extensions</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">extensions</span>.<span class="ident">borrow_mut</span>()
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Read the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">headers</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Mutable reference to the message headers.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">headers_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">HeaderMap</span> {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">headers</span>
     }
 
@@ -759,14 +759,14 @@
     <span class="doccomment">/// Set connection type of the message</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_connection_type</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">ctype</span>: <span class="ident">ConnectionType</span>) {
         <span class="kw">match</span> <span class="ident">ctype</span> {
-            <span class="ident">ConnectionType</span>::<span class="ident">Close</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>),
-            <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>),
-            <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">UPGRADE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">Close</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>),
+            <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">insert</span>(<span class="ident">Flags</span>::<span class="ident">UPGRADE</span>),
         }
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ConnectionType</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">connection_type</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">ConnectionType</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>) {
             <span class="ident">ConnectionType</span>::<span class="ident">Close</span>
         } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>) {
@@ -782,19 +782,19 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Check if keep-alive is enabled</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">connection_type</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">connection_type</span>() <span class="op">==</span> <span class="ident">ConnectionType</span>::<span class="ident">KeepAlive</span>
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Check upgrade status of this message</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">connection_type</span>() <span class="op">=</span><span class="op">=</span> <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">connection_type</span>() <span class="op">==</span> <span class="ident">ConnectionType</span>::<span class="ident">Upgrade</span>
     }
 
     <span class="doccomment">/// Get custom reason for the response</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reason</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reason</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">reason</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">reason</span> {
             <span class="ident">reason</span>
         } <span class="kw">else</span> {
@@ -805,7 +805,7 @@
     }
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">ctype</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ConnectionType</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">ctype</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ConnectionType</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">CLOSE</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">ConnectionType</span>::<span class="ident">Close</span>)
         } <span class="kw">else</span> <span class="kw">if</span> <span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">KEEP_ALIVE</span>) {
@@ -819,7 +819,7 @@
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Get response body chunking state</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chunked</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">chunked</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="op">!</span><span class="self">self</span>.<span class="ident">flags</span>.<span class="ident">contains</span>(<span class="ident">Flags</span>::<span class="ident">NO_CHUNKING</span>)
     }
 
@@ -840,13 +840,13 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Get new message from the pool of objects</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">T</span>::<span class="ident">pool</span>().<span class="ident">get_message</span>()
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">Message</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>(),
         }
@@ -856,36 +856,36 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">T</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_ref</span>()
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">DerefMut</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>::<span class="ident">Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>::<span class="ident">Target</span> {
         <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">head</span>).<span class="ident">expect</span>(<span class="string">&quot;Multiple copies exist&quot;</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-        <span class="kw">if</span> <span class="ident">Rc</span>::<span class="ident">strong_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>) <span class="op">=</span><span class="op">=</span> <span class="number">1</span> {
+        <span class="kw">if</span> <span class="ident">Rc</span>::<span class="ident">strong_count</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">head</span>) <span class="op">==</span> <span class="number">1</span> {
             <span class="ident">T</span>::<span class="ident">pool</span>().<span class="ident">release</span>(<span class="self">self</span>.<span class="ident">head</span>.<span class="ident">clone</span>());
         }
     }
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct</span> <span class="ident">BoxedResponseHead</span> {
-    <span class="ident">head</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">head</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">BoxedResponseHead</span> {
     <span class="doccomment">/// Get new message from the pool of objects</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">RESPONSE_POOL</span>.<span class="ident">with</span>(<span class="op">|</span><span class="ident">p</span><span class="op">|</span> <span class="ident">p</span>.<span class="ident">get_message</span>(<span class="ident">status</span>))
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">take</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="ident">BoxedResponseHead</span> {
             <span class="ident">head</span>: <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">take</span>(),
         }
@@ -895,13 +895,13 @@
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">BoxedResponseHead</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">ResponseHead</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_ref</span>().<span class="ident">unwrap</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">DerefMut</span> <span class="kw">for</span> <span class="ident">BoxedResponseHead</span> {
-    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>::<span class="ident">Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>::<span class="ident">Target</span> {
         <span class="self">self</span>.<span class="ident">head</span>.<span class="ident">as_mut</span>().<span class="ident">unwrap</span>()
     }
 }
@@ -916,25 +916,25 @@
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="doccomment">/// Request&#39;s objects pool</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>);
 
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">vec_box</span>)]</span>
 <span class="doccomment">/// Request&#39;s objects pool</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BoxedResponsePool</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BoxedResponsePool</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="ident">ResponseHead</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>);
 
 <span class="macro">thread_local</span><span class="macro">!</span>(<span class="kw">static</span> <span class="ident">REQUEST_POOL</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">MessagePool</span>::<span class="op">&lt;</span><span class="ident">RequestHead</span><span class="op">&gt;</span>::<span class="ident">create</span>());
 <span class="macro">thread_local</span><span class="macro">!</span>(<span class="kw">static</span> <span class="ident">RESPONSE_POOL</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">BoxedResponsePool</span> <span class="op">=</span> <span class="ident">BoxedResponsePool</span>::<span class="ident">create</span>());
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Head</span><span class="op">&gt;</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">create</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">create</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">MessagePool</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">MessagePool</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">128</span>)));
         <span class="ident">Box</span>::<span class="ident">leak</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">pool</span>))
     }
 
     <span class="doccomment">/// Get message from the pool</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">get_message</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get_message</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Message</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">msg</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>().<span class="ident">pop</span>() {
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">r</span>) <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">get_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">msg</span>) {
                 <span class="ident">r</span>.<span class="ident">clear</span>();
@@ -958,14 +958,14 @@
 }
 
 <span class="kw">impl</span> <span class="ident">BoxedResponsePool</span> {
-    <span class="kw">fn</span> <span class="ident">create</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">BoxedResponsePool</span> {
+    <span class="kw">fn</span> <span class="ident">create</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">BoxedResponsePool</span> {
         <span class="kw">let</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">BoxedResponsePool</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">128</span>)));
         <span class="ident">Box</span>::<span class="ident">leak</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">pool</span>))
     }
 
     <span class="doccomment">/// Get message from the pool</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">get_message</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BoxedResponseHead</span> {
+    <span class="kw">fn</span> <span class="ident">get_message</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="self">self</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="ident">BoxedResponseHead</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">mut</span> <span class="ident">head</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">borrow_mut</span>().<span class="ident">pop</span>() {
             <span class="ident">head</span>.<span class="ident">reason</span> <span class="op">=</span> <span class="prelude-val">None</span>;
             <span class="ident">head</span>.<span class="ident">status</span> <span class="op">=</span> <span class="ident">status</span>;

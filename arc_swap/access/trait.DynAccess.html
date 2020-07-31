@@ -14,7 +14,7 @@ makes certain code simpler and possibly makes the executable smaller.</p>
 <span class="kw">use</span> <span class="ident">arc_swap</span>::<span class="ident">access</span>::{<span class="ident">Constant</span>, <span class="ident">DynAccess</span>};
 
 <span class="kw">fn</span> <span class="ident">do_something</span>(<span class="ident">value</span>: <span class="ident">Box</span><span class="op">&lt;</span><span class="ident">dyn</span> <span class="ident">DynAccess</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span>) {
-    <span class="ident">thread</span>::<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">|</span><span class="op">|</span> {
+    <span class="ident">thread</span>::<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">||</span> {
         <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">value</span>.<span class="ident">load</span>();
         <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="kw-2">*</span><span class="ident">v</span>);
     });

@@ -18,7 +18,7 @@ be executed to start serving requests.</p>
 <span class="kw">use</span> <span class="ident">hyper</span>::{<span class="ident">Body</span>, <span class="ident">Request</span>, <span class="ident">Response</span>, <span class="ident">Server</span>};
 <span class="kw">use</span> <span class="ident">hyper</span>::<span class="ident">service</span>::{<span class="ident">make_service_fn</span>, <span class="ident">service_fn</span>};
 
-<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">_req</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
+<span class="kw">async</span> <span class="kw">fn</span> <span class="ident">handle</span>(<span class="ident">_req</span>: <span class="ident">Request</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&lt;</span><span class="ident">Body</span><span class="op">&gt;</span>, <span class="ident">Infallible</span><span class="op">&gt;</span> {
     <span class="prelude-val">Ok</span>(<span class="ident">Response</span>::<span class="ident">new</span>(<span class="ident">Body</span>::<span class="ident">from</span>(<span class="string">&quot;Hello World&quot;</span>)))
 }
 

@@ -7,7 +7,7 @@
     <span class="ident">App</span>::<span class="ident">new</span>().<span class="ident">service</span>(<span class="ident">web</span>::<span class="ident">resource</span>(<span class="string">&quot;/index.html&quot;</span>).<span class="ident">route</span>(
         <span class="ident">web</span>::<span class="ident">route</span>()
              .<span class="ident">guard</span>(<span class="ident">guard</span>::<span class="ident">Any</span>(<span class="ident">guard</span>::<span class="ident">Get</span>()).<span class="ident">or</span>(<span class="ident">guard</span>::<span class="ident">Post</span>()))
-             .<span class="ident">to</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
+             .<span class="ident">to</span>(<span class="op">||</span> <span class="ident">HttpResponse</span>::<span class="ident">MethodNotAllowed</span>()))
     );
 }</pre></div>
 </div></section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "actix_web";</script><script src="../../main.js"></script><script defer src="../../search-index.js"></script></body></html>

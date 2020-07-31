@@ -8,7 +8,7 @@
 
 <span class="kw">impl</span> <span class="ident">Reject</span> <span class="kw">for</span> <span class="ident">RateLimited</span> {}
 
-<span class="kw">let</span> <span class="ident">route</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">any</span>().<span class="ident">and_then</span>(<span class="op">|</span><span class="op">|</span> <span class="kw">async</span> {
+<span class="kw">let</span> <span class="ident">route</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">any</span>().<span class="ident">and_then</span>(<span class="op">||</span> <span class="kw">async</span> {
     <span class="prelude-val">Err</span>::<span class="op">&lt;</span>(), <span class="kw">_</span><span class="op">&gt;</span>(<span class="ident">warp</span>::<span class="ident">reject</span>::<span class="ident">custom</span>(<span class="ident">RateLimited</span>))
 });</pre></div>
 </div>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/headers-0.3.2/src/common/strict_transport_security.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>strict_transport_security.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../headers/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/headers-0.3.2/src/common/strict_transport_security.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>strict_transport_security.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../headers/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -304,7 +304,7 @@
     <span class="comment">// incorrect assumption about a default.</span>
 
     <span class="doccomment">/// Create an STS header that includes subdomains</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">including_subdomains</span>(<span class="ident">max_age</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StrictTransportSecurity</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">including_subdomains</span>(<span class="ident">max_age</span>: <span class="ident">Duration</span>) <span class="op">-&gt;</span> <span class="ident">StrictTransportSecurity</span> {
         <span class="ident">StrictTransportSecurity</span> {
             <span class="ident">max_age</span>: <span class="ident">max_age</span>.<span class="ident">into</span>(),
             <span class="ident">include_subdomains</span>: <span class="bool-val">true</span>,
@@ -312,7 +312,7 @@
     }
 
     <span class="doccomment">/// Create an STS header that excludes subdomains</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">excluding_subdomains</span>(<span class="ident">max_age</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StrictTransportSecurity</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">excluding_subdomains</span>(<span class="ident">max_age</span>: <span class="ident">Duration</span>) <span class="op">-&gt;</span> <span class="ident">StrictTransportSecurity</span> {
         <span class="ident">StrictTransportSecurity</span> {
             <span class="ident">max_age</span>: <span class="ident">max_age</span>.<span class="ident">into</span>(),
             <span class="ident">include_subdomains</span>: <span class="bool-val">false</span>,
@@ -322,12 +322,12 @@
     <span class="comment">// getters</span>
 
     <span class="doccomment">/// Get whether this should include subdomains.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">include_subdomains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">include_subdomains</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">include_subdomains</span>
     }
 
     <span class="doccomment">/// Get the max-age.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_age</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Duration</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">max_age</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Duration</span> {
         <span class="self">self</span>.<span class="ident">max_age</span>.<span class="ident">into</span>()
     }
 }
@@ -338,7 +338,7 @@
     <span class="ident">Unknown</span>,
 }
 
-<span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StrictTransportSecurity</span>, ::<span class="ident">Error</span><span class="op">&gt;</span> {
+<span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">StrictTransportSecurity</span>, ::<span class="ident">Error</span><span class="op">&gt;</span> {
     <span class="ident">s</span>.<span class="ident">split</span>(<span class="string">&#39;;&#39;</span>)
         .<span class="ident">map</span>(<span class="ident">str</span>::<span class="ident">trim</span>)
         .<span class="ident">map</span>(<span class="op">|</span><span class="ident">sub</span><span class="op">|</span> {
@@ -347,7 +347,7 @@
             } <span class="kw">else</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">sub</span> <span class="op">=</span> <span class="ident">sub</span>.<span class="ident">splitn</span>(<span class="number">2</span>, <span class="string">&#39;=&#39;</span>);
                 <span class="kw">match</span> (<span class="ident">sub</span>.<span class="ident">next</span>(), <span class="ident">sub</span>.<span class="ident">next</span>()) {
-                    (<span class="prelude-val">Some</span>(<span class="ident">left</span>), <span class="prelude-val">Some</span>(<span class="ident">right</span>)) <span class="kw">if</span> <span class="ident">left</span>.<span class="ident">trim</span>().<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;max-age&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                    (<span class="prelude-val">Some</span>(<span class="ident">left</span>), <span class="prelude-val">Some</span>(<span class="ident">right</span>)) <span class="kw">if</span> <span class="ident">left</span>.<span class="ident">trim</span>().<span class="ident">eq_ignore_ascii_case</span>(<span class="string">&quot;max-age&quot;</span>) <span class="op">=&gt;</span> {
                         <span class="ident">right</span>
                             .<span class="ident">trim</span>()
                             .<span class="ident">trim_matches</span>(<span class="string">&#39;&quot;&#39;</span>)
@@ -355,46 +355,46 @@
                             .<span class="ident">ok</span>()
                             .<span class="ident">map</span>(<span class="ident">Directive</span>::<span class="ident">MaxAge</span>)
                     }
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">Unknown</span>),
+                    <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">Unknown</span>),
                 }
             }
         })
         .<span class="ident">fold</span>(<span class="prelude-val">Some</span>((<span class="prelude-val">None</span>, <span class="prelude-val">None</span>)), <span class="op">|</span><span class="ident">res</span>, <span class="ident">dir</span><span class="op">|</span> <span class="kw">match</span> (<span class="ident">res</span>, <span class="ident">dir</span>) {
-            (<span class="prelude-val">Some</span>((<span class="prelude-val">None</span>, <span class="ident">sub</span>)), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">MaxAge</span>(<span class="ident">age</span>))) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>((<span class="prelude-val">Some</span>(<span class="ident">age</span>), <span class="ident">sub</span>)),
-            (<span class="prelude-val">Some</span>((<span class="ident">age</span>, <span class="prelude-val">None</span>)), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">IncludeSubdomains</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>((<span class="ident">age</span>, <span class="prelude-val">Some</span>(()))),
+            (<span class="prelude-val">Some</span>((<span class="prelude-val">None</span>, <span class="ident">sub</span>)), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">MaxAge</span>(<span class="ident">age</span>))) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>((<span class="prelude-val">Some</span>(<span class="ident">age</span>), <span class="ident">sub</span>)),
+            (<span class="prelude-val">Some</span>((<span class="ident">age</span>, <span class="prelude-val">None</span>)), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">IncludeSubdomains</span>)) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>((<span class="ident">age</span>, <span class="prelude-val">Some</span>(()))),
             (<span class="prelude-val">Some</span>((<span class="prelude-val">Some</span>(<span class="kw">_</span>), <span class="kw">_</span>)), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">MaxAge</span>(<span class="kw">_</span>)))
             <span class="op">|</span> (<span class="prelude-val">Some</span>((<span class="kw">_</span>, <span class="prelude-val">Some</span>(<span class="kw">_</span>))), <span class="prelude-val">Some</span>(<span class="ident">Directive</span>::<span class="ident">IncludeSubdomains</span>))
-            <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-            (<span class="ident">res</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">res</span>,
+            <span class="op">|</span> (<span class="kw">_</span>, <span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+            (<span class="ident">res</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">res</span>,
         })
         .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">res</span><span class="op">|</span> <span class="kw">match</span> <span class="ident">res</span> {
-            (<span class="prelude-val">Some</span>(<span class="ident">age</span>), <span class="ident">sub</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">StrictTransportSecurity</span> {
+            (<span class="prelude-val">Some</span>(<span class="ident">age</span>), <span class="ident">sub</span>) <span class="op">=&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">StrictTransportSecurity</span> {
                 <span class="ident">max_age</span>: <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="ident">age</span>).<span class="ident">into</span>(),
                 <span class="ident">include_subdomains</span>: <span class="ident">sub</span>.<span class="ident">is_some</span>(),
             }),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
         })
         .<span class="ident">ok_or_else</span>(::<span class="ident">Error</span>::<span class="ident">invalid</span>)
 }
 
 <span class="kw">impl</span> ::<span class="ident">Header</span> <span class="kw">for</span> <span class="ident">StrictTransportSecurity</span> {
-    <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> ::<span class="ident">HeaderName</span> {
+    <span class="kw">fn</span> <span class="ident">name</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> ::<span class="ident">HeaderName</span> {
         <span class="kw-2">&amp;</span>::<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">STRICT_TRANSPORT_SECURITY</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">decode</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> ::<span class="ident">HeaderValue</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">decode</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> ::<span class="ident">HeaderValue</span><span class="op">&gt;&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">values</span>
             .<span class="ident">just_one</span>()
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">v</span><span class="op">|</span> <span class="ident">v</span>.<span class="ident">to_str</span>().<span class="ident">ok</span>())
             .<span class="ident">map</span>(<span class="ident">from_str</span>)
-            .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="prelude-val">Err</span>(::<span class="ident">Error</span>::<span class="ident">invalid</span>()))
+            .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="prelude-val">Err</span>(::<span class="ident">Error</span>::<span class="ident">invalid</span>()))
     }
 
-    <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Extend</span><span class="op">&lt;</span>::<span class="ident">HeaderValue</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) {
+    <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Extend</span><span class="op">&lt;</span>::<span class="ident">HeaderValue</span><span class="op">&gt;&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) {
         <span class="kw">struct</span> <span class="ident">Adapter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">StrictTransportSecurity</span>);
 
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Adapter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
                 <span class="kw">if</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">include_subdomains</span> {
                     <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;max-age={}; includeSubdomains&quot;</span>, <span class="self">self</span>.<span class="number">0</span>.<span class="ident">max_age</span>)
                 } <span class="kw">else</span> {

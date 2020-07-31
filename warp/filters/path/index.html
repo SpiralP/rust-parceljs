@@ -14,14 +14,14 @@
 <span class="kw">use</span> <span class="ident">warp</span>::<span class="ident">Filter</span>;
 
 <span class="comment">// GET /hi</span>
-<span class="kw">let</span> <span class="ident">hi</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>(<span class="string">&quot;hi&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="op">|</span> {
+<span class="kw">let</span> <span class="ident">hi</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="ident">path</span>(<span class="string">&quot;hi&quot;</span>).<span class="ident">map</span>(<span class="op">||</span> {
     <span class="string">&quot;Hello, World!&quot;</span>
 });</pre></div>
 <p>How about multiple segments? It's easiest with the <code>path!</code> macro:</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered">
 <span class="comment">// GET /hello/from/warp</span>
-<span class="kw">let</span> <span class="ident">hello_from_warp</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="macro">path</span><span class="macro">!</span>(<span class="string">&quot;hello&quot;</span> <span class="op">/</span> <span class="string">&quot;from&quot;</span> <span class="op">/</span> <span class="string">&quot;warp&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="op">|</span> {
+<span class="kw">let</span> <span class="ident">hello_from_warp</span> <span class="op">=</span> <span class="ident">warp</span>::<span class="macro">path</span><span class="macro">!</span>(<span class="string">&quot;hello&quot;</span> <span class="op">/</span> <span class="string">&quot;from&quot;</span> <span class="op">/</span> <span class="string">&quot;warp&quot;</span>).<span class="ident">map</span>(<span class="op">||</span> {
     <span class="string">&quot;Hello from warp!&quot;</span>
 });</pre></div>
 <p>Neat! But how do I handle <strong>parameters</strong> in paths?</p>
