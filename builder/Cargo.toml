@@ -5,6 +5,6 @@ authors = ["SpiralP <spiral.palmer@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-phf_codegen = "0.8.0"
-walkdir = "2.3.1"
-zstd = "0.5.3"
+phf_codegen = "0.8"
+walkdir = "2"
+zstd = "0.6"
