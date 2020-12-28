@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/warp-0.2.4/src/filters/sse.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sse.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../warp/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/warp-0.2.5/src/filters/sse.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>sse.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../warp/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -783,17 +786,17 @@
 <span class="doccomment">/// Server-sent event message</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ServerSentEvent</span>: <span class="ident">SseFormat</span> <span class="op">+</span> <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
     <span class="doccomment">/// Convert to either A</span>
-    <span class="kw">fn</span> <span class="ident">into_a</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">B</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">into_a</span><span class="op">&lt;</span><span class="ident">B</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">B</span><span class="op">&gt;</span> {
         <span class="ident">EitherServerSentEvent</span>::<span class="ident">A</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Convert to either B</span>
-    <span class="kw">fn</span> <span class="ident">into_b</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">into_b</span><span class="op">&lt;</span><span class="ident">A</span><span class="op">&gt;</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="ident">A</span>, <span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">EitherServerSentEvent</span>::<span class="ident">B</span>(<span class="self">self</span>)
     }
 
     <span class="doccomment">/// Convert to boxed</span>
-    <span class="kw">fn</span> <span class="ident">boxed</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">BoxedServerSentEvent</span> {
+    <span class="kw">fn</span> <span class="ident">boxed</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">BoxedServerSentEvent</span> {
         <span class="ident">BoxedServerSentEvent</span>(<span class="ident">Box</span>::<span class="ident">new</span>(<span class="self">self</span>))
     }
 }
@@ -804,7 +807,7 @@
 <span class="kw">struct</span> <span class="ident">SseComment</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">T</span>);
 
 <span class="doccomment">/// Comment field (&quot;:&lt;comment-text&gt;&quot;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">comment</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">comment</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">comment</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">comment</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -812,7 +815,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseComment</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Comment</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
@@ -826,7 +829,7 @@
 <span class="kw">struct</span> <span class="ident">SseEvent</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">T</span>);
 
 <span class="doccomment">/// Event name field (&quot;event:&lt;event-name&gt;&quot;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">event</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">event</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">event</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -834,7 +837,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseEvent</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Event</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
@@ -848,7 +851,7 @@
 <span class="kw">struct</span> <span class="ident">SseId</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">T</span>);
 
 <span class="doccomment">/// Identifier field (&quot;id:&lt;identifier&gt;&quot;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">id</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">id</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">id</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">id</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -856,7 +859,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseId</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Id</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
@@ -870,12 +873,12 @@
 <span class="kw">struct</span> <span class="ident">SseRetry</span>(<span class="ident">Duration</span>);
 
 <span class="doccomment">/// Retry timeout field (&quot;retry:&lt;timeout&gt;&quot;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">retry</span>(<span class="ident">time</span>: <span class="ident">Duration</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">retry</span>(<span class="ident">time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span> {
     <span class="ident">SseRetry</span>(<span class="ident">time</span>)
 }
 
 <span class="kw">impl</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseRetry</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Retry</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
 
@@ -910,7 +913,7 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// The multiline content will be transferred</span>
 <span class="doccomment">/// using sequential data fields, one per line.</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">data</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Display</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -918,7 +921,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Display</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseData</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Data</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="kw">for</span> <span class="ident">line</span> <span class="kw">in</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">to_string</span>().<span class="ident">split</span>(<span class="string">&#39;\n&#39;</span>) {
                 <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
@@ -934,7 +937,7 @@
 <span class="kw">struct</span> <span class="ident">SseJson</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">T</span>);
 
 <span class="doccomment">/// Data field with JSON content (&quot;data:&lt;json-content&gt;&quot;)</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">json</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">data</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">Serialize</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -942,7 +945,7 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Serialize</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">SseJson</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">if</span> <span class="kw">let</span> <span class="ident">SseField</span>::<span class="ident">Data</span> <span class="op">=</span> <span class="ident">k</span> {
             <span class="ident">k</span>.<span class="ident">fmt</span>(<span class="ident">f</span>)<span class="question-mark">?</span>;
             <span class="ident">serde_json</span>::<span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
@@ -958,12 +961,12 @@
 }
 
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">tuple_fmt</span> {
-    (($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ident</span>),<span class="op">+</span>) <span class="op">=&gt;</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">tt</span>),<span class="op">+</span>)) <span class="op">=&gt;</span> {
+    (($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>:<span class="ident">ident</span>),<span class="op">+</span>) <span class="op">=</span><span class="op">&gt;</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>:<span class="ident">tt</span>),<span class="op">+</span>)) <span class="op">=</span><span class="op">&gt;</span> {
         <span class="kw">impl</span><span class="op">&lt;</span>$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>),<span class="op">+</span><span class="op">&gt;</span> <span class="ident">SseFormat</span> <span class="kw">for</span> ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>),<span class="op">+</span>)
         <span class="kw">where</span>
             $(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">t</span>: <span class="ident">SseFormat</span>,)<span class="op">+</span>
         {
-            <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+            <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
                 $(<span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">i</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>)<span class="question-mark">?</span>;)<span class="op">+</span>
                 <span class="prelude-val">Ok</span>(())
             }
@@ -971,13 +974,13 @@
     };
 }
 
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>, <span class="ident">G</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>));
-<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>, <span class="ident">G</span>, <span class="ident">H</span>) <span class="op">=&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>, <span class="ident">G</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>));
+<span class="macro">tuple_fmt</span><span class="macro">!</span>((<span class="ident">A</span>, <span class="ident">B</span>, <span class="ident">C</span>, <span class="ident">D</span>, <span class="ident">E</span>, <span class="ident">F</span>, <span class="ident">G</span>, <span class="ident">H</span>) <span class="op">=</span><span class="op">&gt;</span> (<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>));
 
 <span class="doccomment">/// Gets the optional last event id from request.</span>
 <span class="doccomment">/// Typically this identifier represented as number or string.</span>
@@ -1015,7 +1018,7 @@
 <span class="doccomment">///     );</span>
 <span class="doccomment">///};</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">last_event_id</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> <span class="ident">One</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">last_event_id</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Filter</span><span class="op">&lt;</span><span class="ident">Extract</span> <span class="op">=</span> <span class="ident">One</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">Error</span> <span class="op">=</span> <span class="ident">Rejection</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Copy</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">FromStr</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1099,9 +1102,9 @@
 <span class="doccomment">///     );</span>
 <span class="doccomment">/// };</span>
 <span class="doccomment">/// ```</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reply</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">event_stream</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">Reply</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reply</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">event_stream</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">Reply</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">TryStream</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>: <span class="ident">TryStream</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="prelude-val">Ok</span>: <span class="ident">ServerSentEvent</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1115,12 +1118,12 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">Reply</span> <span class="kw">for</span> <span class="ident">SseReply</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="ident">S</span>: <span class="ident">TryStream</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+    <span class="ident">S</span>: <span class="ident">TryStream</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">S</span>::<span class="prelude-val">Ok</span>: <span class="ident">ServerSentEvent</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">into_response</span>(<span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">into_response</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
         <span class="kw">let</span> <span class="ident">body_stream</span> <span class="op">=</span> <span class="self">self</span>
             .<span class="ident">event_stream</span>
             .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">error</span><span class="op">|</span> {
@@ -1154,7 +1157,7 @@
     <span class="doccomment">/// Customize the interval between keep-alive messages.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Default is 15 seconds.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">interval</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">time</span>: <span class="ident">Duration</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">interval</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">time</span>: <span class="ident">Duration</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">max_interval</span> <span class="op">=</span> <span class="ident">time</span>;
         <span class="self">self</span>
     }
@@ -1162,7 +1165,7 @@
     <span class="doccomment">/// Customize the text of the keep-alive message.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Default is an empty comment.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">text</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">text</span>(<span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">text</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">self</span>.<span class="ident">comment_text</span> <span class="op">=</span> <span class="ident">text</span>.<span class="ident">into</span>();
         <span class="self">self</span>
     }
@@ -1173,7 +1176,7 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">stream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
         <span class="self">self</span>,
         <span class="ident">event_stream</span>: <span class="ident">S</span>,
-    ) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">TryStream</span><span class="op">&lt;</span>
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">TryStream</span><span class="op">&lt;</span>
         <span class="prelude-val">Ok</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
         <span class="ident">Error</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>
@@ -1207,8 +1210,8 @@
 <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;use warp::see:keep_alive() instead&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(
     <span class="ident">event_stream</span>: <span class="ident">S</span>,
-    <span class="ident">keep_interval</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;&gt;</span>,
-) <span class="op">-&gt;</span> <span class="kw">impl</span> <span class="ident">TryStream</span><span class="op">&lt;</span>
+    <span class="ident">keep_interval</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Duration</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+) <span class="op">-</span><span class="op">&gt;</span> <span class="kw">impl</span> <span class="ident">TryStream</span><span class="op">&lt;</span>
     <span class="prelude-val">Ok</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">ServerSentEvent</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">Error</span> <span class="op">=</span> <span class="kw">impl</span> <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 <span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>
@@ -1220,7 +1223,7 @@
 {
     <span class="kw">let</span> <span class="ident">max_interval</span> <span class="op">=</span> <span class="ident">keep_interval</span>
         .<span class="ident">into</span>()
-        .<span class="ident">unwrap_or_else</span>(<span class="op">||</span> <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">15</span>));
+        .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">15</span>));
     <span class="kw">let</span> <span class="ident">alive_timer</span> <span class="op">=</span> <span class="ident">time</span>::<span class="ident">delay_for</span>(<span class="ident">max_interval</span>);
     <span class="ident">SseKeepAlive</span> {
         <span class="ident">event_stream</span>,
@@ -1272,7 +1275,7 @@
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// See [notes](https://www.w3.org/TR/2009/WD-eventsource-20090421/#notes).</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>() <span class="op">-&gt;</span> <span class="ident">KeepAlive</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">keep_alive</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">KeepAlive</span> {
     <span class="ident">KeepAlive</span> {
         <span class="ident">comment_text</span>: <span class="ident">Cow</span>::<span class="ident">Borrowed</span>(<span class="string">&quot;&quot;</span>),
         <span class="ident">max_interval</span>: <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">15</span>),
@@ -1285,14 +1288,14 @@
     <span class="ident">S</span>::<span class="prelude-val">Ok</span>: <span class="ident">ServerSentEvent</span>,
     <span class="ident">S</span>::<span class="ident">Error</span>: <span class="ident">StdError</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">SseComment</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>, <span class="ident">SseError</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">EitherServerSentEvent</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">SseComment</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span>, <span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>, <span class="ident">SseError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pin</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">project</span>();
         <span class="kw">match</span> <span class="ident">pin</span>.<span class="ident">event_stream</span>.<span class="ident">try_poll_next</span>(<span class="ident">cx</span>) {
-            <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=&gt;</span> <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pin</span>.<span class="ident">alive_timer</span>).<span class="ident">poll</span>(<span class="ident">cx</span>) {
-                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=&gt;</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
-                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="kw">_</span>) <span class="op">=&gt;</span> {
+            <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">pin</span>.<span class="ident">alive_timer</span>).<span class="ident">poll</span>(<span class="ident">cx</span>) {
+                <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Poll</span>::<span class="ident">Pending</span>,
+                <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="comment">// restart timer</span>
                     <span class="ident">pin</span>.<span class="ident">alive_timer</span>
                         .<span class="ident">reset</span>(<span class="ident">tokio</span>::<span class="ident">time</span>::<span class="ident">Instant</span>::<span class="ident">now</span>() <span class="op">+</span> <span class="kw-2">*</span><span class="ident">pin</span>.<span class="ident">max_interval</span>);
@@ -1300,14 +1303,14 @@
                     <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">EitherServerSentEvent</span>::<span class="ident">B</span>(<span class="ident">SseComment</span>(<span class="ident">comment_str</span>)))))
                 }
             },
-            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">event</span>))) <span class="op">=&gt;</span> {
+            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">event</span>))) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="comment">// restart timer</span>
                 <span class="ident">pin</span>.<span class="ident">alive_timer</span>
                     .<span class="ident">reset</span>(<span class="ident">tokio</span>::<span class="ident">time</span>::<span class="ident">Instant</span>::<span class="ident">now</span>() <span class="op">+</span> <span class="kw-2">*</span><span class="ident">pin</span>.<span class="ident">max_interval</span>);
                 <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Ok</span>(<span class="ident">EitherServerSentEvent</span>::<span class="ident">A</span>(<span class="ident">event</span>))))
             }
-            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=&gt;</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>),
-            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">error</span>))) <span class="op">=&gt;</span> {
+            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>),
+            <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">error</span>))) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="ident">tracing</span>::<span class="macro">error</span><span class="macro">!</span>(<span class="string">&quot;sse::keep error: {}&quot;</span>, <span class="ident">error</span>);
                 <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">SseError</span>)))
             }
@@ -1323,7 +1326,7 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SseError</span>;
 
     <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">SseError</span> {
-        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> ::<span class="ident">std</span>::<span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;sse error&quot;</span>)
         }
     }
@@ -1331,14 +1334,14 @@
     <span class="kw">impl</span> <span class="ident">StdError</span> <span class="kw">for</span> <span class="ident">SseError</span> {}
 
     <span class="kw">impl</span> <span class="ident">Display</span> <span class="kw">for</span> <span class="ident">SseField</span> {
-        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="kw">use</span> <span class="self">self</span>::<span class="ident">SseField</span>::<span class="kw-2">*</span>;
             <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="kw">match</span> <span class="self">self</span> {
-                <span class="ident">Event</span> <span class="op">=&gt;</span> <span class="string">&quot;event:&quot;</span>,
-                <span class="ident">Id</span> <span class="op">=&gt;</span> <span class="string">&quot;id:&quot;</span>,
-                <span class="ident">Data</span> <span class="op">=&gt;</span> <span class="string">&quot;data:&quot;</span>,
-                <span class="ident">Retry</span> <span class="op">=&gt;</span> <span class="string">&quot;retry:&quot;</span>,
-                <span class="ident">Comment</span> <span class="op">=&gt;</span> <span class="string">&quot;:&quot;</span>,
+                <span class="ident">Event</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;event:&quot;</span>,
+                <span class="ident">Id</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;id:&quot;</span>,
+                <span class="ident">Data</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;data:&quot;</span>,
+                <span class="ident">Retry</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;retry:&quot;</span>,
+                <span class="ident">Comment</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;:&quot;</span>,
             })
         }
     }
@@ -1361,7 +1364,7 @@
     <span class="doccomment">/// SSE formatter trait</span>
     <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">SseFormat</span> {
         <span class="doccomment">/// format message field</span>
-        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">_key</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">_key</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="prelude-val">Ok</span>(())
         }
     }
@@ -1374,7 +1377,7 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">SseFormat</span> <span class="op">+</span> <span class="lifetime">&#39;a</span>,
     {
-        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">format</span>(<span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">SseError</span><span class="op">&gt;</span> {
+        <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">format</span>(<span class="ident">event</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">SseError</span><span class="op">&gt;</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
             <span class="ident">buf</span>.<span class="ident">write_fmt</span>(<span class="macro">format_args</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">SseWrapper</span>(<span class="ident">event</span>)))
                 .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">SseError</span>)<span class="question-mark">?</span>;
@@ -1387,7 +1390,7 @@
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">SseFormat</span>,
     {
-        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="ident">SseField</span>::<span class="ident">Comment</span>)<span class="question-mark">?</span>;
             <span class="comment">// The event name usually transferred before the other fields.</span>
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="kw-2">&amp;</span><span class="ident">SseField</span>::<span class="ident">Event</span>)<span class="question-mark">?</span>;
@@ -1405,7 +1408,7 @@
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">BoxedServerSentEvent</span>(<span class="kw">pub</span>(<span class="kw">super</span>) <span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">SseFormat</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span><span class="op">&gt;</span>);
 
     <span class="kw">impl</span> <span class="ident">SseFormat</span> <span class="kw">for</span> <span class="ident">BoxedServerSentEvent</span> {
-        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="self">self</span>.<span class="number">0</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>)
         }
     }
@@ -1421,10 +1424,10 @@
         <span class="ident">A</span>: <span class="ident">SseFormat</span>,
         <span class="ident">B</span>: <span class="ident">SseFormat</span>,
     {
-        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+        <span class="kw">fn</span> <span class="ident">fmt_field</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Formatter</span>, <span class="ident">k</span>: <span class="kw-2">&amp;</span><span class="ident">SseField</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
             <span class="kw">match</span> <span class="self">self</span> {
-                <span class="ident">EitherServerSentEvent</span>::<span class="ident">A</span>(<span class="ident">a</span>) <span class="op">=&gt;</span> <span class="ident">a</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>),
-                <span class="ident">EitherServerSentEvent</span>::<span class="ident">B</span>(<span class="ident">b</span>) <span class="op">=&gt;</span> <span class="ident">b</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>),
+                <span class="ident">EitherServerSentEvent</span>::<span class="ident">A</span>(<span class="ident">a</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">a</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>),
+                <span class="ident">EitherServerSentEvent</span>::<span class="ident">B</span>(<span class="ident">b</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">b</span>.<span class="ident">fmt_field</span>(<span class="ident">f</span>, <span class="ident">k</span>),
             }
         }
     }

@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/trust-dns-proto-0.18.0-alpha.2/src/tcp/tcp_stream.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tcp_stream.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-proto-0.19.6/src/tcp/tcp_stream.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tcp_stream.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -471,106 +474,6 @@
 <span id="471">471</span>
 <span id="472">472</span>
 <span id="473">473</span>
-<span id="474">474</span>
-<span id="475">475</span>
-<span id="476">476</span>
-<span id="477">477</span>
-<span id="478">478</span>
-<span id="479">479</span>
-<span id="480">480</span>
-<span id="481">481</span>
-<span id="482">482</span>
-<span id="483">483</span>
-<span id="484">484</span>
-<span id="485">485</span>
-<span id="486">486</span>
-<span id="487">487</span>
-<span id="488">488</span>
-<span id="489">489</span>
-<span id="490">490</span>
-<span id="491">491</span>
-<span id="492">492</span>
-<span id="493">493</span>
-<span id="494">494</span>
-<span id="495">495</span>
-<span id="496">496</span>
-<span id="497">497</span>
-<span id="498">498</span>
-<span id="499">499</span>
-<span id="500">500</span>
-<span id="501">501</span>
-<span id="502">502</span>
-<span id="503">503</span>
-<span id="504">504</span>
-<span id="505">505</span>
-<span id="506">506</span>
-<span id="507">507</span>
-<span id="508">508</span>
-<span id="509">509</span>
-<span id="510">510</span>
-<span id="511">511</span>
-<span id="512">512</span>
-<span id="513">513</span>
-<span id="514">514</span>
-<span id="515">515</span>
-<span id="516">516</span>
-<span id="517">517</span>
-<span id="518">518</span>
-<span id="519">519</span>
-<span id="520">520</span>
-<span id="521">521</span>
-<span id="522">522</span>
-<span id="523">523</span>
-<span id="524">524</span>
-<span id="525">525</span>
-<span id="526">526</span>
-<span id="527">527</span>
-<span id="528">528</span>
-<span id="529">529</span>
-<span id="530">530</span>
-<span id="531">531</span>
-<span id="532">532</span>
-<span id="533">533</span>
-<span id="534">534</span>
-<span id="535">535</span>
-<span id="536">536</span>
-<span id="537">537</span>
-<span id="538">538</span>
-<span id="539">539</span>
-<span id="540">540</span>
-<span id="541">541</span>
-<span id="542">542</span>
-<span id="543">543</span>
-<span id="544">544</span>
-<span id="545">545</span>
-<span id="546">546</span>
-<span id="547">547</span>
-<span id="548">548</span>
-<span id="549">549</span>
-<span id="550">550</span>
-<span id="551">551</span>
-<span id="552">552</span>
-<span id="553">553</span>
-<span id="554">554</span>
-<span id="555">555</span>
-<span id="556">556</span>
-<span id="557">557</span>
-<span id="558">558</span>
-<span id="559">559</span>
-<span id="560">560</span>
-<span id="561">561</span>
-<span id="562">562</span>
-<span id="563">563</span>
-<span id="564">564</span>
-<span id="565">565</span>
-<span id="566">566</span>
-<span id="567">567</span>
-<span id="568">568</span>
-<span id="569">569</span>
-<span id="570">570</span>
-<span id="571">571</span>
-<span id="572">572</span>
-<span id="573">573</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright 2015-2016 Benjamin Fry &lt;benjaminfry@me.com&gt;</span>
 <span class="comment">//</span>
@@ -591,11 +494,12 @@
 <span class="kw">use</span> <span class="ident">async_trait</span>::<span class="ident">async_trait</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">channel</span>::<span class="ident">mpsc</span>::{<span class="ident">unbounded</span>, <span class="ident">UnboundedReceiver</span>};
 <span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">stream</span>::{<span class="ident">Fuse</span>, <span class="ident">Peekable</span>, <span class="ident">Stream</span>, <span class="ident">StreamExt</span>};
-<span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">ready</span>, <span class="ident">Future</span>, <span class="ident">FutureExt</span>, <span class="ident">TryFutureExt</span>};
+<span class="kw">use</span> <span class="ident">futures</span>::{<span class="self">self</span>, <span class="ident">ready</span>, <span class="ident">Future</span>, <span class="ident">FutureExt</span>};
 <span class="kw">use</span> <span class="ident">log</span>::<span class="ident">debug</span>;
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">xfer</span>::{<span class="ident">BufStreamHandle</span>, <span class="ident">SerialMessage</span>};
+<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">Time</span>;
 
 <span class="doccomment">/// Trait for TCP connection</span>
 <span class="attribute">#[<span class="ident">async_trait</span>]</span>
@@ -604,10 +508,10 @@
     <span class="self">Self</span>: <span class="ident">Sized</span>,
 {
     <span class="doccomment">/// TcpSteam</span>
-    <span class="kw">type</span> <span class="ident">Transport</span>: <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Send</span>;
+    <span class="kw">type</span> <span class="ident">Transport</span>: <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Unpin</span>;
 
     <span class="doccomment">/// connect to tcp</span>
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="ident">addr</span>: <span class="kw-2">&amp;</span><span class="ident">SocketAddr</span>) <span class="op">-&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Transport</span><span class="op">&gt;</span>;
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(<span class="ident">addr</span>: <span class="ident">SocketAddr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Transport</span><span class="op">&gt;</span>;
 }
 
 <span class="doccomment">/// Current state while writing to the remote of the TCP connection</span>
@@ -654,7 +558,7 @@
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;futures do nothing unless polled&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
     <span class="ident">socket</span>: <span class="ident">S</span>,
-    <span class="ident">outbound_messages</span>: <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">Fuse</span><span class="op">&lt;</span><span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">outbound_messages</span>: <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">Fuse</span><span class="op">&lt;</span><span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
     <span class="ident">send_state</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">WriteTcpState</span><span class="op">&gt;</span>,
     <span class="ident">read_state</span>: <span class="ident">ReadTcpState</span>,
     <span class="ident">peer_addr</span>: <span class="ident">SocketAddr</span>,
@@ -662,15 +566,15 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Returns the address of the peer connection.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">SocketAddr</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">peer_addr</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SocketAddr</span> {
         <span class="self">self</span>.<span class="ident">peer_addr</span>
     }
 
     <span class="kw">fn</span> <span class="ident">pollable_split</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
-    ) <span class="op">-&gt;</span> (
+    ) <span class="op">-</span><span class="op">&gt;</span> (
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">S</span>,
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">Fuse</span><span class="op">&lt;</span><span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span>,
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Peekable</span><span class="op">&lt;</span><span class="ident">Fuse</span><span class="op">&lt;</span><span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">WriteTcpState</span><span class="op">&gt;</span>,
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">ReadTcpState</span>,
     ) {
@@ -692,16 +596,17 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `name_server` - the IP and Port of the DNS server to connect to</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">new_ret_no_self</span>, <span class="ident">clippy</span>::<span class="ident">type_complexity</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">TE</span><span class="op">&gt;</span>(
         <span class="ident">name_server</span>: <span class="ident">SocketAddr</span>,
-    ) <span class="op">-&gt;</span> (
-        <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> (
+        <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
         <span class="ident">BufStreamHandle</span>,
     )
     <span class="kw">where</span>
         <span class="ident">E</span>: <span class="ident">FromProtoError</span>,
+        <span class="ident">TE</span>: <span class="ident">Time</span>,
     {
-        <span class="self">Self</span>::<span class="ident">with_timeout</span>(<span class="ident">name_server</span>, <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>))
+        <span class="self">Self</span>::<span class="ident">with_timeout</span>::<span class="op">&lt;</span><span class="ident">TE</span><span class="op">&gt;</span>(<span class="ident">name_server</span>, <span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>))
     }
 
     <span class="doccomment">/// Creates a new future of the eventually establish a IO stream connection or fail trying</span>
@@ -711,36 +616,29 @@
     <span class="doccomment">/// * `name_server` - the IP and Port of the DNS server to connect to</span>
     <span class="doccomment">/// * `timeout` - connection timeout</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">type_complexity</span>)]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_timeout</span>(
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_timeout</span><span class="op">&lt;</span><span class="ident">TE</span>: <span class="ident">Time</span><span class="op">&gt;</span>(
         <span class="ident">name_server</span>: <span class="ident">SocketAddr</span>,
         <span class="ident">timeout</span>: <span class="ident">Duration</span>,
-    ) <span class="op">-&gt;</span> (
-        <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> (
+        <span class="kw">impl</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span>,
         <span class="ident">BufStreamHandle</span>,
     ) {
         <span class="kw">let</span> (<span class="ident">message_sender</span>, <span class="ident">outbound_messages</span>) <span class="op">=</span> <span class="ident">unbounded</span>();
         <span class="kw">let</span> <span class="ident">message_sender</span> <span class="op">=</span> <span class="ident">BufStreamHandle</span>::<span class="ident">new</span>(<span class="ident">message_sender</span>);
         <span class="comment">// This set of futures collapses the next tcp socket into a stream which can be used for</span>
         <span class="comment">//  sending and receiving tcp packets.</span>
-        <span class="kw">let</span> <span class="ident">stream_fut</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">connect</span>(<span class="ident">name_server</span>, <span class="ident">timeout</span>, <span class="ident">outbound_messages</span>);
+        <span class="kw">let</span> <span class="ident">stream_fut</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">connect</span>::<span class="op">&lt;</span><span class="ident">TE</span><span class="op">&gt;</span>(<span class="ident">name_server</span>, <span class="ident">timeout</span>, <span class="ident">outbound_messages</span>);
 
         (<span class="ident">stream_fut</span>, <span class="ident">message_sender</span>)
     }
 
-    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span>(
+    <span class="kw">async</span> <span class="kw">fn</span> <span class="ident">connect</span><span class="op">&lt;</span><span class="ident">TE</span>: <span class="ident">Time</span><span class="op">&gt;</span>(
         <span class="ident">name_server</span>: <span class="ident">SocketAddr</span>,
         <span class="ident">timeout</span>: <span class="ident">Duration</span>,
         <span class="ident">outbound_messages</span>: <span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">tcp</span> <span class="op">=</span> <span class="ident">S</span>::<span class="ident">connect</span>(<span class="kw-2">&amp;</span><span class="ident">name_server</span>);
-        <span class="ident">tokio</span>::<span class="ident">time</span>::<span class="ident">timeout</span>(<span class="ident">timeout</span>, <span class="ident">tcp</span>)
-            .<span class="ident">map_err</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> {
-                <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;timed out connecting to: {}&quot;</span>, <span class="ident">name_server</span>);
-                <span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
-                    <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">TimedOut</span>,
-                    <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;timed out connecting to: {}&quot;</span>, <span class="ident">name_server</span>),
-                )
-            })
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span><span class="op">&gt;</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="ident">tcp</span> <span class="op">=</span> <span class="ident">S</span>::<span class="ident">connect</span>(<span class="ident">name_server</span>);
+        <span class="ident">TE</span>::<span class="ident">timeout</span>(<span class="ident">timeout</span>, <span class="ident">tcp</span>)
             .<span class="ident">map</span>(
                 <span class="kw">move</span> <span class="op">|</span><span class="ident">tcp_stream</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="ident">Transport</span>, <span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>, <span class="kw">_</span><span class="op">&gt;</span><span class="op">|</span> {
                     <span class="ident">tcp_stream</span>
@@ -764,7 +662,7 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span><span class="op">&gt;</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span><span class="op">&gt;</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Initializes a TcpStream.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This is intended for use with a TcpListener and Incoming.</span>
@@ -773,7 +671,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `stream` - the established IO stream for communication</span>
     <span class="doccomment">/// * `peer_addr` - sources address of the stream</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_stream</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">peer_addr</span>: <span class="ident">SocketAddr</span>) <span class="op">-&gt;</span> (<span class="self">Self</span>, <span class="ident">BufStreamHandle</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_stream</span>(<span class="ident">stream</span>: <span class="ident">S</span>, <span class="ident">peer_addr</span>: <span class="ident">SocketAddr</span>) <span class="op">-</span><span class="op">&gt;</span> (<span class="self">Self</span>, <span class="ident">BufStreamHandle</span>) {
         <span class="kw">let</span> (<span class="ident">message_sender</span>, <span class="ident">outbound_messages</span>) <span class="op">=</span> <span class="ident">unbounded</span>();
         <span class="kw">let</span> <span class="ident">message_sender</span> <span class="op">=</span> <span class="ident">BufStreamHandle</span>::<span class="ident">new</span>(<span class="ident">message_sender</span>);
 
@@ -787,7 +685,7 @@
         <span class="ident">stream</span>: <span class="ident">S</span>,
         <span class="ident">peer_addr</span>: <span class="ident">SocketAddr</span>,
         <span class="ident">receiver</span>: <span class="ident">UnboundedReceiver</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">TcpStream</span> {
             <span class="ident">socket</span>: <span class="ident">stream</span>,
             <span class="ident">outbound_messages</span>: <span class="ident">receiver</span>.<span class="ident">fuse</span>().<span class="ident">peekable</span>(),
@@ -801,11 +699,11 @@
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">tokio</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span> <span class="ident">Stream</span> <span class="kw">for</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncRead</span> <span class="op">+</span> <span class="ident">futures</span>::<span class="ident">io</span>::<span class="ident">AsyncWrite</span> <span class="op">+</span> <span class="ident">Unpin</span><span class="op">&gt;</span> <span class="ident">Stream</span> <span class="kw">for</span> <span class="ident">TcpStream</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="ident">io</span>::<span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">SerialMessage</span><span class="op">&gt;</span>;
 
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">cognitive_complexity</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll_next</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">peer</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">peer_addr</span>;
         <span class="kw">let</span> (<span class="ident">socket</span>, <span class="ident">outbound_messages</span>, <span class="ident">send_state</span>, <span class="ident">read_state</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">pollable_split</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">socket</span> <span class="op">=</span> <span class="ident">Pin</span>::<span class="ident">new</span>(<span class="ident">socket</span>);
@@ -823,21 +721,21 @@
                         <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">pos</span>,
                         <span class="kw-2">ref</span> <span class="ident">length</span>,
                         ..
-                    }) <span class="op">=&gt;</span> {
+                    }) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">let</span> <span class="ident">wrote</span> <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">socket</span>.<span class="ident">as_mut</span>().<span class="ident">poll_write</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="ident">length</span>[<span class="kw-2">*</span><span class="ident">pos</span>..]))<span class="question-mark">?</span>;
-                        <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+=</span> <span class="ident">wrote</span>;
+                        <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">wrote</span>;
                     }
                     <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Bytes</span> {
                         <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">pos</span>,
                         <span class="kw-2">ref</span> <span class="ident">bytes</span>,
-                    }) <span class="op">=&gt;</span> {
+                    }) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">let</span> <span class="ident">wrote</span> <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">socket</span>.<span class="ident">as_mut</span>().<span class="ident">poll_write</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="kw-2">*</span><span class="ident">pos</span>..]))<span class="question-mark">?</span>;
-                        <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+=</span> <span class="ident">wrote</span>;
+                        <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">wrote</span>;
                     }
-                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Flushing</span>) <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Flushing</span>) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">socket</span>.<span class="ident">as_mut</span>().<span class="ident">poll_flush</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
                     }
-                    <span class="kw">_</span> <span class="op">=&gt;</span> (),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> (),
                 }
 
                 <span class="comment">// get current state</span>
@@ -845,7 +743,7 @@
 
                 <span class="comment">// switch states</span>
                 <span class="kw">match</span> <span class="ident">current_state</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">LenBytes</span> { <span class="ident">pos</span>, <span class="ident">length</span>, <span class="ident">bytes</span> }) <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">LenBytes</span> { <span class="ident">pos</span>, <span class="ident">length</span>, <span class="ident">bytes</span> }) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">if</span> <span class="ident">pos</span> <span class="op">&lt;</span> <span class="ident">length</span>.<span class="ident">len</span>() {
                             <span class="ident">mem</span>::<span class="ident">replace</span>(
                                 <span class="ident">send_state</span>,
@@ -855,7 +753,7 @@
                             <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="ident">send_state</span>, <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Bytes</span> { <span class="ident">pos</span>: <span class="number">0</span>, <span class="ident">bytes</span> }));
                         }
                     }
-                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Bytes</span> { <span class="ident">pos</span>, <span class="ident">bytes</span> }) <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Bytes</span> { <span class="ident">pos</span>, <span class="ident">bytes</span> }) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="kw">if</span> <span class="ident">pos</span> <span class="op">&lt;</span> <span class="ident">bytes</span>.<span class="ident">len</span>() {
                             <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="ident">send_state</span>, <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Bytes</span> { <span class="ident">pos</span>, <span class="ident">bytes</span> }));
                         } <span class="kw">else</span> {
@@ -864,11 +762,11 @@
                             <span class="ident">mem</span>::<span class="ident">replace</span>(<span class="ident">send_state</span>, <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Flushing</span>));
                         }
                     }
-                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Flushing</span>) <span class="op">=&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">WriteTcpState</span>::<span class="ident">Flushing</span>) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="comment">// At this point we successfully delivered the entire message.</span>
                         <span class="ident">send_state</span>.<span class="ident">take</span>();
                     }
-                    <span class="prelude-val">None</span> <span class="op">=&gt;</span> (),
+                    <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> (),
                 };
             } <span class="kw">else</span> {
                 <span class="comment">// then see if there is more to send</span>
@@ -876,13 +774,13 @@
                     <span class="comment">// .map_err(|()| io::Error::new(io::ErrorKind::Other, &quot;unknown&quot;))?</span>
                 {
                     <span class="comment">// already handled above, here to make sure the poll() pops the next message</span>
-                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="ident">message</span>)) <span class="op">=&gt;</span> {
+                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="ident">message</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="comment">// if there is no peer, this connection should die...</span>
                         <span class="kw">let</span> (<span class="ident">buffer</span>, <span class="ident">dst</span>) <span class="op">=</span> <span class="ident">message</span>.<span class="ident">unwrap</span>();
 
                         <span class="comment">// This is an error if the destination is not our peer (this is TCP after all)</span>
                         <span class="comment">//  This will kill the connection...</span>
-                        <span class="kw">if</span> <span class="ident">peer</span> <span class="op">!=</span> <span class="ident">dst</span> {
+                        <span class="kw">if</span> <span class="ident">peer</span> <span class="op">!</span><span class="op">=</span> <span class="ident">dst</span> {
                             <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Some</span>(<span class="prelude-val">Err</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
                                 <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">InvalidData</span>,
                                 <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;mismatched peer: {} and dst: {}&quot;</span>, <span class="ident">peer</span>, <span class="ident">dst</span>),
@@ -892,7 +790,7 @@
                         <span class="comment">// will return if the socket will block</span>
                         <span class="comment">// the length is 16 bits</span>
                         <span class="kw">let</span> <span class="ident">len</span>: [<span class="ident">u8</span>; <span class="number">2</span>] <span class="op">=</span> [
-                            (<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">&gt;&gt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+                            (<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
                             (<span class="ident">buffer</span>.<span class="ident">len</span>() <span class="op">&amp;</span> <span class="number">0xFF</span>) <span class="kw">as</span> <span class="ident">u8</span>,
                         ];
 
@@ -905,8 +803,8 @@
                     }
                     <span class="comment">// now we get to drop through to the receives...</span>
                     <span class="comment">// TODO: should we also return None if there are no more messages to send?</span>
-                    <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=&gt;</span> <span class="kw">break</span>,
-                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=&gt;</span> {
+                    <span class="ident">Poll</span>::<span class="ident">Pending</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">break</span>,
+                    <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>) <span class="op">=</span><span class="op">&gt;</span> {
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;no messages to send&quot;</span>);
                         <span class="kw">break</span>;
                     }
@@ -914,7 +812,7 @@
             }
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret_buf</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">ret_buf</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">=</span> <span class="prelude-val">None</span>;
 
         <span class="comment">// this will loop while there is data to read, or the data has been read, or an IO</span>
         <span class="comment">//  event would block</span>
@@ -925,15 +823,15 @@
                 <span class="ident">ReadTcpState</span>::<span class="ident">LenBytes</span> {
                     <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">pos</span>,
                     <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">bytes</span>,
-                } <span class="op">=&gt;</span> {
+                } <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="comment">// debug!(&quot;reading length {}&quot;, bytes.len());</span>
                     <span class="kw">let</span> <span class="ident">read</span> <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">socket</span>.<span class="ident">as_mut</span>().<span class="ident">poll_read</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>[<span class="kw-2">*</span><span class="ident">pos</span>..]))<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="ident">read</span> <span class="op">==</span> <span class="number">0</span> {
+                    <span class="kw">if</span> <span class="ident">read</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="comment">// the Stream was closed!</span>
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;zero bytes read, stream closed?&quot;</span>);
                         <span class="comment">//try!(self.socket.shutdown(Shutdown::Both)); // TODO: add generic shutdown function</span>
 
-                        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">==</span> <span class="number">0</span> {
+                        <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                             <span class="comment">// Since this is the start of the next message, we have a clean end</span>
                             <span class="kw">return</span> <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">None</span>);
                         } <span class="kw">else</span> {
@@ -944,14 +842,14 @@
                         }
                     }
                     <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;in ReadTcpState::LenBytes: {}&quot;</span>, <span class="ident">pos</span>);
-                    <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+=</span> <span class="ident">read</span>;
+                    <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">read</span>;
 
                     <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">&lt;</span> <span class="ident">bytes</span>.<span class="ident">len</span>() {
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;remain ReadTcpState::LenBytes: {}&quot;</span>, <span class="ident">pos</span>);
                         <span class="prelude-val">None</span>
                     } <span class="kw">else</span> {
                         <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span>
-                            <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">bytes</span>[<span class="number">0</span>]) <span class="op">&lt;&lt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0xFF00</span> <span class="op">|</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">bytes</span>[<span class="number">1</span>]) <span class="op">&amp;</span> <span class="number">0x00FF</span>;
+                            <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">bytes</span>[<span class="number">0</span>]) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0xFF00</span> <span class="op">|</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">bytes</span>[<span class="number">1</span>]) <span class="op">&amp;</span> <span class="number">0x00FF</span>;
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;got length: {}&quot;</span>, <span class="ident">length</span>);
                         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">length</span> <span class="kw">as</span> <span class="ident">usize</span>];
                         <span class="ident">bytes</span>.<span class="ident">resize</span>(<span class="ident">length</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="number">0</span>);
@@ -963,9 +861,9 @@
                 <span class="ident">ReadTcpState</span>::<span class="ident">Bytes</span> {
                     <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">pos</span>,
                     <span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">bytes</span>,
-                } <span class="op">=&gt;</span> {
+                } <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">read</span> <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">socket</span>.<span class="ident">as_mut</span>().<span class="ident">poll_read</span>(<span class="ident">cx</span>, <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>[<span class="kw-2">*</span><span class="ident">pos</span>..]))<span class="question-mark">?</span>;
-                    <span class="kw">if</span> <span class="ident">read</span> <span class="op">==</span> <span class="number">0</span> {
+                    <span class="kw">if</span> <span class="ident">read</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
                         <span class="comment">// the Stream was closed!</span>
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;zero bytes read for message, stream closed?&quot;</span>);
 
@@ -978,7 +876,7 @@
                     }
 
                     <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;in ReadTcpState::Bytes: {}&quot;</span>, <span class="ident">bytes</span>.<span class="ident">len</span>());
-                    <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+=</span> <span class="ident">read</span>;
+                    <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">+</span><span class="op">=</span> <span class="ident">read</span>;
 
                     <span class="kw">if</span> <span class="kw-2">*</span><span class="ident">pos</span> <span class="op">&lt;</span> <span class="ident">bytes</span>.<span class="ident">len</span>() {
                         <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;remain ReadTcpState::Bytes: {}&quot;</span>, <span class="ident">bytes</span>.<span class="ident">len</span>());
@@ -1019,130 +917,35 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>))]</span>
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">Ipv6Addr</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::{<span class="ident">IpAddr</span>, <span class="ident">Ipv4Addr</span>};
+    <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">net</span>::<span class="ident">TcpStream</span> <span class="kw">as</span> <span class="ident">TokioTcpStream</span>;
+    <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>::<span class="ident">Runtime</span>;
 
-    <span class="kw">use</span> <span class="ident">tokio</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">iocompat</span>::<span class="ident">AsyncIo02As03</span>;
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">TokioTime</span>;
 
-    <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-
+    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">tests</span>::<span class="ident">tcp_stream_test</span>;
     <span class="attribute">#[<span class="ident">test</span>]</span>
-    <span class="comment">// this fails on linux for some reason. It appears that a buffer somewhere is dirty</span>
-    <span class="comment">//  and subsequent reads of a message buffer reads the wrong length. It works for 2 iterations</span>
-    <span class="comment">//  but not 3?</span>
-    <span class="comment">// #[cfg(not(target_os = &quot;linux&quot;))]</span>
-    <span class="kw">fn</span> <span class="ident">test_tcp_client_stream_ipv4</span>() {
-        <span class="ident">tcp_client_stream_test</span>(<span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)))
+    <span class="kw">fn</span> <span class="ident">test_tcp_stream_ipv4</span>() {
+        <span class="kw">let</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime</span>::<span class="ident">new</span>().<span class="ident">expect</span>(<span class="string">&quot;failed to create tokio runtime&quot;</span>);
+        <span class="ident">tcp_stream_test</span>::<span class="op">&lt;</span><span class="ident">AsyncIo02As03</span><span class="op">&lt;</span><span class="ident">TokioTcpStream</span><span class="op">&gt;</span>, <span class="ident">Runtime</span>, <span class="ident">TokioTime</span><span class="op">&gt;</span>(
+            <span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)),
+            <span class="ident">io_loop</span>,
+        )
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;linux&quot;</span>))]</span> <span class="comment">// ignored until Travis-CI fixes IPv6</span>
-    <span class="kw">fn</span> <span class="ident">test_tcp_client_stream_ipv6</span>() {
-        <span class="ident">tcp_client_stream_test</span>(<span class="ident">IpAddr</span>::<span class="ident">V6</span>(<span class="ident">Ipv6Addr</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)))
-    }
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">const</span> <span class="ident">TEST_BYTES</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>; <span class="number">8</span>] <span class="op">=</span> <span class="string">b&quot;DEADBEEF&quot;</span>;
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">const</span> <span class="ident">TEST_BYTES_LEN</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">8</span>;
-
-    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">tcp_client_stream_test</span>(<span class="ident">server_addr</span>: <span class="ident">IpAddr</span>) {
-        <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::{<span class="ident">Read</span>, <span class="ident">Write</span>};
-        <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>;
-
-        <span class="kw">let</span> <span class="ident">succeeded</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">atomic</span>::<span class="ident">AtomicBool</span>::<span class="ident">new</span>(<span class="bool-val">false</span>));
-        <span class="kw">let</span> <span class="ident">succeeded_clone</span> <span class="op">=</span> <span class="ident">succeeded</span>.<span class="ident">clone</span>();
-        <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
-            .<span class="ident">name</span>(<span class="string">&quot;thread_killer&quot;</span>.<span class="ident">to_string</span>())
-            .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">||</span> {
-                <span class="kw">let</span> <span class="ident">succeeded</span> <span class="op">=</span> <span class="ident">succeeded_clone</span>;
-                <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">15</span> {
-                    <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">sleep</span>(<span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">1</span>));
-                    <span class="kw">if</span> <span class="ident">succeeded</span>.<span class="ident">load</span>(<span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">atomic</span>::<span class="ident">Ordering</span>::<span class="ident">Relaxed</span>) {
-                        <span class="kw">return</span>;
-                    }
-                }
-
-                <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;timeout&quot;</span>);
-            })
-            .<span class="ident">unwrap</span>();
-
-        <span class="comment">// TODO: need a timeout on listen</span>
-        <span class="kw">let</span> <span class="ident">server</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">net</span>::<span class="ident">TcpListener</span>::<span class="ident">bind</span>(<span class="ident">SocketAddr</span>::<span class="ident">new</span>(<span class="ident">server_addr</span>, <span class="number">0</span>)).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">server_addr</span> <span class="op">=</span> <span class="ident">server</span>.<span class="ident">local_addr</span>().<span class="ident">unwrap</span>();
-
-        <span class="kw">let</span> <span class="ident">send_recv_times</span> <span class="op">=</span> <span class="number">4</span>;
-
-        <span class="comment">// an in and out server</span>
-        <span class="kw">let</span> <span class="ident">server_handle</span> <span class="op">=</span> <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">Builder</span>::<span class="ident">new</span>()
-            .<span class="ident">name</span>(<span class="string">&quot;test_tcp_client_stream:server&quot;</span>.<span class="ident">to_string</span>())
-            .<span class="ident">spawn</span>(<span class="kw">move</span> <span class="op">||</span> {
-                <span class="kw">let</span> (<span class="kw-2">mut</span> <span class="ident">socket</span>, <span class="kw">_</span>) <span class="op">=</span> <span class="ident">server</span>.<span class="ident">accept</span>().<span class="ident">expect</span>(<span class="string">&quot;accept failed&quot;</span>);
-
-                <span class="ident">socket</span>
-                    .<span class="ident">set_read_timeout</span>(<span class="prelude-val">Some</span>(<span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>)))
-                    .<span class="ident">unwrap</span>(); <span class="comment">// should receive something within 5 seconds...</span>
-                <span class="ident">socket</span>
-                    .<span class="ident">set_write_timeout</span>(<span class="prelude-val">Some</span>(<span class="ident">std</span>::<span class="ident">time</span>::<span class="ident">Duration</span>::<span class="ident">from_secs</span>(<span class="number">5</span>)))
-                    .<span class="ident">unwrap</span>(); <span class="comment">// should receive something within 5 seconds...</span>
-
-                <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">send_recv_times</span> {
-                    <span class="comment">// wait for some bytes...</span>
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">len_bytes</span> <span class="op">=</span> [<span class="number">0_u8</span>; <span class="number">2</span>];
-                    <span class="ident">socket</span>
-                        .<span class="ident">read_exact</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">len_bytes</span>)
-                        .<span class="ident">expect</span>(<span class="string">&quot;SERVER: receive failed&quot;</span>);
-                    <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span>
-                        <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">len_bytes</span>[<span class="number">0</span>]) <span class="op">&lt;&lt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0xFF00</span> <span class="op">|</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">len_bytes</span>[<span class="number">1</span>]) <span class="op">&amp;</span> <span class="number">0x00FF</span>;
-                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">length</span> <span class="kw">as</span> <span class="ident">usize</span>, <span class="ident">TEST_BYTES_LEN</span>);
-
-                    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buffer</span> <span class="op">=</span> [<span class="number">0_u8</span>; <span class="ident">TEST_BYTES_LEN</span>];
-                    <span class="ident">socket</span>.<span class="ident">read_exact</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buffer</span>).<span class="ident">unwrap</span>();
-
-                    <span class="comment">// println!(&quot;read bytes iter: {}&quot;, i);</span>
-                    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>, <span class="ident">TEST_BYTES</span>);
-
-                    <span class="comment">// bounce them right back...</span>
-                    <span class="ident">socket</span>
-                        .<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">len_bytes</span>)
-                        .<span class="ident">expect</span>(<span class="string">&quot;SERVER: send length failed&quot;</span>);
-                    <span class="ident">socket</span>
-                        .<span class="ident">write_all</span>(<span class="kw-2">&amp;</span><span class="ident">buffer</span>)
-                        .<span class="ident">expect</span>(<span class="string">&quot;SERVER: send buffer failed&quot;</span>);
-                    <span class="comment">// println!(&quot;wrote bytes iter: {}&quot;, i);</span>
-                    <span class="ident">std</span>::<span class="ident">thread</span>::<span class="ident">yield_now</span>();
-                }
-            })
-            .<span class="ident">unwrap</span>();
-
-        <span class="comment">// setup the client, which is going to run on the testing thread...</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">runtime</span>::<span class="ident">Runtime</span>::<span class="ident">new</span>().<span class="ident">unwrap</span>();
-
-        <span class="comment">// the tests should run within 5 seconds... right?</span>
-        <span class="comment">// TODO: add timeout here, so that test never hangs...</span>
-        <span class="comment">// let timeout = Timeout::new(Duration::from_secs(5));</span>
-        <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">sender</span>) <span class="op">=</span> <span class="ident">TcpStream</span>::<span class="op">&lt;</span><span class="ident">tokio</span>::<span class="ident">net</span>::<span class="ident">TcpStream</span><span class="op">&gt;</span>::<span class="ident">new</span>::<span class="op">&lt;</span><span class="ident">ProtoError</span><span class="op">&gt;</span>(<span class="ident">server_addr</span>);
-
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">stream</span> <span class="op">=</span> <span class="ident">io_loop</span>.<span class="ident">block_on</span>(<span class="ident">stream</span>).<span class="ident">expect</span>(<span class="string">&quot;run failed to get stream&quot;</span>);
-
-        <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">send_recv_times</span> {
-            <span class="comment">// test once</span>
-            <span class="ident">sender</span>
-                .<span class="ident">unbounded_send</span>(<span class="ident">SerialMessage</span>::<span class="ident">new</span>(<span class="ident">TEST_BYTES</span>.<span class="ident">to_vec</span>(), <span class="ident">server_addr</span>))
-                .<span class="ident">expect</span>(<span class="string">&quot;send failed&quot;</span>);
-            <span class="kw">let</span> (<span class="ident">buffer</span>, <span class="ident">stream_tmp</span>) <span class="op">=</span> <span class="ident">io_loop</span>.<span class="ident">block_on</span>(<span class="ident">stream</span>.<span class="ident">into_future</span>());
-            <span class="ident">stream</span> <span class="op">=</span> <span class="ident">stream_tmp</span>;
-            <span class="kw">let</span> <span class="ident">message</span> <span class="op">=</span> <span class="ident">buffer</span>
-                .<span class="ident">expect</span>(<span class="string">&quot;no buffer received&quot;</span>)
-                .<span class="ident">expect</span>(<span class="string">&quot;error receiving buffer&quot;</span>);
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">message</span>.<span class="ident">bytes</span>(), <span class="ident">TEST_BYTES</span>);
-        }
-
-        <span class="ident">succeeded</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">atomic</span>::<span class="ident">Ordering</span>::<span class="ident">Relaxed</span>);
-        <span class="ident">server_handle</span>.<span class="ident">join</span>().<span class="ident">expect</span>(<span class="string">&quot;server thread failed&quot;</span>);
+    <span class="kw">fn</span> <span class="ident">test_tcp_stream_ipv6</span>() {
+        <span class="kw">let</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime</span>::<span class="ident">new</span>().<span class="ident">expect</span>(<span class="string">&quot;failed to create tokio runtime&quot;</span>);
+        <span class="ident">tcp_stream_test</span>::<span class="op">&lt;</span><span class="ident">AsyncIo02As03</span><span class="op">&lt;</span><span class="ident">TokioTcpStream</span><span class="op">&gt;</span>, <span class="ident">Runtime</span>, <span class="ident">TokioTime</span><span class="op">&gt;</span>(
+            <span class="ident">IpAddr</span>::<span class="ident">V6</span>(<span class="ident">Ipv6Addr</span>::<span class="ident">new</span>(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>)),
+            <span class="ident">io_loop</span>,
+        )
     }
 }
 </pre></div>

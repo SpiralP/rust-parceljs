@@ -1,3 +1,3 @@
 (function() {var implementors = {};
-implementors["actix_http"] = [{"text":"impl Encoder for ClientCodec","synthetic":false,"types":[]},{"text":"impl Encoder for Codec","synthetic":false,"types":[]},{"text":"impl Encoder for Codec","synthetic":false,"types":[]}];
+implementors["actix_http"] = [{"text":"impl Encoder&lt;Message&lt;(RequestHeadType, BodySize)&gt;&gt; for ClientCodec","synthetic":false,"types":[]},{"text":"impl Encoder&lt;Message&lt;(Response&lt;()&gt;, BodySize)&gt;&gt; for Codec","synthetic":false,"types":[]},{"text":"impl Encoder&lt;Message&gt; for Codec","synthetic":false,"types":[]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

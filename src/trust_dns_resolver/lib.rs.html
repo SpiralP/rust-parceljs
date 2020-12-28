@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/trust-dns-resolver-0.18.0-alpha.2/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../trust_dns_resolver/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-resolver-0.19.6/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../trust_dns_resolver/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -262,6 +265,21 @@
 <span id="262">262</span>
 <span id="263">263</span>
 <span id="264">264</span>
+<span id="265">265</span>
+<span id="266">266</span>
+<span id="267">267</span>
+<span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="comment">// Copyright 2015-2017 Benjamin Fry &lt;benjaminfry@me.com&gt;</span>
 <span class="comment">//</span>
@@ -302,7 +320,7 @@
 <span class="doccomment">//! ```rust</span>
 <span class="doccomment">//! # extern crate trust_dns_resolver;</span>
 <span class="doccomment">//! # fn main() {</span>
-<span class="doccomment">//! # #[cfg(feature = &quot;tokio&quot;)]</span>
+<span class="doccomment">//! # #[cfg(feature = &quot;tokio-runtime&quot;)]</span>
 <span class="doccomment">//! # {</span>
 <span class="doccomment">//! use std::net::*;</span>
 <span class="doccomment">//! use trust_dns_resolver::Resolver;</span>
@@ -335,7 +353,7 @@
 <span class="doccomment">//! ```rust,no_run</span>
 <span class="doccomment">//! # extern crate trust_dns_resolver;</span>
 <span class="doccomment">//! # fn main() {</span>
-<span class="doccomment">//! # #[cfg(feature = &quot;tokio&quot;)]</span>
+<span class="doccomment">//! # #[cfg(feature = &quot;tokio-runtime&quot;)]</span>
 <span class="doccomment">//! # {</span>
 <span class="doccomment">//! # use std::net::*;</span>
 <span class="doccomment">//! # use trust_dns_resolver::Resolver;</span>
@@ -357,9 +375,11 @@
 <span class="doccomment">//! # extern crate tokio;</span>
 <span class="doccomment">//! # extern crate trust_dns_resolver;</span>
 <span class="doccomment">//! # fn main() {</span>
+<span class="doccomment">//! # #[cfg(feature = &quot;tokio-runtime&quot;)]</span>
+<span class="doccomment">//! # {</span>
 <span class="doccomment">//! use std::net::*;</span>
 <span class="doccomment">//! use tokio::runtime::Runtime;</span>
-<span class="doccomment">//! use trust_dns_resolver::AsyncResolver;</span>
+<span class="doccomment">//! use trust_dns_resolver::TokioAsyncResolver;</span>
 <span class="doccomment">//! use trust_dns_resolver::config::*;</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! // We need a Tokio Runtime to run the resolver</span>
@@ -367,13 +387,13 @@
 <span class="doccomment">//! let mut io_loop = Runtime::new().unwrap();</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! // Construct a new Resolver with default configuration options</span>
-<span class="doccomment">//! let (resolver, background) = AsyncResolver::new(</span>
+<span class="doccomment">//! let resolver = TokioAsyncResolver::tokio(</span>
 <span class="doccomment">//!     ResolverConfig::default(),</span>
-<span class="doccomment">//!     ResolverOpts::default()</span>
+<span class="doccomment">//!     ResolverOpts::default(),</span>
 <span class="doccomment">//! );</span>
 <span class="doccomment">//! // AsyncResolver::new returns a handle for sending resolve requests and a background task</span>
 <span class="doccomment">//! // that must be spawned on an executor.</span>
-<span class="doccomment">//! io_loop.spawn(background);</span>
+<span class="doccomment">//! let resolver = io_loop.block_on(resolver).expect(&quot;failed to connect resolver&quot;);</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! // Lookup the IP addresses associated with a name.</span>
 <span class="doccomment">//! // This returns a future that will lookup the IP addresses, it must be run in the Core to</span>
@@ -392,6 +412,7 @@
 <span class="doccomment">//!     assert_eq!(address, IpAddr::V6(Ipv6Addr::new(0x2606, 0x2800, 0x220, 0x1, 0x248, 0x1893, 0x25c8, 0x1946)));</span>
 <span class="doccomment">//! }</span>
 <span class="doccomment">//! # }</span>
+<span class="doccomment">//! # }</span>
 <span class="doccomment">//! ```</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Generally after a lookup in an asynchronous context, there would probably be a connection made to a server, for example:</span>
@@ -406,11 +427,11 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! It&#39;s beyond the scope of these examples to show how to deal with connection failures and looping etc. But if you wanted to say try a different address from the result set after a connection failure, it will be necessary to create a type that implements the `Future` trait. Inside the `Future::poll` method would be the place to implement a loop over the different IP addresses.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! ## DNS-over-TLS</span>
+<span class="doccomment">//! ## DNS-over-TLS and DNS-over-HTTPS</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! DNS over TLS is experimental in the Trust-DNS Resolver library. The underlying implementations have been available as addon libraries to the Client and Server, but the configuration is experimental in Trust-DNS Resolver. *WARNING* The trust-dns developers make no claims on the security and/or privacy guarantees of this implementation.</span>
+<span class="doccomment">//! DNS-over-TLS and DNS-over-HTTPS are supported in the Trust-DNS Resolver library. The underlying implementations are available as addon libraries. *WARNING* The trust-dns developers make no claims on the security and/or privacy guarantees of this implementation.</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! To use you must compile in support with one of the `dns-over-tls` features. There are three: `dns-over-openssl`, `dns-over-native-tls`, and `dns-over-rustls`. The reason for each is to make the Trust-DNS libraries flexible for different deployments, and/or security concerns. The easiest to use will generally be `dns-over-rustls` which utilizes the native Rust library (a rework of the `boringssl` project), this should compile and be usable on most ARM and x86 platforms. `dns-over-native-tls` will utilize the hosts TLS implementation where available or fallback to `openssl` where not. `dns-over-openssl` will specify that `openssl` should be used (which is a perfect fine option if required). If more than one is specified, the precedence will be in this order (i.e. only one can be used at a time) `dns-over-rustls`, `dns-over-native-tls`, and then `dns-over-openssl`. *NOTICE* the trust-dns developers are not responsible for any choice of library that does not meet required security requirements.</span>
+<span class="doccomment">//! To use DNS-over-TLS one of the `dns-over-tls` features must be enabled at compile time. There are three: `dns-over-openssl`, `dns-over-native-tls`, and `dns-over-rustls`. For DNS-over-HTTPS only rustls is supported with the `dns-over-https-rustls`, this implicitly enables support for DNS-over-TLS as well. The reason for each is to make the Trust-DNS libraries flexible for different deployments, and/or security concerns. The easiest to use will generally be `dns-over-rustls` which utilizes the `*ring*` Rust cryptography library (a rework of the `boringssl` project), this should compile and be usable on most ARM and x86 platforms. `dns-over-native-tls` will utilize the hosts TLS implementation where available or fallback to `openssl` where not supported. `dns-over-openssl` will specify that `openssl` should be used (which is a perfectly fine option if required). If more than one is specified, the precedence will be in this order (i.e. only one can be used at a time) `dns-over-rustls`, `dns-over-native-tls`, and then `dns-over-openssl`. *NOTICE* the trust-dns developers are not responsible for any choice of library that does not meet required security requirements.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! ### Example</span>
 <span class="doccomment">//!</span>
@@ -425,7 +446,7 @@
 <span class="doccomment">//! ```rust,no_run</span>
 <span class="doccomment">//! # extern crate trust_dns_resolver;</span>
 <span class="doccomment">//! # fn main() {</span>
-<span class="doccomment">//! # #[cfg(feature = &quot;tokio&quot;)]</span>
+<span class="doccomment">//! # #[cfg(feature = &quot;tokio-runtime&quot;)]</span>
 <span class="doccomment">//! # {</span>
 <span class="doccomment">//! use trust_dns_resolver::Resolver;</span>
 <span class="doccomment">//! use trust_dns_resolver::config::*;</span>
@@ -450,13 +471,15 @@
     <span class="ident">clippy</span>::<span class="ident">unimplemented</span>
 )]</span>
 <span class="attribute">#![<span class="ident">recursion_limit</span> <span class="op">=</span> <span class="string">&quot;128&quot;</span>]</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">needless_doctest_main</span>)]</span>
-<span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">unknown_clippy_lints</span>)]</span>
+<span class="attribute">#![<span class="ident">allow</span>(
+    <span class="ident">clippy</span>::<span class="ident">needless_doctest_main</span>,
+    <span class="ident">clippy</span>::<span class="ident">unknown_clippy_lints</span>,
+    <span class="ident">clippy</span>::<span class="ident">single_component_path_imports</span>
+)]</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">cfg_if</span>;
-<span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">failure</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">futures</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">target_os</span> <span class="op">=</span> <span class="string">&quot;windows&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">ipconfig</span>;
@@ -465,11 +488,13 @@
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">log</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">lru_cache</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;unix-config&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">resolv_conf</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-config&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">macro_use</span>]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">serde</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">smallvec</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">tokio</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-https&quot;</span>)]</span>
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">trust_dns_https</span>;
@@ -494,7 +519,7 @@
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">lookup_state</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">name_server</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">resolver</span>;
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">system_conf</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
@@ -503,9 +528,16 @@
 <span class="comment">// reexports from proto</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">proto</span>::<span class="ident">rr</span>::{<span class="ident">IntoName</span>, <span class="ident">Name</span>, <span class="ident">TryParseIp</span>};
 
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">async_resolver</span>::{<span class="ident">AsyncResolver</span>, <span class="ident">Background</span>, <span class="ident">BackgroundLookup</span>, <span class="ident">BackgroundLookupIp</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;testing&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">async_resolver</span>::<span class="ident">testing</span>;
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">async_resolver</span>::<span class="ident">AsyncResolver</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">async_resolver</span>::<span class="ident">TokioAsyncResolver</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">hosts</span>::<span class="ident">Hosts</span>;
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">name_server</span>::<span class="ident">ConnectionProvider</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">name_server</span>::{<span class="ident">TokioConnection</span>, <span class="ident">TokioConnectionProvider</span>};
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">resolver</span>::<span class="ident">Resolver</span>;
 
 <span class="doccomment">/// This is an alias for [`AsyncResolver`], which replaced the type previously</span>
@@ -521,10 +553,11 @@
 <span class="doccomment">/// See the [`AsyncResolver`] documentation for more information on how to</span>
 <span class="doccomment">/// use the background future.</span>
 <span class="attribute">#[<span class="ident">deprecated</span>(<span class="ident">note</span> <span class="op">=</span> <span class="string">&quot;use [`trust_dns_resolver::AsyncResolver`] instead&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ResolverFuture</span> <span class="op">=</span> <span class="ident">AsyncResolver</span>;
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
+<span class="kw">pub</span> <span class="kw">type</span> <span class="ident">ResolverFuture</span> <span class="op">=</span> <span class="ident">TokioAsyncResolver</span>;
 
 <span class="doccomment">/// returns a version as specified in Cargo.toml</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>() <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">version</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">str</span> {
     <span class="macro">env</span><span class="macro">!</span>(<span class="string">&quot;CARGO_PKG_VERSION&quot;</span>)
 }
 </pre></div>

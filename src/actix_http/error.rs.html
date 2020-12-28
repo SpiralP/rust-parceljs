@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/actix-http-1.0.1/src/error.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>error.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-http-2.2.0/src/error.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>error.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_http/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1201,16 +1202,9 @@
 <span id="1201">1201</span>
 <span id="1202">1202</span>
 <span id="1203">1203</span>
-<span id="1204">1204</span>
-<span id="1205">1205</span>
-<span id="1206">1206</span>
-<span id="1207">1207</span>
-<span id="1208">1208</span>
-<span id="1209">1209</span>
-<span id="1210">1210</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Error and Result module</span>
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">any</span>::<span class="ident">TypeId</span>;
+
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="ident">Write</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">Utf8Error</span>;
@@ -1219,19 +1213,18 @@
 
 <span class="kw">use</span> <span class="ident">actix_codec</span>::{<span class="ident">Decoder</span>, <span class="ident">Encoder</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">actix_threadpool</span>::<span class="ident">BlockingError</span>;
-<span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">framed</span>::<span class="ident">DispatcherError</span> <span class="kw">as</span> <span class="ident">FramedDispatcherError</span>;
+<span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">dispatcher</span>::<span class="ident">DispatcherError</span> <span class="kw">as</span> <span class="ident">FramedDispatcherError</span>;
 <span class="kw">use</span> <span class="ident">actix_utils</span>::<span class="ident">timeout</span>::<span class="ident">TimeoutError</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">BytesMut</span>;
 <span class="kw">use</span> <span class="ident">derive_more</span>::{<span class="ident">Display</span>, <span class="ident">From</span>};
 <span class="kw">pub</span> <span class="kw">use</span> <span class="ident">futures_channel</span>::<span class="ident">oneshot</span>::<span class="ident">Canceled</span>;
 <span class="kw">use</span> <span class="ident">http</span>::<span class="ident">uri</span>::<span class="ident">InvalidUri</span>;
 <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">header</span>, <span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">StatusCode</span>};
-<span class="kw">use</span> <span class="ident">httparse</span>;
 <span class="kw">use</span> <span class="ident">serde</span>::<span class="ident">de</span>::<span class="ident">value</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">DeError</span>;
 <span class="kw">use</span> <span class="ident">serde_json</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">JsonError</span>;
 <span class="kw">use</span> <span class="ident">serde_urlencoded</span>::<span class="ident">ser</span>::<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">FormError</span>;
 
-<span class="comment">// re-export for convinience</span>
+<span class="comment">// re-export for convenience</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">body</span>::<span class="ident">Body</span>;
 <span class="kw">pub</span> <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">cookie</span>::<span class="ident">ParseError</span> <span class="kw">as</span> <span class="ident">CookieParseError</span>;
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">helpers</span>::<span class="ident">Writer</span>;
@@ -1247,7 +1240,7 @@
 
 <span class="doccomment">/// General purpose actix web error.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// An actix web error is used to carry errors from `failure` or `std::error`</span>
+<span class="doccomment">/// An actix web error is used to carry errors from `std::error`</span>
 <span class="doccomment">/// through actix in a convenient way.  It can be created through</span>
 <span class="doccomment">/// converting errors with `into()`.</span>
 <span class="doccomment">///</span>
@@ -1261,12 +1254,12 @@
 
 <span class="kw">impl</span> <span class="ident">Error</span> {
     <span class="doccomment">/// Returns the reference to the underlying `ResponseError`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_response_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_response_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">ResponseError</span> {
         <span class="self">self</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>()
     }
 
     <span class="doccomment">/// Similar to `as_response_error` but downcasts.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_error</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_error</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">ResponseError</span>::<span class="ident">downcast_ref</span>(<span class="self">self</span>.<span class="ident">cause</span>.<span class="ident">as_ref</span>())
     }
 }
@@ -1276,14 +1269,14 @@
     <span class="doccomment">/// Response&#39;s status code</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Internal server error is generated by default.</span>
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>
     }
 
     <span class="doccomment">/// Create response for error</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Internal server error is generated by default.</span>
-    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resp</span> <span class="op">=</span> <span class="ident">Response</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">status_code</span>());
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
         <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">Writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>), <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
@@ -1294,56 +1287,41 @@
         <span class="ident">resp</span>.<span class="ident">set_body</span>(<span class="ident">Body</span>::<span class="ident">from</span>(<span class="ident">buf</span>))
     }
 
-    <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">__private_get_type_id__</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">TypeId</span>
-    <span class="kw">where</span>
-        <span class="self">Self</span>: <span class="lifetime">&#39;static</span>,
-    {
-        <span class="ident">TypeId</span>::<span class="ident">of</span>::<span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span>()
-    }
+    <span class="macro">downcast_get_type_id</span><span class="macro">!</span>();
 }
 
-<span class="kw">impl</span> <span class="kw">dyn</span> <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> {
-    <span class="doccomment">/// Downcasts a response error to a specific type.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downcast_ref</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">__private_get_type_id__</span>() <span class="op">==</span> <span class="ident">TypeId</span>::<span class="ident">of</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>() {
-            <span class="kw">unsafe</span> { <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span>(<span class="self">self</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="kw">dyn</span> <span class="ident">ResponseError</span> <span class="kw">as</span> <span class="kw-2">*</span><span class="kw">const</span> <span class="ident">T</span>)) }
-        } <span class="kw">else</span> {
-            <span class="prelude-val">None</span>
-        }
-    }
-}
+<span class="macro">downcast</span><span class="macro">!</span>(<span class="ident">ResponseError</span>);
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">fmt</span>::<span class="ident">Display</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>, <span class="ident">f</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{:?}&quot;</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">cause</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">cause</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 
-    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">source</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>(<span class="kw">dyn</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>)<span class="op">&gt;</span> {
         <span class="prelude-val">None</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span>()<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: ()) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: ()) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Error</span>::<span class="ident">from</span>(<span class="ident">UnitError</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">Infallible</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">Infallible</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw">_</span>: <span class="ident">std</span>::<span class="ident">convert</span>::<span class="ident">Infallible</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="comment">// `std::convert::Infallible` indicates an error</span>
         <span class="comment">// that will never happen</span>
         <span class="macro">unreachable</span><span class="macro">!</span>()
@@ -1352,14 +1330,14 @@
 
 <span class="doccomment">/// Convert `Error` to a `Response` instance</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Response</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Response</span>::<span class="ident">from_error</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="doccomment">/// `Error` for any error that implements `ResponseError`</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">ResponseError</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">Error</span> {
             <span class="ident">cause</span>: <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">err</span>),
         }
@@ -1368,24 +1346,24 @@
 
 <span class="doccomment">/// Convert Response to a Error</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="ident">Response</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">res</span>: <span class="ident">Response</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">InternalError</span>::<span class="ident">from_response</span>(<span class="string">&quot;&quot;</span>, <span class="ident">res</span>).<span class="ident">into</span>()
     }
 }
 
 <span class="doccomment">/// Convert ResponseBuilder to a Error</span>
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">ResponseBuilder</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">ResponseBuilder</span>) <span class="op">-&gt;</span> <span class="ident">Error</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="kw-2">mut</span> <span class="ident">res</span>: <span class="ident">ResponseBuilder</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span> {
         <span class="ident">InternalError</span>::<span class="ident">from_response</span>(<span class="string">&quot;&quot;</span>, <span class="ident">res</span>.<span class="ident">finish</span>()).<span class="ident">into</span>()
     }
 }
 
 <span class="doccomment">/// Return `GATEWAY_TIMEOUT` for `TimeoutError`</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">ResponseError</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">TimeoutError</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">TimeoutError</span>::<span class="ident">Service</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">e</span>.<span class="ident">status_code</span>(),
-            <span class="ident">TimeoutError</span>::<span class="ident">Timeout</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">GATEWAY_TIMEOUT</span>,
+            <span class="ident">TimeoutError</span>::<span class="ident">Service</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">status_code</span>(),
+            <span class="ident">TimeoutError</span>::<span class="ident">Timeout</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">GATEWAY_TIMEOUT</span>,
         }
     }
 }
@@ -1413,7 +1391,7 @@
 
 <span class="doccomment">/// Return `BAD_REQUEST` for `de::value::Error`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">DeError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
@@ -1426,7 +1404,7 @@
 
 <span class="doccomment">/// Return `BAD_REQUEST` for `Utf8Error`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">Utf8Error</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
@@ -1437,18 +1415,18 @@
 
 <span class="doccomment">/// Return `InternalServerError` for `io::Error`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">io</span>::<span class="ident">Error</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">kind</span>() {
-            <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">NotFound</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">NOT_FOUND</span>,
-            <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">PermissionDenied</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">FORBIDDEN</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>,
+            <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">NotFound</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">NOT_FOUND</span>,
+            <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">PermissionDenied</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">FORBIDDEN</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">INTERNAL_SERVER_ERROR</span>,
         }
     }
 }
 
 <span class="doccomment">/// `BadRequest` for `InvalidHeaderValue`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">header</span>::<span class="ident">InvalidHeaderValue</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
@@ -1492,45 +1470,45 @@
 
 <span class="doccomment">/// Return `BadRequest` for `ParseError`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">io</span>::<span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">ParseError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">io</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="ident">ParseError</span>::<span class="ident">Io</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">InvalidUri</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">InvalidUri</span>) <span class="op">-&gt;</span> <span class="ident">ParseError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">InvalidUri</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="ident">ParseError</span>::<span class="ident">Uri</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Utf8Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Utf8Error</span>) <span class="op">-&gt;</span> <span class="ident">ParseError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">Utf8Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="ident">ParseError</span>::<span class="ident">Utf8</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">FromUtf8Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">FromUtf8Error</span>) <span class="op">-&gt;</span> <span class="ident">ParseError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">FromUtf8Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="ident">ParseError</span>::<span class="ident">Utf8</span>(<span class="ident">err</span>.<span class="ident">utf8_error</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">httparse</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">httparse</span>::<span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="ident">ParseError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">httparse</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ParseError</span> {
         <span class="kw">match</span> <span class="ident">err</span> {
             <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderName</span>
             <span class="op">|</span> <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderValue</span>
             <span class="op">|</span> <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">NewLine</span>
-            <span class="op">|</span> <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Token</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>,
-            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Status</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Status</span>,
-            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">TooManyHeaders</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">TooLarge</span>,
-            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Version</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Version</span>,
+            <span class="op">|</span> <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Token</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>,
+            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Status</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Status</span>,
+            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">TooManyHeaders</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">TooLarge</span>,
+            <span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Version</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Version</span>,
         }
     }
 }
@@ -1561,29 +1539,31 @@
     <span class="ident">Io</span>(<span class="ident">io</span>::<span class="ident">Error</span>),
 }
 
+<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {}
+
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">h2</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">h2</span>::<span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">h2</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">PayloadError</span>::<span class="ident">Http2Payload</span>(<span class="ident">err</span>)
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">PayloadError</span>::<span class="ident">Incomplete</span>(<span class="ident">err</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">io</span>::<span class="ident">Error</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">io</span>::<span class="ident">Error</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">PayloadError</span>::<span class="ident">Incomplete</span>(<span class="prelude-val">Some</span>(<span class="ident">err</span>))
     }
 }
 
-<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">err</span>: <span class="ident">BlockingError</span><span class="op">&lt;</span><span class="ident">io</span>::<span class="ident">Error</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">err</span> {
-            <span class="ident">BlockingError</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=&gt;</span> <span class="ident">PayloadError</span>::<span class="ident">Io</span>(<span class="ident">e</span>),
-            <span class="ident">BlockingError</span>::<span class="ident">Canceled</span> <span class="op">=&gt;</span> <span class="ident">PayloadError</span>::<span class="ident">Io</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
+            <span class="ident">BlockingError</span>::<span class="ident">Error</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">PayloadError</span>::<span class="ident">Io</span>(<span class="ident">e</span>),
+            <span class="ident">BlockingError</span>::<span class="ident">Canceled</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">PayloadError</span>::<span class="ident">Io</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(
                 <span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>,
                 <span class="string">&quot;Operation is canceled&quot;</span>,
             )),
@@ -1596,17 +1576,17 @@
 <span class="doccomment">/// - `Overflow` returns `PayloadTooLarge`</span>
 <span class="doccomment">/// - Other errors returns `BadRequest`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">PayloadError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">PayloadError</span>::<span class="ident">Overflow</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">PAYLOAD_TOO_LARGE</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>,
+            <span class="ident">PayloadError</span>::<span class="ident">Overflow</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">PAYLOAD_TOO_LARGE</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>,
         }
     }
 }
 
 <span class="doccomment">/// Return `BadRequest` for `cookie::ParseError`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="kw">crate</span>::<span class="ident">cookie</span>::<span class="ident">ParseError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
@@ -1658,7 +1638,7 @@
     <span class="ident">Unknown</span>,
 }
 
-<span class="doccomment">/// A set of error that can occure during parsing content type</span>
+<span class="doccomment">/// A set of error that can occur during parsing content type</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">PartialEq</span>, <span class="ident">Debug</span>, <span class="ident">Display</span>)]</span>
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ContentTypeError</span> {
     <span class="doccomment">/// Can not parse content type</span>
@@ -1669,17 +1649,19 @@
     <span class="ident">UnknownEncoding</span>,
 }
 
+<span class="kw">impl</span> <span class="ident">std</span>::<span class="ident">error</span>::<span class="ident">Error</span> <span class="kw">for</span> <span class="ident">ContentTypeError</span> {}
+
 <span class="doccomment">/// Return `BadRequest` for `ContentTypeError`</span>
 <span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">ContentTypeError</span> {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="ident">StatusCode</span>::<span class="ident">BAD_REQUEST</span>
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>: <span class="ident">Encoder</span> <span class="op">+</span> <span class="ident">Decoder</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">FramedDispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span><span class="op">&gt;</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>: <span class="ident">Encoder</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Decoder</span>, <span class="ident">I</span><span class="op">&gt;</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">FramedDispatcherError</span><span class="op">&lt;</span><span class="ident">E</span>, <span class="ident">U</span>, <span class="ident">I</span><span class="op">&gt;</span>
 <span class="kw">where</span>
     <span class="ident">E</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span>,
-    <span class="op">&lt;</span><span class="ident">U</span> <span class="kw">as</span> <span class="ident">Encoder</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
+    <span class="op">&lt;</span><span class="ident">U</span> <span class="kw">as</span> <span class="ident">Encoder</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
     <span class="op">&lt;</span><span class="ident">U</span> <span class="kw">as</span> <span class="ident">Decoder</span><span class="op">&gt;</span>::<span class="ident">Error</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span>,
 {
 }
@@ -1705,12 +1687,12 @@
 
 <span class="kw">enum</span> <span class="ident">InternalErrorType</span> {
     <span class="ident">Status</span>(<span class="ident">StatusCode</span>),
-    <span class="ident">Response</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;&gt;</span>),
+    <span class="ident">Response</span>(<span class="ident">RefCell</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Response</span><span class="op">&gt;</span><span class="op">&gt;</span>),
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> <span class="ident">InternalError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create `InternalError` instance</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cause</span>: <span class="ident">T</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">cause</span>: <span class="ident">T</span>, <span class="ident">status</span>: <span class="ident">StatusCode</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">InternalError</span> {
             <span class="ident">cause</span>,
             <span class="ident">status</span>: <span class="ident">InternalErrorType</span>::<span class="ident">Status</span>(<span class="ident">status</span>),
@@ -1718,7 +1700,7 @@
     }
 
     <span class="doccomment">/// Create `InternalError` with predefined `Response`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">cause</span>: <span class="ident">T</span>, <span class="ident">response</span>: <span class="ident">Response</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_response</span>(<span class="ident">cause</span>: <span class="ident">T</span>, <span class="ident">response</span>: <span class="ident">Response</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">InternalError</span> {
             <span class="ident">cause</span>,
             <span class="ident">status</span>: <span class="ident">InternalErrorType</span>::<span class="ident">Response</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="prelude-val">Some</span>(<span class="ident">response</span>))),
@@ -1730,7 +1712,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">fmt</span>::<span class="ident">Debug</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>, <span class="ident">f</span>)
     }
 }
@@ -1739,7 +1721,7 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">fmt</span>::<span class="ident">Display</span>::<span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">cause</span>, <span class="ident">f</span>)
     }
 }
@@ -1748,10 +1730,10 @@
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">StatusCode</span> {
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">status</span> {
-            <span class="ident">InternalErrorType</span>::<span class="ident">Status</span>(<span class="ident">st</span>) <span class="op">=&gt;</span> <span class="ident">st</span>,
-            <span class="ident">InternalErrorType</span>::<span class="ident">Response</span>(<span class="kw-2">ref</span> <span class="ident">resp</span>) <span class="op">=&gt;</span> {
+            <span class="ident">InternalErrorType</span>::<span class="ident">Status</span>(<span class="ident">st</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">st</span>,
+            <span class="ident">InternalErrorType</span>::<span class="ident">Response</span>(<span class="kw-2">ref</span> <span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">resp</span>) <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">borrow</span>().<span class="ident">as_ref</span>() {
                     <span class="ident">resp</span>.<span class="ident">head</span>().<span class="ident">status</span>
                 } <span class="kw">else</span> {
@@ -1761,9 +1743,9 @@
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">error_response</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Response</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">status</span> {
-            <span class="ident">InternalErrorType</span>::<span class="ident">Status</span>(<span class="ident">st</span>) <span class="op">=&gt;</span> {
+            <span class="ident">InternalErrorType</span>::<span class="ident">Status</span>(<span class="ident">st</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">res</span> <span class="op">=</span> <span class="ident">Response</span>::<span class="ident">new</span>(<span class="ident">st</span>);
                 <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">BytesMut</span>::<span class="ident">new</span>();
                 <span class="kw">let</span> <span class="kw">_</span> <span class="op">=</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">Writer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>), <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>);
@@ -1773,7 +1755,7 @@
                 );
                 <span class="ident">res</span>.<span class="ident">set_body</span>(<span class="ident">Body</span>::<span class="ident">from</span>(<span class="ident">buf</span>))
             }
-            <span class="ident">InternalErrorType</span>::<span class="ident">Response</span>(<span class="kw-2">ref</span> <span class="ident">resp</span>) <span class="op">=&gt;</span> {
+            <span class="ident">InternalErrorType</span>::<span class="ident">Response</span>(<span class="kw-2">ref</span> <span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">resp</span>) <span class="op">=</span> <span class="ident">resp</span>.<span class="ident">borrow_mut</span>().<span class="ident">take</span>() {
                     <span class="ident">resp</span>
                 } <span class="kw">else</span> {
@@ -1787,7 +1769,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *BAD</span>
 <span class="doccomment">/// REQUEST* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorBadRequest</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorBadRequest</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1797,7 +1779,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *UNAUTHORIZED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnauthorized</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnauthorized</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1807,7 +1789,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *PAYMENT_REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPaymentRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPaymentRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1817,7 +1799,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *FORBIDDEN*</span>
 <span class="doccomment">/// response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorForbidden</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorForbidden</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1827,7 +1809,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *NOT FOUND*</span>
 <span class="doccomment">/// response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotFound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotFound</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1837,7 +1819,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *METHOD NOT</span>
 <span class="doccomment">/// ALLOWED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorMethodNotAllowed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorMethodNotAllowed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1847,7 +1829,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *NOT</span>
 <span class="doccomment">/// ACCEPTABLE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotAcceptable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotAcceptable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1857,7 +1839,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *PROXY</span>
 <span class="doccomment">/// AUTHENTICATION REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorProxyAuthenticationRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorProxyAuthenticationRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1867,7 +1849,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *REQUEST</span>
 <span class="doccomment">/// TIMEOUT* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRequestTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRequestTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1877,7 +1859,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *CONFLICT*</span>
 <span class="doccomment">/// response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorConflict</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorConflict</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1887,7 +1869,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *GONE*</span>
 <span class="doccomment">/// response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorGone</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorGone</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1897,7 +1879,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate *LENGTH</span>
 <span class="doccomment">/// REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLengthRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLengthRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1907,7 +1889,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *PAYLOAD TOO LARGE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPayloadTooLarge</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPayloadTooLarge</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1917,7 +1899,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *URI TOO LONG* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUriTooLong</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUriTooLong</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1927,7 +1909,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *UNSUPPORTED MEDIA TYPE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnsupportedMediaType</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnsupportedMediaType</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1937,7 +1919,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *RANGE NOT SATISFIABLE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRangeNotSatisfiable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRangeNotSatisfiable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1947,7 +1929,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *IM A TEAPOT* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorImATeapot</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorImATeapot</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1957,7 +1939,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *MISDIRECTED REQUEST* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorMisdirectedRequest</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorMisdirectedRequest</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1967,7 +1949,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *UNPROCESSABLE ENTITY* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnprocessableEntity</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnprocessableEntity</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1977,7 +1959,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *LOCKED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLocked</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLocked</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1987,7 +1969,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *FAILED DEPENDENCY* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorFailedDependency</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorFailedDependency</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -1997,7 +1979,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *UPGRADE REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUpgradeRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUpgradeRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2007,7 +1989,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *PRECONDITION FAILED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPreconditionFailed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPreconditionFailed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2017,7 +1999,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *PRECONDITION REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPreconditionRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorPreconditionRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2027,7 +2009,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *TOO MANY REQUESTS* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorTooManyRequests</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorTooManyRequests</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2037,7 +2019,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *REQUEST HEADER FIELDS TOO LARGE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRequestHeaderFieldsTooLarge</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorRequestHeaderFieldsTooLarge</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2047,7 +2029,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *UNAVAILABLE FOR LEGAL REASONS* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnavailableForLegalReasons</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorUnavailableForLegalReasons</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2057,7 +2039,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and generate</span>
 <span class="doccomment">/// *EXPECTATION FAILED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorExpectationFailed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorExpectationFailed</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2067,7 +2049,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *INTERNAL SERVER ERROR* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorInternalServerError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorInternalServerError</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2077,7 +2059,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *NOT IMPLEMENTED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotImplemented</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotImplemented</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2087,7 +2069,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *BAD GATEWAY* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorBadGateway</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorBadGateway</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2097,7 +2079,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *SERVICE UNAVAILABLE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorServiceUnavailable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorServiceUnavailable</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2107,7 +2089,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *GATEWAY TIMEOUT* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorGatewayTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorGatewayTimeout</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2117,7 +2099,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *HTTP VERSION NOT SUPPORTED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorHttpVersionNotSupported</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorHttpVersionNotSupported</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2127,7 +2109,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *VARIANT ALSO NEGOTIATES* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorVariantAlsoNegotiates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorVariantAlsoNegotiates</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2137,7 +2119,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *INSUFFICIENT STORAGE* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorInsufficientStorage</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorInsufficientStorage</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2147,7 +2129,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *LOOP DETECTED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLoopDetected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorLoopDetected</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2157,7 +2139,7 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *NOT EXTENDED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotExtended</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNotExtended</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
@@ -2167,22 +2149,27 @@
 <span class="doccomment">/// Helper function that creates wrapper of any error and</span>
 <span class="doccomment">/// generate *NETWORK AUTHENTICATION REQUIRED* response.</span>
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">non_snake_case</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNetworkAuthenticationRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">Error</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ErrorNetworkAuthenticationRequired</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">err</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Error</span>
 <span class="kw">where</span>
     <span class="ident">T</span>: <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="op">+</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="ident">InternalError</span>::<span class="ident">new</span>(<span class="ident">err</span>, <span class="ident">StatusCode</span>::<span class="ident">NETWORK_AUTHENTICATION_REQUIRED</span>).<span class="ident">into</span>()
 }
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;failure&quot;</span>)]</span>
-<span class="doccomment">/// Compatibility for `failure::Error`</span>
-<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">fail_ure</span>::<span class="ident">Error</span> {}
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actors&quot;</span>)]</span>
+<span class="doccomment">/// `InternalServerError` for `actix::MailboxError`</span>
+<span class="doccomment">/// This is supported on feature=`actors` only</span>
+<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix</span>::<span class="ident">MailboxError</span> {}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;actors&quot;</span>)]</span>
+<span class="doccomment">/// `InternalServerError` for `actix::ResolverError`</span>
+<span class="doccomment">/// This is supported on feature=`actors` only</span>
+<span class="kw">impl</span> <span class="ident">ResponseError</span> <span class="kw">for</span> <span class="ident">actix</span>::<span class="ident">actors</span>::<span class="ident">resolver</span>::<span class="ident">ResolverError</span> {}
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
     <span class="kw">use</span> <span class="ident">http</span>::{<span class="ident">Error</span> <span class="kw">as</span> <span class="ident">HttpError</span>, <span class="ident">StatusCode</span>};
-    <span class="kw">use</span> <span class="ident">httparse</span>;
     <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2246,39 +2233,39 @@
     }
 
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">from</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">expr</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">pat</span>) <span class="op">=&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">expr</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">pat</span>) <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="ident">ParseError</span>::<span class="ident">from</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>) {
-                <span class="ident">e</span> @ <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span> <span class="op">=&gt;</span> {
-                    <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>).<span class="ident">len</span>() <span class="op">&gt;=</span> <span class="number">5</span>);
+                <span class="ident">e</span> @ <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="macro">assert</span><span class="macro">!</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>).<span class="ident">len</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="number">5</span>);
                 }
-                <span class="ident">e</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
+                <span class="ident">e</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="ident">e</span>),
             }
         };
     }
 
     <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">from_and_cause</span> {
-        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">expr</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">pat</span>) <span class="op">=&gt;</span> {
+        (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>:<span class="ident">expr</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span>:<span class="ident">pat</span>) <span class="op">=</span><span class="op">&gt;</span> {
             <span class="kw">match</span> <span class="ident">ParseError</span>::<span class="ident">from</span>(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>) {
-                <span class="ident">e</span> @ <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span> <span class="op">=&gt;</span> {
+                <span class="ident">e</span> @ <span class="macro-nonterminal">$</span><span class="macro-nonterminal">error</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">let</span> <span class="ident">desc</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">e</span>);
                     <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">desc</span>, <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;IO error: {}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>));
                 }
-                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>),
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;{:?}&quot;</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">from</span>),
             }
         };
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from</span>() {
-        <span class="macro">from_and_cause</span><span class="macro">!</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="string">&quot;other&quot;</span>) <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Io</span>(..));
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderName</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderName</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderValue</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">NewLine</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Status</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Status</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Token</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">TooManyHeaders</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">TooLarge</span>);
-        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Version</span> <span class="op">=&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Version</span>);
+        <span class="macro">from_and_cause</span><span class="macro">!</span>(<span class="ident">io</span>::<span class="ident">Error</span>::<span class="ident">new</span>(<span class="ident">io</span>::<span class="ident">ErrorKind</span>::<span class="ident">Other</span>, <span class="string">&quot;other&quot;</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Io</span>(..));
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderName</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderName</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">HeaderValue</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">NewLine</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Status</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Status</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Token</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Header</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">TooManyHeaders</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">TooLarge</span>);
+        <span class="macro">from</span><span class="macro">!</span>(<span class="ident">httparse</span>::<span class="ident">Error</span>::<span class="ident">Version</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ParseError</span>::<span class="ident">Version</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>

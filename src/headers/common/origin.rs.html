@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/headers-0.3.2/src/common/origin.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>origin.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../headers/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/headers-0.3.2/src/common/origin.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>origin.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../headers/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -256,37 +259,37 @@
 
     <span class="doccomment">/// Checks if `Origin` is `null`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_null</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_null</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="bool-val">true</span>,
-            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="bool-val">false</span>,
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">true</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="bool-val">false</span>,
         }
     }
 
     <span class="doccomment">/// Get the &quot;scheme&quot; part of this origin.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scheme</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">scheme</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw">_</span>) <span class="op">=&gt;</span> <span class="ident">scheme</span>.<span class="ident">as_str</span>(),
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="string">&quot;&quot;</span>,
+            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">scheme</span>.<span class="ident">as_str</span>(),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;&quot;</span>,
         }
     }
 
     <span class="doccomment">/// Get the &quot;hostname&quot; part of this origin.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hostname</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">hostname</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=&gt;</span> <span class="ident">auth</span>.<span class="ident">host</span>(),
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="string">&quot;&quot;</span>,
+            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">auth</span>.<span class="ident">host</span>(),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="string">&quot;&quot;</span>,
         }
     }
 
     <span class="doccomment">/// Get the &quot;port&quot; part of this origin.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">port</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">port</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=&gt;</span> <span class="ident">auth</span>.<span class="ident">port_u16</span>(),
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="prelude-val">None</span>,
+            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw">_</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">auth</span>.<span class="ident">port_u16</span>(),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
         }
     }
 
@@ -294,12 +297,12 @@
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_from_parts</span>(
         <span class="ident">scheme</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">host</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
-        <span class="ident">port</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidOrigin</span><span class="op">&gt;</span> {
+        <span class="ident">port</span>: <span class="kw">impl</span> <span class="ident">Into</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">InvalidOrigin</span><span class="op">&gt;</span> {
         <span class="kw">struct</span> <span class="ident">MaybePort</span>(<span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>);
 
         <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">MaybePort</span> {
-            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+            <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">port</span>) <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span> {
                     <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;:{}&quot;</span>, <span class="ident">port</span>)
                 } <span class="kw">else</span> {
@@ -312,24 +315,24 @@
         <span class="ident">HeaderValue</span>::<span class="ident">from_maybe_shared</span>(<span class="ident">bytes</span>)
             .<span class="ident">ok</span>()
             .<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">val</span><span class="op">|</span> <span class="self">Self</span>::<span class="ident">try_from_value</span>(<span class="kw-2">&amp;</span><span class="ident">val</span>))
-            .<span class="ident">ok_or_else</span>(<span class="op">||</span> <span class="ident">InvalidOrigin</span> { <span class="ident">_inner</span>: () })
+            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">InvalidOrigin</span> { <span class="ident">_inner</span>: () })
     }
 
     <span class="comment">// Used in AccessControlAllowOrigin</span>
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">try_from_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">try_from_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="ident">OriginOrNull</span>::<span class="ident">try_from_value</span>(<span class="ident">value</span>).<span class="ident">map</span>(<span class="ident">Origin</span>)
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">into_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">HeaderValue</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn</span> <span class="ident">into_value</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HeaderValue</span> {
         (<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>).<span class="ident">into</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Origin</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="number">0</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}://{}&quot;</span>, <span class="ident">scheme</span>, <span class="ident">auth</span>),
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;null&quot;</span>),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}://{}&quot;</span>, <span class="ident">scheme</span>, <span class="ident">auth</span>),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">f</span>.<span class="ident">write_str</span>(<span class="string">&quot;null&quot;</span>),
         }
     }
 }
@@ -337,8 +340,8 @@
 <span class="macro">error_type</span><span class="macro">!</span>(<span class="ident">InvalidOrigin</span>);
 
 <span class="kw">impl</span> <span class="ident">OriginOrNull</span> {
-    <span class="kw">fn</span> <span class="ident">try_from_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">value</span> <span class="op">==</span> <span class="string">&quot;null&quot;</span> {
+    <span class="kw">fn</span> <span class="ident">try_from_value</span>(<span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">HeaderValue</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">value</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;null&quot;</span> {
             <span class="kw">return</span> <span class="prelude-val">Some</span>(<span class="ident">OriginOrNull</span>::<span class="ident">Null</span>);
         }
 
@@ -350,14 +353,14 @@
                 <span class="ident">authority</span>: <span class="prelude-val">Some</span>(<span class="ident">auth</span>),
                 <span class="ident">path_and_query</span>: <span class="prelude-val">None</span>,
                 ..
-            } <span class="op">=&gt;</span> (<span class="ident">scheme</span>, <span class="ident">auth</span>),
+            } <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">scheme</span>, <span class="ident">auth</span>),
             <span class="ident">uri</span>::<span class="ident">Parts</span> {
                 <span class="ident">scheme</span>: <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>),
                 <span class="ident">authority</span>: <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">auth</span>),
                 <span class="ident">path_and_query</span>: <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="ident">p</span>),
                 ..
-            } <span class="kw">if</span> <span class="ident">p</span> <span class="op">==</span> <span class="string">&quot;/&quot;</span> <span class="op">=&gt;</span> (<span class="ident">scheme</span>.<span class="ident">clone</span>(), <span class="ident">auth</span>.<span class="ident">clone</span>()),
-            <span class="kw">_</span> <span class="op">=&gt;</span> {
+            } <span class="kw">if</span> <span class="ident">p</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;/&quot;</span> <span class="op">=</span><span class="op">&gt;</span> (<span class="ident">scheme</span>.<span class="ident">clone</span>(), <span class="ident">auth</span>.<span class="ident">clone</span>()),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">return</span> <span class="prelude-val">None</span>;
             }
         };
@@ -367,7 +370,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">TryFromValues</span> <span class="kw">for</span> <span class="ident">OriginOrNull</span> {
-    <span class="kw">fn</span> <span class="ident">try_from_values</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">I</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ::<span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">try_from_values</span><span class="op">&lt;</span><span class="lifetime">&#39;i</span>, <span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">values</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">I</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ::<span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">I</span>: <span class="ident">Iterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;i</span> <span class="ident">HeaderValue</span><span class="op">&gt;</span>,
     {
@@ -379,9 +382,9 @@
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">From</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OriginOrNull</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">HeaderValue</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OriginOrNull</span>) <span class="op">-&gt;</span> <span class="ident">HeaderValue</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">origin</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">OriginOrNull</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">HeaderValue</span> {
         <span class="kw">match</span> <span class="ident">origin</span> {
-            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=&gt;</span> {
+            <span class="ident">OriginOrNull</span>::<span class="ident">Origin</span>(<span class="kw-2">ref</span> <span class="ident">scheme</span>, <span class="kw-2">ref</span> <span class="ident">auth</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}://{}&quot;</span>, <span class="ident">scheme</span>, <span class="ident">auth</span>);
                 <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Bytes</span>::<span class="ident">from</span>(<span class="ident">s</span>);
                 <span class="ident">HeaderValue</span>::<span class="ident">from_maybe_shared</span>(<span class="ident">bytes</span>)
@@ -389,7 +392,7 @@
             }
             <span class="comment">// Serialized as &quot;null&quot; per ASCII serialization of an origin</span>
             <span class="comment">// https://html.spec.whatwg.org/multipage/browsers.html#ascii-serialisation-of-an-origin</span>
-            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=&gt;</span> <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;null&quot;</span>),
+            <span class="ident">OriginOrNull</span>::<span class="ident">Null</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">HeaderValue</span>::<span class="ident">from_static</span>(<span class="string">&quot;null&quot;</span>),
         }
     }
 }

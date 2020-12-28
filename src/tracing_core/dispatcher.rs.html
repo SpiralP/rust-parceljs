@@ -1,4 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-f1e60147b9cdaa30/tracing-core-0.1.11/src/dispatcher.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dispatcher.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../tracing_core/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/tracing-core-0.1.17/src/dispatcher.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dispatcher.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
+<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../tracing_core/index.html'><div class='logo-container'><img src='https://raw.githubusercontent.com/tokio-rs/tracing/master/assets/logo-type.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -886,6 +889,65 @@
 <span id="886">886</span>
 <span id="887">887</span>
 <span id="888">888</span>
+<span id="889">889</span>
+<span id="890">890</span>
+<span id="891">891</span>
+<span id="892">892</span>
+<span id="893">893</span>
+<span id="894">894</span>
+<span id="895">895</span>
+<span id="896">896</span>
+<span id="897">897</span>
+<span id="898">898</span>
+<span id="899">899</span>
+<span id="900">900</span>
+<span id="901">901</span>
+<span id="902">902</span>
+<span id="903">903</span>
+<span id="904">904</span>
+<span id="905">905</span>
+<span id="906">906</span>
+<span id="907">907</span>
+<span id="908">908</span>
+<span id="909">909</span>
+<span id="910">910</span>
+<span id="911">911</span>
+<span id="912">912</span>
+<span id="913">913</span>
+<span id="914">914</span>
+<span id="915">915</span>
+<span id="916">916</span>
+<span id="917">917</span>
+<span id="918">918</span>
+<span id="919">919</span>
+<span id="920">920</span>
+<span id="921">921</span>
+<span id="922">922</span>
+<span id="923">923</span>
+<span id="924">924</span>
+<span id="925">925</span>
+<span id="926">926</span>
+<span id="927">927</span>
+<span id="928">928</span>
+<span id="929">929</span>
+<span id="930">930</span>
+<span id="931">931</span>
+<span id="932">932</span>
+<span id="933">933</span>
+<span id="934">934</span>
+<span id="935">935</span>
+<span id="936">936</span>
+<span id="937">937</span>
+<span id="938">938</span>
+<span id="939">939</span>
+<span id="940">940</span>
+<span id="941">941</span>
+<span id="942">942</span>
+<span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Dispatches trace events to [`Subscriber`]s.</span>
 <span class="doccomment">//!</span>
@@ -1009,13 +1071,6 @@
 <span class="doccomment">//! instead.</span>
 <span class="doccomment">//! &lt;/pre&gt;&lt;/div&gt;</span>
 <span class="doccomment">//!</span>
-<span class="doccomment">//! Finally, `tokio` users should note that versions of `tokio` &gt;= 0.1.22</span>
-<span class="doccomment">//! support an `experimental-tracing` feature flag. When this flag is enabled,</span>
-<span class="doccomment">//! the `tokio` runtime&#39;s thread pool will automatically propagate the default</span>
-<span class="doccomment">//! subscriber. This means that if `tokio::runtime::Runtime::new()` or</span>
-<span class="doccomment">//! `tokio::run()` are invoked when a default subscriber is set, it will also be</span>
-<span class="doccomment">//! set by all worker threads created by that runtime.</span>
-<span class="doccomment">//!</span>
 <span class="doccomment">//! ## Accessing the Default Subscriber</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! A thread&#39;s current default subscriber can be accessed using the</span>
@@ -1031,7 +1086,7 @@
 <span class="kw">use</span> <span class="kw">crate</span>::{
     <span class="ident">callsite</span>, <span class="ident">span</span>,
     <span class="ident">subscriber</span>::{<span class="self">self</span>, <span class="ident">Subscriber</span>},
-    <span class="ident">Event</span>, <span class="ident">Metadata</span>,
+    <span class="ident">Event</span>, <span class="ident">LevelFilter</span>, <span class="ident">Metadata</span>,
 };
 
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">stdlib</span>::{
@@ -1045,7 +1100,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">stdlib</span>::{
-    <span class="ident">cell</span>::{<span class="ident">Cell</span>, <span class="ident">RefCell</span>},
+    <span class="ident">cell</span>::{<span class="ident">Cell</span>, <span class="ident">RefCell</span>, <span class="ident">RefMut</span>},
     <span class="ident">error</span>,
 };
 
@@ -1089,6 +1144,12 @@
     <span class="ident">can_enter</span>: <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>,
 }
 
+<span class="doccomment">/// While this guard is active, additional calls to subscriber functions on</span>
+<span class="doccomment">/// the default dispatcher will not be able to access the dispatch context.</span>
+<span class="doccomment">/// Dropping the guard will allow the dispatch context to be re-entered.</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">struct</span> <span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">State</span>);
+
 <span class="doccomment">/// A guard that resets the current default dispatcher to the prior</span>
 <span class="doccomment">/// default dispatcher when dropped.</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
@@ -1117,7 +1178,7 @@
 <span class="doccomment">/// [`set_global_default`]: ../fn.set_global_default.html</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_default</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">dispatcher</span>: <span class="kw-2">&amp;</span><span class="ident">Dispatch</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() <span class="op">-&gt;</span> <span class="ident">T</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_default</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">dispatcher</span>: <span class="kw-2">&amp;</span><span class="ident">Dispatch</span>, <span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
     <span class="comment">// When this guard is dropped, the default dispatcher will be reset to the</span>
     <span class="comment">// prior default. Using this (rather than simply resetting after calling</span>
     <span class="comment">// `f`) ensures that we always reset to the prior dispatcher even if `f`</span>
@@ -1143,7 +1204,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">docsrs</span>, <span class="ident">doc</span>(<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)))]</span>
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;Dropping the guard unregisters the dispatcher.&quot;</span>]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_default</span>(<span class="ident">dispatcher</span>: <span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-&gt;</span> <span class="ident">DefaultGuard</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_default</span>(<span class="ident">dispatcher</span>: <span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DefaultGuard</span> {
     <span class="comment">// When this guard is dropped, the default dispatcher will be reset to the</span>
     <span class="comment">// prior default. Using this ensures that we always reset to the prior</span>
     <span class="comment">// dispatcher even if the thread calling this function panics.</span>
@@ -1169,8 +1230,8 @@
 <span class="doccomment">/// [span]: ../span/index.html</span>
 <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
 <span class="doccomment">/// [`Event`]: ../event/struct.Event.html</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_global_default</span>(<span class="ident">dispatcher</span>: <span class="ident">Dispatch</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SetGlobalDefaultError</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">GLOBAL_INIT</span>.<span class="ident">compare_and_swap</span>(<span class="ident">UNINITIALIZED</span>, <span class="ident">INITIALIZING</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) <span class="op">==</span> <span class="ident">UNINITIALIZED</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_global_default</span>(<span class="ident">dispatcher</span>: <span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">SetGlobalDefaultError</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">GLOBAL_INIT</span>.<span class="ident">compare_and_swap</span>(<span class="ident">UNINITIALIZED</span>, <span class="ident">INITIALIZING</span>, <span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">UNINITIALIZED</span>
     {
         <span class="kw">unsafe</span> {
             <span class="ident">GLOBAL_DISPATCH</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">dispatcher</span>);
@@ -1189,7 +1250,7 @@
 <span class="doccomment">/// at all or has yet to be initialized.</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
 <span class="attribute">#[<span class="ident">inline</span>(<span class="ident">always</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_been_set</span>() <span class="op">-&gt;</span> <span class="ident">bool</span> {
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">has_been_set</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
     <span class="ident">EXISTS</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">Relaxed</span>)
 }
 
@@ -1200,7 +1261,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">SetGlobalDefaultError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">pad</span>(<span class="string">&quot;a global default trace dispatcher has already been set&quot;</span>)
     }
 }
@@ -1217,49 +1278,57 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// [dispatcher]: ../dispatcher/struct.Dispatch.html</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="ident">T</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-&gt;</span> <span class="ident">T</span>,
+    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>,
 {
-    <span class="comment">// While this guard is active, additional calls to subscriber functions on</span>
-    <span class="comment">// the default dispatcher will not be able to access the dispatch context.</span>
-    <span class="comment">// Dropping the guard will allow the dispatch context to be re-entered.</span>
-    <span class="kw">struct</span> <span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">Cell</span><span class="op">&lt;</span><span class="ident">bool</span><span class="op">&gt;</span>);
-    <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-        <span class="attribute">#[<span class="ident">inline</span>]</span>
-        <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
-            <span class="self">self</span>.<span class="number">0</span>.<span class="ident">set</span>(<span class="bool-val">true</span>);
-        }
-    }
-
     <span class="ident">CURRENT_STATE</span>
         .<span class="ident">try_with</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
-            <span class="kw">if</span> <span class="ident">state</span>.<span class="ident">can_enter</span>.<span class="ident">replace</span>(<span class="bool-val">false</span>) {
-                <span class="kw">let</span> <span class="ident">_guard</span> <span class="op">=</span> <span class="ident">Entered</span>(<span class="kw-2">&amp;</span><span class="ident">state</span>.<span class="ident">can_enter</span>);
-
-                <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">default</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">default</span>.<span class="ident">borrow_mut</span>();
-
-                <span class="kw">if</span> <span class="ident">default</span>.<span class="ident">is</span>::<span class="op">&lt;</span><span class="ident">NoSubscriber</span><span class="op">&gt;</span>() {
-                    <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">global</span>) <span class="op">=</span> <span class="ident">get_global</span>() {
-                        <span class="comment">// don&#39;t redo this call on the next check</span>
-                        <span class="kw-2">*</span><span class="ident">default</span> <span class="op">=</span> <span class="ident">global</span>.<span class="ident">clone</span>();
-                    }
-                }
-                <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">default</span>)
-            } <span class="kw">else</span> {
-                <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>::<span class="ident">none</span>())
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">entered</span>) <span class="op">=</span> <span class="ident">state</span>.<span class="ident">enter</span>() {
+                <span class="kw">return</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">entered</span>.<span class="ident">current</span>());
             }
+
+            <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>::<span class="ident">none</span>())
         })
         .<span class="ident">unwrap_or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>::<span class="ident">none</span>()))
+}
+
+<span class="doccomment">/// Executes a closure with a reference to this thread&#39;s current [dispatcher].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// Note that calls to `get_default` should not be nested; if this function is</span>
+<span class="doccomment">/// called while inside of another `get_default`, that closure will be provided</span>
+<span class="doccomment">/// with `Dispatch::none` rather than the previously set dispatcher.</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [dispatcher]: ../dispatcher/struct.Dispatch.html</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="attribute">#[<span class="ident">inline</span>(<span class="ident">never</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_current</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="ident">CURRENT_STATE</span>
+        .<span class="ident">try_with</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
+            <span class="kw">let</span> <span class="ident">entered</span> <span class="op">=</span> <span class="ident">state</span>.<span class="ident">enter</span>()<span class="question-mark">?</span>;
+            <span class="prelude-val">Some</span>(<span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">entered</span>.<span class="ident">current</span>()))
+        })
+        .<span class="ident">ok</span>()<span class="question-mark">?</span>
 }
 
 <span class="doccomment">/// Executes a closure with a reference to the current [dispatcher].</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [dispatcher]: ../dispatcher/struct.Dispatch.html</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="ident">T</span>
+<span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_current</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw">impl</span> <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">let</span> <span class="ident">dispatch</span> <span class="op">=</span> <span class="ident">get_global</span>()<span class="question-mark">?</span>;
+    <span class="prelude-val">Some</span>(<span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="ident">dispatch</span>))
+}
+
+<span class="doccomment">/// Executes a closure with a reference to the current [dispatcher].</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// [dispatcher]: ../dispatcher/struct.Dispatch.html</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>))]</span>
+<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_default</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">mut</span> <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>
 <span class="kw">where</span>
-    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-&gt;</span> <span class="ident">T</span>,
+    <span class="ident">F</span>: <span class="ident">FnMut</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span>,
 {
     <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">d</span>) <span class="op">=</span> <span class="ident">get_global</span>() {
         <span class="ident">f</span>(<span class="ident">d</span>)
@@ -1268,8 +1337,8 @@
     }
 }
 
-<span class="kw">fn</span> <span class="ident">get_global</span>() <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Dispatch</span><span class="op">&gt;</span> {
-    <span class="kw">if</span> <span class="ident">GLOBAL_INIT</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) <span class="op">!=</span> <span class="ident">INITIALIZED</span> {
+<span class="kw">fn</span> <span class="ident">get_global</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Dispatch</span><span class="op">&gt;</span> {
+    <span class="kw">if</span> <span class="ident">GLOBAL_INIT</span>.<span class="ident">load</span>(<span class="ident">Ordering</span>::<span class="ident">SeqCst</span>) <span class="op">!</span><span class="op">=</span> <span class="ident">INITIALIZED</span> {
         <span class="kw">return</span> <span class="prelude-val">None</span>;
     }
     <span class="kw">unsafe</span> {
@@ -1286,7 +1355,7 @@
 <span class="kw">impl</span> <span class="ident">Dispatch</span> {
     <span class="doccomment">/// Returns a new `Dispatch` that discards events and spans.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">none</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">none</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Dispatch</span> {
             <span class="ident">subscriber</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">NoSubscriber</span>),
         }
@@ -1295,7 +1364,7 @@
     <span class="doccomment">/// Returns a `Dispatch` that forwards to the given [`Subscriber`].</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">subscriber</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="self">Self</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="ident">subscriber</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Subscriber</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     {
@@ -1306,7 +1375,7 @@
         <span class="ident">me</span>
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">registrar</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Registrar</span> {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">registrar</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Registrar</span> {
         <span class="ident">Registrar</span>(<span class="ident">Arc</span>::<span class="ident">downgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">subscriber</span>))
     }
 
@@ -1319,8 +1388,24 @@
     <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
     <span class="doccomment">/// [`register_callsite`]: ../subscriber/trait.Subscriber.html#method.register_callsite</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_callsite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">subscriber</span>::<span class="ident">Interest</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_callsite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">subscriber</span>::<span class="ident">Interest</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">register_callsite</span>(<span class="ident">metadata</span>)
+    }
+
+    <span class="doccomment">/// Returns the highest [verbosity level][level] that this [`Subscriber`] will</span>
+    <span class="doccomment">/// enable, or `None`, if the subscriber does not implement level-based</span>
+    <span class="doccomment">/// filtering or chooses not to implement this method.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This calls the [`max_level_hint`] function on the [`Subscriber`]</span>
+    <span class="doccomment">/// that this `Dispatch` forwards to.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// [level]: ../struct.Level.html</span>
+    <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
+    <span class="doccomment">/// [`register_callsite`]: ../subscriber/trait.Subscriber.html#method.max_level_hint</span>
+    <span class="comment">// TODO(eliza): consider making this a public API?</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">max_level_hint</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">LevelFilter</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">max_level_hint</span>()
     }
 
     <span class="doccomment">/// Record the construction of a new span, returning a new [ID] for the</span>
@@ -1333,7 +1418,7 @@
     <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
     <span class="doccomment">/// [`new_span`]: ../subscriber/trait.Subscriber.html#method.new_span</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">span</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">span</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">new_span</span>(<span class="ident">span</span>)
     }
 
@@ -1372,7 +1457,7 @@
     <span class="doccomment">/// [`Subscriber`]: ../subscriber/trait.Subscriber.html</span>
     <span class="doccomment">/// [`enabled`]: ../subscriber/trait.Subscriber.html#method.enabled</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">enabled</span>(<span class="ident">metadata</span>)
     }
 
@@ -1428,7 +1513,7 @@
     <span class="doccomment">/// [`clone_span`]: ../subscriber/trait.Subscriber.html#method.clone_span</span>
     <span class="doccomment">/// [`new_span`]: ../subscriber/trait.Subscriber.html#method.new_span</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Id</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">clone_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Id</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">clone_span</span>(<span class="kw-2">&amp;</span><span class="ident">id</span>)
     }
 
@@ -1479,7 +1564,7 @@
     <span class="doccomment">/// [`try_close`]: ../subscriber/trait.Subscriber.html#method.try_close</span>
     <span class="doccomment">/// [`new_span`]: ../subscriber/trait.Subscriber.html#method.new_span</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_close</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">span</span>::<span class="ident">Id</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">try_close</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">id</span>: <span class="ident">span</span>::<span class="ident">Id</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">try_close</span>(<span class="ident">id</span>)
     }
 
@@ -1490,34 +1575,34 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`current`]: ../subscriber/trait.Subscriber.html#method.current</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">current_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Current</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">current_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Current</span> {
         <span class="self">self</span>.<span class="ident">subscriber</span>.<span class="ident">current_span</span>()
     }
 
     <span class="doccomment">/// Returns `true` if this `Dispatch` forwards to a `Subscriber` of type</span>
     <span class="doccomment">/// `T`.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="ident">Subscriber</span>::<span class="ident">is</span>::<span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">subscriber</span>)
     }
 
     <span class="doccomment">/// Returns some reference to the `Subscriber` this `Dispatch` forwards to</span>
     <span class="doccomment">/// if it is of type `T`, or `None` if it isn&#39;t.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downcast_ref</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">downcast_ref</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Any</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="ident">Subscriber</span>::<span class="ident">downcast_ref</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="self">self</span>.<span class="ident">subscriber</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">Dispatch</span> {
     <span class="doccomment">/// Returns the current default dispatcher</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">get_default</span>(<span class="op">|</span><span class="ident">default</span><span class="op">|</span> <span class="ident">default</span>.<span class="ident">clone</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">Dispatch</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="ident">f</span>.<span class="ident">pad</span>(<span class="string">&quot;Dispatch(...)&quot;</span>)
     }
 }
@@ -1527,7 +1612,7 @@
     <span class="ident">S</span>: <span class="ident">Subscriber</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">subscriber</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">subscriber</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">Dispatch</span>::<span class="ident">new</span>(<span class="ident">subscriber</span>)
     }
 }
@@ -1535,11 +1620,11 @@
 <span class="kw">struct</span> <span class="ident">NoSubscriber</span>;
 <span class="kw">impl</span> <span class="ident">Subscriber</span> <span class="kw">for</span> <span class="ident">NoSubscriber</span> {
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">register_callsite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">subscriber</span>::<span class="ident">Interest</span> {
+    <span class="kw">fn</span> <span class="ident">register_callsite</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">subscriber</span>::<span class="ident">Interest</span> {
         <span class="ident">subscriber</span>::<span class="ident">Interest</span>::<span class="ident">never</span>()
     }
 
-    <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+    <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
         <span class="ident">span</span>::<span class="ident">Id</span>::<span class="ident">from_u64</span>(<span class="number">0xDEAD</span>)
     }
 
@@ -1550,7 +1635,7 @@
     <span class="kw">fn</span> <span class="ident">record_follows_from</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_span</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Id</span>, <span class="ident">_follows</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Id</span>) {}
 
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_metadata</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="bool-val">false</span>
     }
 
@@ -1562,12 +1647,12 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">try_register</span>(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">metadata</span>: <span class="kw-2">&amp;</span><span class="lifetime">&#39;static</span> <span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;static</span><span class="op">&gt;</span>,
-    ) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">subscriber</span>::<span class="ident">Interest</span><span class="op">&gt;</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">subscriber</span>::<span class="ident">Interest</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">upgrade</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">s</span><span class="op">|</span> <span class="ident">s</span>.<span class="ident">register_callsite</span>(<span class="ident">metadata</span>))
     }
 
-    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">is_alive</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">upgrade</span>().<span class="ident">is_some</span>()
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">upgrade</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Dispatch</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">upgrade</span>().<span class="ident">map</span>(<span class="op">|</span><span class="ident">subscriber</span><span class="op">|</span> <span class="ident">Dispatch</span> { <span class="ident">subscriber</span> })
     }
 }
 
@@ -1581,7 +1666,7 @@
     <span class="doccomment">/// Dropping the returned `ResetGuard` will reset the default dispatcher to</span>
     <span class="doccomment">/// the previous value.</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
-    <span class="kw">fn</span> <span class="ident">set_default</span>(<span class="ident">new_dispatch</span>: <span class="ident">Dispatch</span>) <span class="op">-&gt;</span> <span class="ident">DefaultGuard</span> {
+    <span class="kw">fn</span> <span class="ident">set_default</span>(<span class="ident">new_dispatch</span>: <span class="ident">Dispatch</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DefaultGuard</span> {
         <span class="kw">let</span> <span class="ident">prior</span> <span class="op">=</span> <span class="ident">CURRENT_STATE</span>
             .<span class="ident">try_with</span>(<span class="op">|</span><span class="ident">state</span><span class="op">|</span> {
                 <span class="ident">state</span>.<span class="ident">can_enter</span>.<span class="ident">set</span>(<span class="bool-val">true</span>);
@@ -1590,6 +1675,42 @@
             .<span class="ident">ok</span>();
         <span class="ident">EXISTS</span>.<span class="ident">store</span>(<span class="bool-val">true</span>, <span class="ident">Ordering</span>::<span class="ident">Release</span>);
         <span class="ident">DefaultGuard</span>(<span class="ident">prior</span>)
+    }
+
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">enter</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="self">self</span>.<span class="ident">can_enter</span>.<span class="ident">replace</span>(<span class="bool-val">false</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">Entered</span>(<span class="kw-2">&amp;</span><span class="self">self</span>))
+        } <span class="kw">else</span> {
+            <span class="prelude-val">None</span>
+        }
+    }
+}
+
+<span class="comment">// ===== impl Entered =====</span>
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">current</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RefMut</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">Dispatch</span><span class="op">&gt;</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">default</span> <span class="op">=</span> <span class="self">self</span>.<span class="number">0</span>.<span class="ident">default</span>.<span class="ident">borrow_mut</span>();
+
+        <span class="kw">if</span> <span class="ident">default</span>.<span class="ident">is</span>::<span class="op">&lt;</span><span class="ident">NoSubscriber</span><span class="op">&gt;</span>() {
+            <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">global</span>) <span class="op">=</span> <span class="ident">get_global</span>() {
+                <span class="comment">// don&#39;t redo this call on the next check</span>
+                <span class="kw-2">*</span><span class="ident">default</span> <span class="op">=</span> <span class="ident">global</span>.<span class="ident">clone</span>();
+            }
+        }
+
+        <span class="ident">default</span>
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;std&quot;</span>)]</span>
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Drop</span> <span class="kw">for</span> <span class="ident">Entered</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
+    <span class="kw">fn</span> <span class="ident">drop</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">can_enter</span>.<span class="ident">set</span>(<span class="bool-val">true</span>);
     }
 }
 
@@ -1647,7 +1768,7 @@
 
     <span class="kw">impl</span> <span class="ident">Callsite</span> <span class="kw">for</span> <span class="ident">TestCallsite</span> {
         <span class="kw">fn</span> <span class="ident">set_interest</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="ident">Interest</span>) {}
-        <span class="kw">fn</span> <span class="ident">metadata</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+        <span class="kw">fn</span> <span class="ident">metadata</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
             <span class="kw-2">&amp;</span><span class="ident">TEST_META</span>
         }
     }
@@ -1659,11 +1780,11 @@
         <span class="comment">// won&#39;t cause an infinite loop of events.</span>
         <span class="kw">struct</span> <span class="ident">TestSubscriber</span>;
         <span class="kw">impl</span> <span class="ident">Subscriber</span> <span class="kw">for</span> <span class="ident">TestSubscriber</span> {
-            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
                 <span class="bool-val">true</span>
             }
 
-            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
                 <span class="ident">span</span>::<span class="ident">Id</span>::<span class="ident">from_u64</span>(<span class="number">0xAAAA</span>)
             }
 
@@ -1686,7 +1807,7 @@
             <span class="kw">fn</span> <span class="ident">exit</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Id</span>) {}
         }
 
-        <span class="ident">with_default</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>::<span class="ident">new</span>(<span class="ident">TestSubscriber</span>), <span class="op">||</span> {
+        <span class="ident">with_default</span>(<span class="kw-2">&amp;</span><span class="ident">Dispatch</span>::<span class="ident">new</span>(<span class="ident">TestSubscriber</span>), <span class="op">|</span><span class="op">|</span> {
             <span class="ident">Event</span>::<span class="ident">dispatch</span>(<span class="kw-2">&amp;</span><span class="ident">TEST_META</span>, <span class="kw-2">&amp;</span><span class="ident">TEST_META</span>.<span class="ident">fields</span>().<span class="ident">value_set</span>(<span class="kw-2">&amp;</span>[]))
         })
     }
@@ -1708,11 +1829,11 @@
 
         <span class="kw">struct</span> <span class="ident">TestSubscriber</span>;
         <span class="kw">impl</span> <span class="ident">Subscriber</span> <span class="kw">for</span> <span class="ident">TestSubscriber</span> {
-            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
                 <span class="bool-val">true</span>
             }
 
-            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
                 <span class="kw">static</span> <span class="ident">NEW_SPANS</span>: <span class="ident">AtomicUsize</span> <span class="op">=</span> <span class="ident">AtomicUsize</span>::<span class="ident">new</span>(<span class="number">0</span>);
                 <span class="macro">assert_eq</span><span class="macro">!</span>(
                     <span class="ident">NEW_SPANS</span>.<span class="ident">fetch_add</span>(<span class="number">1</span>, <span class="ident">Ordering</span>::<span class="ident">Relaxed</span>),
@@ -1748,11 +1869,11 @@
     <span class="kw">fn</span> <span class="ident">default_dispatch</span>() {
         <span class="kw">struct</span> <span class="ident">TestSubscriber</span>;
         <span class="kw">impl</span> <span class="ident">Subscriber</span> <span class="kw">for</span> <span class="ident">TestSubscriber</span> {
-            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+            <span class="kw">fn</span> <span class="ident">enabled</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">Metadata</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
                 <span class="bool-val">true</span>
             }
 
-            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
+            <span class="kw">fn</span> <span class="ident">new_span</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="ident">span</span>::<span class="ident">Attributes</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">span</span>::<span class="ident">Id</span> {
                 <span class="ident">span</span>::<span class="ident">Id</span>::<span class="ident">from_u64</span>(<span class="number">0xAAAA</span>)
             }
 
