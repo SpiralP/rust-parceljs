@@ -1,4 +1,3 @@
 (function() {var implementors = {};
-implementors["actix_utils"] = [{"text":"impl BitXorAssign&lt;Flags&gt; for Flags","synthetic":false,"types":[]}];
-implementors["mio"] = [{"text":"impl&lt;T:&nbsp;Into&lt;Ready&gt;&gt; BitXorAssign&lt;T&gt; for Ready","synthetic":false,"types":[]}];
+implementors["actix_utils"] = [{"text":"impl <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/ops/bit/trait.BitXorAssign.html\" title=\"trait core::ops::bit::BitXorAssign\">BitXorAssign</a>&lt;<a class=\"struct\" href=\"actix_utils/oneshot/struct.Flags.html\" title=\"struct actix_utils::oneshot::Flags\">Flags</a>&gt; for <a class=\"struct\" href=\"actix_utils/oneshot/struct.Flags.html\" title=\"struct actix_utils::oneshot::Flags\">Flags</a>","synthetic":false,"types":["actix_utils::oneshot::Flags"]}];
 if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

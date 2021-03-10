@@ -1,7 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-router-0.2.5/src/resource.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>resource.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
-<link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../actix_router/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
-                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/actix-router-0.2.7/src/resource.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>resource.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://actix.rs/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../actix_router/index.html'><div class='logo-container'><img src='https://actix.rs/img/logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -945,6 +943,9 @@
 <span id="942">942</span>
 <span id="943">943</span>
 <span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">min</span>;
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">collections</span>::<span class="ident">HashMap</span>;
@@ -976,6 +977,7 @@
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>, <span class="ident">Debug</span>)]</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">large_enum_variant</span>)]</span>
 <span class="kw">enum</span> <span class="ident">PatternType</span> {
     <span class="ident">Static</span>(<span class="ident">String</span>),
     <span class="ident">Prefix</span>(<span class="ident">String</span>),
@@ -1102,8 +1104,8 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">pattern</span>
     }
 
-    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="doccomment">/// Check if path matches this pattern.</span>
+    <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_match</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">tp</span> {
             <span class="ident">PatternType</span>::<span class="ident">Static</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">path</span>,
@@ -1115,13 +1117,13 @@
 
     <span class="doccomment">/// Is prefix path a match against this resource.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_prefix_match</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">path</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="ident">plen</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">len</span>();
+        <span class="kw">let</span> <span class="ident">p_len</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">len</span>();
         <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">path</span>.<span class="ident">is_empty</span>() { <span class="string">&quot;/&quot;</span> } <span class="kw">else</span> { <span class="ident">path</span> };
 
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">tp</span> {
             <span class="ident">PatternType</span>::<span class="ident">Static</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">path</span> {
-                    <span class="prelude-val">Some</span>(<span class="ident">plen</span>)
+                    <span class="prelude-val">Some</span>(<span class="ident">p_len</span>)
                 } <span class="kw">else</span> {
                     <span class="prelude-val">None</span>
                 }
@@ -1159,7 +1161,7 @@
                 } <span class="kw">else</span> {
                     <span class="kw">return</span> <span class="prelude-val">None</span>;
                 };
-                <span class="prelude-val">Some</span>(<span class="ident">min</span>(<span class="ident">plen</span>, <span class="ident">len</span>))
+                <span class="prelude-val">Some</span>(<span class="ident">min</span>(<span class="ident">p_len</span>, <span class="ident">len</span>))
             }
             <span class="ident">PatternType</span>::<span class="ident">DynamicSet</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw-2">ref</span> <span class="ident">params</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">idx</span>) <span class="op">=</span> <span class="ident">re</span>.<span class="ident">matches</span>(<span class="ident">path</span>).<span class="ident">into_iter</span>().<span class="ident">next</span>() {
@@ -1200,11 +1202,11 @@
                 }
             }
             <span class="ident">PatternType</span>::<span class="ident">Prefix</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> <span class="ident">rpath</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">path</span>();
-                <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rpath</span> {
+                <span class="kw">let</span> <span class="ident">r_path</span> <span class="op">=</span> <span class="ident">path</span>.<span class="ident">path</span>();
+                <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">r_path</span> {
                     <span class="ident">s</span>.<span class="ident">len</span>()
-                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rpath</span>.<span class="ident">starts_with</span>(<span class="ident">s</span>)
-                    <span class="op">&amp;&amp;</span> (<span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">rpath</span>.<span class="ident">split_at</span>(<span class="ident">s</span>.<span class="ident">len</span>()).<span class="number">1</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>))
+                } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">r_path</span>.<span class="ident">starts_with</span>(<span class="ident">s</span>)
+                    <span class="op">&amp;&amp;</span> (<span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">r_path</span>.<span class="ident">split_at</span>(<span class="ident">s</span>.<span class="ident">len</span>()).<span class="number">1</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>))
                 {
                     <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) {
                         <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>
@@ -1214,8 +1216,8 @@
                 } <span class="kw">else</span> {
                     <span class="kw">return</span> <span class="bool-val">false</span>;
                 };
-                <span class="kw">let</span> <span class="ident">rpath_len</span> <span class="op">=</span> <span class="ident">rpath</span>.<span class="ident">len</span>();
-                <span class="ident">path</span>.<span class="ident">skip</span>(<span class="ident">min</span>(<span class="ident">rpath_len</span>, <span class="ident">len</span>) <span class="kw">as</span> <span class="ident">u16</span>);
+                <span class="kw">let</span> <span class="ident">r_path_len</span> <span class="op">=</span> <span class="ident">r_path</span>.<span class="ident">len</span>();
+                <span class="ident">path</span>.<span class="ident">skip</span>(<span class="ident">min</span>(<span class="ident">r_path_len</span>, <span class="ident">len</span>) <span class="kw">as</span> <span class="ident">u16</span>);
                 <span class="bool-val">true</span>
             }
             <span class="ident">PatternType</span>::<span class="ident">Dynamic</span>(<span class="kw-2">ref</span> <span class="ident">re</span>, <span class="kw-2">ref</span> <span class="ident">names</span>, <span class="ident">len</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -1309,11 +1311,11 @@
             }
             <span class="ident">PatternType</span>::<span class="ident">Prefix</span>(<span class="kw-2">ref</span> <span class="ident">s</span>) <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> {
-                    <span class="kw">let</span> <span class="ident">rpath</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">resource_path</span>().<span class="ident">path</span>();
-                    <span class="kw">if</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">rpath</span> {
+                    <span class="kw">let</span> <span class="ident">r_path</span> <span class="op">=</span> <span class="ident">res</span>.<span class="ident">resource_path</span>().<span class="ident">path</span>();
+                    <span class="kw">if</span> <span class="ident">s</span> <span class="op">=</span><span class="op">=</span> <span class="ident">r_path</span> {
                         <span class="ident">s</span>.<span class="ident">len</span>()
-                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">rpath</span>.<span class="ident">starts_with</span>(<span class="ident">s</span>)
-                        <span class="op">&amp;&amp;</span> (<span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">rpath</span>.<span class="ident">split_at</span>(<span class="ident">s</span>.<span class="ident">len</span>()).<span class="number">1</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>))
+                    } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">r_path</span>.<span class="ident">starts_with</span>(<span class="ident">s</span>)
+                        <span class="op">&amp;&amp;</span> (<span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) <span class="op">|</span><span class="op">|</span> <span class="ident">r_path</span>.<span class="ident">split_at</span>(<span class="ident">s</span>.<span class="ident">len</span>()).<span class="number">1</span>.<span class="ident">starts_with</span>(<span class="string">&#39;/&#39;</span>))
                     {
                         <span class="kw">if</span> <span class="ident">s</span>.<span class="ident">ends_with</span>(<span class="string">&#39;/&#39;</span>) {
                             <span class="ident">s</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>
@@ -1528,6 +1530,8 @@
         <span class="kw-2">mut</span> <span class="ident">for_prefix</span>: <span class="ident">bool</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> (<span class="ident">String</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">PatternElement</span><span class="op">&gt;</span>, <span class="ident">bool</span>, <span class="ident">usize</span>) {
         <span class="kw">if</span> <span class="ident">pattern</span>.<span class="ident">find</span>(<span class="string">&#39;{&#39;</span>).<span class="ident">is_none</span>() {
+            <span class="comment">// TODO: MSRV: 1.45</span>
+            <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">manual_strip</span>)]</span>
             <span class="kw">return</span> <span class="kw">if</span> <span class="ident">pattern</span>.<span class="ident">ends_with</span>(<span class="string">&#39;*&#39;</span>) {
                 <span class="kw">let</span> <span class="ident">path</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">pattern</span>[..<span class="ident">pattern</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="number">1</span>];
                 <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;^&quot;</span>) <span class="op">+</span> <span class="ident">path</span> <span class="op">+</span> <span class="string">&quot;(.*)&quot;</span>;
@@ -1542,39 +1546,39 @@
             };
         }
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">elems</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">elements</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">new</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">from</span>(<span class="string">&quot;^&quot;</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dyn_elems</span> <span class="op">=</span> <span class="number">0</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">dyn_elements</span> <span class="op">=</span> <span class="number">0</span>;
 
         <span class="kw">while</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">idx</span>) <span class="op">=</span> <span class="ident">pattern</span>.<span class="ident">find</span>(<span class="string">&#39;{&#39;</span>) {
             <span class="kw">let</span> (<span class="ident">prefix</span>, <span class="ident">rem</span>) <span class="op">=</span> <span class="ident">pattern</span>.<span class="ident">split_at</span>(<span class="ident">idx</span>);
-            <span class="ident">elems</span>.<span class="ident">push</span>(<span class="ident">PatternElement</span>::<span class="ident">Str</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="ident">prefix</span>)));
+            <span class="ident">elements</span>.<span class="ident">push</span>(<span class="ident">PatternElement</span>::<span class="ident">Str</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="ident">prefix</span>)));
             <span class="ident">re</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">escape</span>(<span class="ident">prefix</span>));
             <span class="kw">let</span> (<span class="ident">param_pattern</span>, <span class="ident">re_part</span>, <span class="ident">rem</span>, <span class="ident">tail</span>) <span class="op">=</span> <span class="self">Self</span>::<span class="ident">parse_param</span>(<span class="ident">rem</span>);
             <span class="kw">if</span> <span class="ident">tail</span> {
                 <span class="ident">for_prefix</span> <span class="op">=</span> <span class="bool-val">true</span>;
             }
 
-            <span class="ident">elems</span>.<span class="ident">push</span>(<span class="ident">param_pattern</span>);
+            <span class="ident">elements</span>.<span class="ident">push</span>(<span class="ident">param_pattern</span>);
             <span class="ident">re</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">re_part</span>);
             <span class="ident">pattern</span> <span class="op">=</span> <span class="ident">rem</span>;
-            <span class="ident">dyn_elems</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+            <span class="ident">dyn_elements</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
         }
 
-        <span class="ident">elems</span>.<span class="ident">push</span>(<span class="ident">PatternElement</span>::<span class="ident">Str</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="ident">pattern</span>)));
+        <span class="ident">elements</span>.<span class="ident">push</span>(<span class="ident">PatternElement</span>::<span class="ident">Str</span>(<span class="ident">String</span>::<span class="ident">from</span>(<span class="ident">pattern</span>)));
         <span class="ident">re</span>.<span class="ident">push_str</span>(<span class="kw-2">&amp;</span><span class="ident">escape</span>(<span class="ident">pattern</span>));
 
-        <span class="kw">if</span> <span class="ident">dyn_elems</span> <span class="op">&gt;</span> <span class="ident">MAX_DYNAMIC_SEGMENTS</span> {
+        <span class="kw">if</span> <span class="ident">dyn_elements</span> <span class="op">&gt;</span> <span class="ident">MAX_DYNAMIC_SEGMENTS</span> {
             <span class="macro">panic</span><span class="macro">!</span>(
-                <span class="string">&quot;Only {} dynanic segments are allowed, provided: {}&quot;</span>,
-                <span class="ident">MAX_DYNAMIC_SEGMENTS</span>, <span class="ident">dyn_elems</span>
+                <span class="string">&quot;Only {} dynamic segments are allowed, provided: {}&quot;</span>,
+                <span class="ident">MAX_DYNAMIC_SEGMENTS</span>, <span class="ident">dyn_elements</span>
             );
         }
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">for_prefix</span> {
             <span class="ident">re</span>.<span class="ident">push</span>(<span class="string">&#39;$&#39;</span>);
         }
-        (<span class="ident">re</span>, <span class="ident">elems</span>, <span class="bool-val">true</span>, <span class="ident">pattern</span>.<span class="ident">chars</span>().<span class="ident">count</span>())
+        (<span class="ident">re</span>, <span class="ident">elements</span>, <span class="bool-val">true</span>, <span class="ident">pattern</span>.<span class="ident">chars</span>().<span class="ident">count</span>())
     }
 }
 
@@ -1666,10 +1670,10 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/v/resource/1&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/resource&quot;</span>));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;/v151/resource/adahg32&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;/v151/resource/adage32&quot;</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">re</span>.<span class="ident">match_path</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;version&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;151&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;adahg32&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;adage32&quot;</span>);
 
         <span class="kw">let</span> <span class="ident">re</span> <span class="op">=</span> <span class="ident">ResourceDef</span>::<span class="ident">new</span>(<span class="string">&quot;/{id:[[:digit:]]{6}}&quot;</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/012345&quot;</span>));
@@ -1707,10 +1711,10 @@
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/v/resource/1&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/resource&quot;</span>));
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;/v151/resource/adahg32&quot;</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">path</span> <span class="op">=</span> <span class="ident">Path</span>::<span class="ident">new</span>(<span class="string">&quot;/v151/resource/adage32&quot;</span>);
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">re</span>.<span class="ident">match_path</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">path</span>));
         <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;version&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;151&quot;</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;adahg32&quot;</span>);
+        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">path</span>.<span class="ident">get</span>(<span class="string">&quot;id&quot;</span>).<span class="ident">unwrap</span>(), <span class="string">&quot;adage32&quot;</span>);
 
         <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/012345&quot;</span>));
         <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">re</span>.<span class="ident">is_match</span>(<span class="string">&quot;/012&quot;</span>));
@@ -1891,4 +1895,5 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "actix_router";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="actix_router" data-search-js="../../search-index.js"></div>
+    <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>
