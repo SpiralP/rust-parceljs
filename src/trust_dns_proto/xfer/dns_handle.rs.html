@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-proto-0.19.7/src/xfer/dns_handle.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>dns_handle.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -111,14 +111,14 @@
 <span class="comment">// copied, modified, or distributed except according to those terms.</span>
 
 <span class="doccomment">//! `DnsHandle` types perform conversions of the raw DNS messages before sending the messages on the specified streams.</span>
-<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">channel</span>::<span class="ident">mpsc</span>::<span class="ident">UnboundedSender</span>;
-<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">future</span>::<span class="ident">Future</span>;
-<span class="kw">use</span> <span class="ident">log</span>::<span class="ident">debug</span>;
+<span class="kw">use</span> <span class="ident">futures::channel::mpsc::UnboundedSender</span>;
+<span class="kw">use</span> <span class="ident">futures::future::Future</span>;
+<span class="kw">use</span> <span class="ident">log::debug</span>;
 <span class="kw">use</span> <span class="ident">rand</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">op</span>::{<span class="ident">Message</span>, <span class="ident">MessageType</span>, <span class="ident">OpCode</span>, <span class="ident">Query</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">xfer</span>::{<span class="ident">DnsRequest</span>, <span class="ident">DnsRequestOptions</span>, <span class="ident">DnsResponse</span>, <span class="ident">SerialMessage</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::op</span>::{<span class="ident">Message</span>, <span class="ident">MessageType</span>, <span class="ident">OpCode</span>, <span class="ident">Query</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::xfer</span>::{<span class="ident">DnsRequest</span>, <span class="ident">DnsRequestOptions</span>, <span class="ident">DnsResponse</span>, <span class="ident">SerialMessage</span>};
 
 <span class="comment">// TODO: this should be configurable</span>
 <span class="kw">const</span> <span class="ident">MAX_PAYLOAD_LEN</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="number">1500</span> <span class="op">-</span> <span class="number">40</span> <span class="op">-</span> <span class="number">8</span>; <span class="comment">// 1500 (general MTU) - 40 (ipv6 header) - 8 (udp header)</span>
@@ -143,8 +143,8 @@
 
 <span class="kw">impl</span> <span class="ident">DnsStreamHandle</span> <span class="kw">for</span> <span class="ident">StreamHandle</span> {
     <span class="kw">fn</span> <span class="ident">send</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">buffer</span>: <span class="ident">SerialMessage</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span> {
-        <span class="ident">UnboundedSender</span>::<span class="ident">unbounded_send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sender</span>, <span class="ident">buffer</span>.<span class="ident">unwrap</span>().<span class="number">0</span>)
-            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;mpsc::SendError {}&quot;</span>, <span class="ident">e</span>)))
+        <span class="ident">UnboundedSender::unbounded_send</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">sender</span>, <span class="ident">buffer</span>.<span class="ident">unwrap</span>().<span class="number">0</span>)
+            .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> <span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;mpsc::SendError {}&quot;</span>, <span class="ident">e</span>)))
     }
 }
 
@@ -167,7 +167,7 @@
     <span class="doccomment">/// * `request` - the fully constructed Message to send, note that most implementations of</span>
     <span class="doccomment">///               will most likely be required to rewrite the QueryId, do no rely on that as</span>
     <span class="doccomment">///               being stable.</span>
-    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span>;
+    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Response</span>;
 
     <span class="doccomment">/// A *classic* DNS query</span>
     <span class="doccomment">///</span>
@@ -176,21 +176,21 @@
     <span class="doccomment">/// # Arguments</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// * `query` - the query to lookup</span>
-    <span class="kw">fn</span> <span class="ident">lookup</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="ident">Query</span>, <span class="ident">options</span>: <span class="ident">DnsRequestOptions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;querying: {} {:?}&quot;</span>, <span class="ident">query</span>.<span class="ident">name</span>(), <span class="ident">query</span>.<span class="ident">query_type</span>());
+    <span class="kw">fn</span> <span class="ident">lookup</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="ident">Query</span>, <span class="ident">options</span>: <span class="ident">DnsRequestOptions</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Response</span> {
+        <span class="macro">debug!</span>(<span class="string">&quot;querying: {} {:?}&quot;</span>, <span class="ident">query</span>.<span class="ident">name</span>(), <span class="ident">query</span>.<span class="ident">query_type</span>());
 
         <span class="comment">// build the message</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span>: <span class="ident">Message</span> <span class="op">=</span> <span class="ident">Message</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">message</span>: <span class="ident">Message</span> <span class="op">=</span> <span class="ident">Message::new</span>();
 
         <span class="comment">// TODO: This is not the final ID, it&#39;s actually set in the poll method of DNS future</span>
         <span class="comment">//  should we just remove this?</span>
-        <span class="kw">let</span> <span class="ident">id</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="ident">rand</span>::<span class="ident">random</span>();
+        <span class="kw">let</span> <span class="ident">id</span>: <span class="ident">u16</span> <span class="op">=</span> <span class="ident">rand::random</span>();
 
         <span class="ident">message</span>.<span class="ident">add_query</span>(<span class="ident">query</span>);
         <span class="ident">message</span>
             .<span class="ident">set_id</span>(<span class="ident">id</span>)
-            .<span class="ident">set_message_type</span>(<span class="ident">MessageType</span>::<span class="ident">Query</span>)
-            .<span class="ident">set_op_code</span>(<span class="ident">OpCode</span>::<span class="ident">Query</span>)
+            .<span class="ident">set_message_type</span>(<span class="ident">MessageType::Query</span>)
+            .<span class="ident">set_op_code</span>(<span class="ident">OpCode::Query</span>)
             .<span class="ident">set_recursion_desired</span>(<span class="bool-val">true</span>);
 
         <span class="comment">// Extended dns</span>
@@ -201,9 +201,9 @@
             <span class="ident">edns</span>.<span class="ident">set_version</span>(<span class="number">0</span>);
         }
 
-        <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">DnsRequest</span>::<span class="ident">new</span>(<span class="ident">message</span>, <span class="ident">options</span>))
+        <span class="self">self</span>.<span class="ident">send</span>(<span class="ident">DnsRequest::new</span>(<span class="ident">message</span>, <span class="ident">options</span>))
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_proto" data-search-js="../../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_proto" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
     <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-resolver-0.19.7/src/name_server/connection_provider.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>connection_provider.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_resolver/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_resolver/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -546,55 +546,55 @@
 <span class="comment">// http://opensource.org/licenses/MIT&gt;, at your option. This file may not be</span>
 <span class="comment">// copied, modified, or distributed except according to those terms.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">marker</span>::<span class="ident">Unpin</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
+<span class="kw">use</span> <span class="ident">std::marker::Unpin</span>;
+<span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
+<span class="kw">use</span> <span class="ident">std::task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
 
-<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">io</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
-<span class="kw">use</span> <span class="ident">futures</span>::<span class="ident">ready</span>;
+<span class="kw">use</span> <span class="ident">futures::io</span>::{<span class="ident">AsyncRead</span>, <span class="ident">AsyncWrite</span>};
+<span class="kw">use</span> <span class="ident">futures::ready</span>;
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">Future</span>, <span class="ident">FutureExt</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">net</span>::<span class="ident">TcpStream</span> <span class="kw">as</span> <span class="ident">TokioTcpStream</span>;
+<span class="kw">use</span> <span class="ident">tokio::net::TcpStream</span> <span class="kw">as</span> <span class="ident">TokioTcpStream</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(
     <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-openssl&quot;</span>,
     <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>),
     <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-native-tls&quot;</span>)
 ))]</span>
-<span class="kw">use</span> <span class="ident">tokio_openssl</span>::<span class="ident">SslStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
+<span class="kw">use</span> <span class="ident">tokio_openssl::SslStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">tokio_rustls</span>::<span class="ident">client</span>::<span class="ident">TlsStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
+<span class="kw">use</span> <span class="ident">tokio_rustls::client::TlsStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-native-tls&quot;</span>, <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)))]</span>
-<span class="kw">use</span> <span class="ident">tokio_tls</span>::<span class="ident">TlsStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
+<span class="kw">use</span> <span class="ident">tokio_tls::TlsStream</span> <span class="kw">as</span> <span class="ident">TokioTlsStream</span>;
 
 <span class="kw">use</span> <span class="ident">proto</span>;
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">error</span>::<span class="ident">ProtoError</span>;
+<span class="kw">use</span> <span class="ident">proto::error::ProtoError</span>;
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">proto</span>::{<span class="ident">iocompat</span>::<span class="ident">AsyncIo02As03</span>, <span class="ident">TokioTime</span>};
+<span class="kw">use</span> <span class="ident">proto</span>::{<span class="ident">iocompat::AsyncIo02As03</span>, <span class="ident">TokioTime</span>};
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">multicast</span>::{<span class="ident">MdnsClientConnect</span>, <span class="ident">MdnsClientStream</span>, <span class="ident">MdnsQueryType</span>};
+<span class="kw">use</span> <span class="ident">proto::multicast</span>::{<span class="ident">MdnsClientConnect</span>, <span class="ident">MdnsClientStream</span>, <span class="ident">MdnsQueryType</span>};
 
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">op</span>::<span class="ident">NoopMessageFinalizer</span>;
+<span class="kw">use</span> <span class="ident">proto::op::NoopMessageFinalizer</span>;
 
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">udp</span>::<span class="ident">UdpClientStream</span>;
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">udp</span>::<span class="ident">UdpResponse</span>;
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">xfer</span>::{
+<span class="kw">use</span> <span class="ident">proto::udp::UdpClientStream</span>;
+<span class="kw">use</span> <span class="ident">proto::udp::UdpResponse</span>;
+<span class="kw">use</span> <span class="ident">proto::xfer</span>::{
     <span class="ident">DnsExchange</span>, <span class="ident">DnsExchangeSend</span>, <span class="ident">DnsHandle</span>, <span class="ident">DnsMultiplexerSerialResponse</span>, <span class="ident">DnsRequest</span>, <span class="ident">DnsResponse</span>,
 };
 
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">xfer</span>::{<span class="ident">DnsExchangeBackground</span>, <span class="ident">DnsMultiplexer</span>};
+<span class="kw">use</span> <span class="ident">proto::xfer</span>::{<span class="ident">DnsExchangeBackground</span>, <span class="ident">DnsMultiplexer</span>};
 
 <span class="kw">use</span> <span class="ident">proto</span>::{
-    <span class="ident">tcp</span>::<span class="ident">Connect</span>, <span class="ident">tcp</span>::<span class="ident">TcpClientConnect</span>, <span class="ident">tcp</span>::<span class="ident">TcpClientStream</span>, <span class="ident">udp</span>::<span class="ident">UdpClientConnect</span>,
-    <span class="ident">udp</span>::<span class="ident">UdpSocket</span>, <span class="ident">xfer</span>::<span class="ident">DnsExchangeConnect</span>, <span class="ident">xfer</span>::<span class="ident">DnsMultiplexerConnect</span>, <span class="ident">Time</span>,
+    <span class="ident">tcp::Connect</span>, <span class="ident">tcp::TcpClientConnect</span>, <span class="ident">tcp::TcpClientStream</span>, <span class="ident">udp::UdpClientConnect</span>,
+    <span class="ident">udp::UdpSocket</span>, <span class="ident">xfer::DnsExchangeConnect</span>, <span class="ident">xfer::DnsMultiplexerConnect</span>, <span class="ident">Time</span>,
 };
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-https&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">trust_dns_https</span>::{<span class="self">self</span>, <span class="ident">HttpsClientConnect</span>, <span class="ident">HttpsClientResponse</span>, <span class="ident">HttpsClientStream</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::<span class="ident">Protocol</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::{<span class="ident">NameServerConfig</span>, <span class="ident">ResolverOpts</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::Protocol</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config</span>::{<span class="ident">NameServerConfig</span>, <span class="ident">ResolverOpts</span>};
 
 <span class="doccomment">/// A type to allow for custom ConnectionProviders. Needed mainly for mocking purposes.</span>
 <span class="doccomment">///</span>
@@ -604,11 +604,11 @@
     <span class="kw">type</span> <span class="ident">Conn</span>: <span class="ident">DnsHandle</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="ident">Sync</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>;
 
     <span class="doccomment">/// Ths future is responsible for spawning any background tasks as necessary</span>
-    <span class="kw">type</span> <span class="ident">FutureConn</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Conn</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>;
+    <span class="kw">type</span> <span class="ident">FutureConn</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Conn</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>;
 
     <span class="doccomment">/// The returned handle should</span>
     <span class="kw">fn</span> <span class="ident">new_connection</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">NameServerConfig</span>, <span class="ident">options</span>: <span class="kw-2">&amp;</span><span class="ident">ResolverOpts</span>)
-        <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FutureConn</span>;
+        <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::FutureConn</span>;
 }
 
 <span class="doccomment">/// A type defines runtime.</span>
@@ -635,17 +635,17 @@
 
 <span class="doccomment">/// Standard connection implements the default mechanism for creating new Connections</span>
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GenericConnectionProvider</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>(<span class="ident">R</span>::<span class="ident">Handle</span>);
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">GenericConnectionProvider</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>(<span class="ident">R::Handle</span>);
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span> <span class="ident">GenericConnectionProvider</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">handle</span>: <span class="ident">R</span>::<span class="ident">Handle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">handle</span>: <span class="ident">R::Handle</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span>(<span class="ident">handle</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span> <span class="ident">ConnectionProvider</span> <span class="kw">for</span> <span class="ident">GenericConnectionProvider</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>;
     <span class="kw">type</span> <span class="ident">FutureConn</span> <span class="op">=</span> <span class="ident">ConnectionFuture</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>;
@@ -656,33 +656,33 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         <span class="ident">config</span>: <span class="kw-2">&amp;</span><span class="ident">NameServerConfig</span>,
         <span class="ident">options</span>: <span class="kw-2">&amp;</span><span class="ident">ResolverOpts</span>,
-    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FutureConn</span> {
+    ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::FutureConn</span> {
         <span class="kw">let</span> <span class="ident">dns_connect</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">config</span>.<span class="ident">protocol</span> {
-            <span class="ident">Protocol</span>::<span class="ident">Udp</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Protocol::Udp</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">stream</span> <span class="op">=</span>
-                    <span class="ident">UdpClientStream</span>::<span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Udp</span><span class="op">&gt;</span>::<span class="ident">with_timeout</span>(<span class="ident">config</span>.<span class="ident">socket_addr</span>, <span class="ident">options</span>.<span class="ident">timeout</span>);
-                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange</span>::<span class="ident">connect</span>(<span class="ident">stream</span>);
-                <span class="ident">ConnectionConnect</span>::<span class="ident">Udp</span>(<span class="ident">exchange</span>)
+                    <span class="ident">UdpClientStream</span>::<span class="op">&lt;</span><span class="ident">R::Udp</span><span class="op">&gt;</span><span class="ident">::with_timeout</span>(<span class="ident">config</span>.<span class="ident">socket_addr</span>, <span class="ident">options</span>.<span class="ident">timeout</span>);
+                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange::connect</span>(<span class="ident">stream</span>);
+                <span class="ident">ConnectionConnect::Udp</span>(<span class="ident">exchange</span>)
             }
-            <span class="ident">Protocol</span>::<span class="ident">Tcp</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Protocol::Tcp</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">socket_addr</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">socket_addr</span>;
                 <span class="kw">let</span> <span class="ident">timeout</span> <span class="op">=</span> <span class="ident">options</span>.<span class="ident">timeout</span>;
 
                 <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">handle</span>) <span class="op">=</span>
-                    <span class="ident">TcpClientStream</span>::<span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Tcp</span><span class="op">&gt;</span>::<span class="ident">with_timeout</span>::<span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Timer</span><span class="op">&gt;</span>(<span class="ident">socket_addr</span>, <span class="ident">timeout</span>);
+                    <span class="ident">TcpClientStream</span>::<span class="op">&lt;</span><span class="ident">R::Tcp</span><span class="op">&gt;</span><span class="ident">::with_timeout</span>::<span class="op">&lt;</span><span class="ident">R::Timer</span><span class="op">&gt;</span>(<span class="ident">socket_addr</span>, <span class="ident">timeout</span>);
                 <span class="comment">// TODO: need config for Signer...</span>
-                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer</span>::<span class="ident">with_timeout</span>(
+                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer::with_timeout</span>(
                     <span class="ident">stream</span>,
                     <span class="ident">handle</span>,
                     <span class="ident">timeout</span>,
-                    <span class="ident">NoopMessageFinalizer</span>::<span class="ident">new</span>(),
+                    <span class="ident">NoopMessageFinalizer::new</span>(),
                 );
 
-                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange</span>::<span class="ident">connect</span>(<span class="ident">dns_conn</span>);
-                <span class="ident">ConnectionConnect</span>::<span class="ident">Tcp</span>(<span class="ident">exchange</span>)
+                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange::connect</span>(<span class="ident">dns_conn</span>);
+                <span class="ident">ConnectionConnect::Tcp</span>(<span class="ident">exchange</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
-            <span class="ident">Protocol</span>::<span class="ident">Tls</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Protocol::Tls</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">socket_addr</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">socket_addr</span>;
                 <span class="kw">let</span> <span class="ident">timeout</span> <span class="op">=</span> <span class="ident">options</span>.<span class="ident">timeout</span>;
                 <span class="kw">let</span> <span class="ident">tls_dns_name</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">tls_dns_name</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_default</span>();
@@ -691,48 +691,48 @@
 
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
                 <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">handle</span>) <span class="op">=</span>
-                    { <span class="kw">crate</span>::<span class="ident">tls</span>::<span class="ident">new_tls_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>, <span class="ident">client_config</span>) };
+                    { <span class="kw">crate</span><span class="ident">::tls::new_tls_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>, <span class="ident">client_config</span>) };
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>))]</span>
-                <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">handle</span>) <span class="op">=</span> { <span class="kw">crate</span>::<span class="ident">tls</span>::<span class="ident">new_tls_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>) };
+                <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">handle</span>) <span class="op">=</span> { <span class="kw">crate</span><span class="ident">::tls::new_tls_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>) };
 
-                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer</span>::<span class="ident">with_timeout</span>(
+                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer::with_timeout</span>(
                     <span class="ident">stream</span>,
-                    <span class="ident">Box</span>::<span class="ident">new</span>(<span class="ident">handle</span>),
+                    <span class="ident">Box::new</span>(<span class="ident">handle</span>),
                     <span class="ident">timeout</span>,
-                    <span class="ident">NoopMessageFinalizer</span>::<span class="ident">new</span>(),
+                    <span class="ident">NoopMessageFinalizer::new</span>(),
                 );
 
-                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange</span>::<span class="ident">connect</span>(<span class="ident">dns_conn</span>);
-                <span class="ident">ConnectionConnect</span>::<span class="ident">Tls</span>(<span class="ident">exchange</span>)
+                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange::connect</span>(<span class="ident">dns_conn</span>);
+                <span class="ident">ConnectionConnect::Tls</span>(<span class="ident">exchange</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-https&quot;</span>)]</span>
-            <span class="ident">Protocol</span>::<span class="ident">Https</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Protocol::Https</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">socket_addr</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">socket_addr</span>;
                 <span class="kw">let</span> <span class="ident">tls_dns_name</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">tls_dns_name</span>.<span class="ident">clone</span>().<span class="ident">unwrap_or_default</span>();
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
                 <span class="kw">let</span> <span class="ident">client_config</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">tls_config</span>.<span class="ident">clone</span>();
 
                 <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span>
-                    <span class="kw">crate</span>::<span class="ident">https</span>::<span class="ident">new_https_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>, <span class="ident">client_config</span>);
-                <span class="ident">ConnectionConnect</span>::<span class="ident">Https</span>(<span class="ident">exchange</span>)
+                    <span class="kw">crate</span><span class="ident">::https::new_https_stream</span>(<span class="ident">socket_addr</span>, <span class="ident">tls_dns_name</span>, <span class="ident">client_config</span>);
+                <span class="ident">ConnectionConnect::Https</span>(<span class="ident">exchange</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-            <span class="ident">Protocol</span>::<span class="ident">Mdns</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">Protocol::Mdns</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">socket_addr</span> <span class="op">=</span> <span class="ident">config</span>.<span class="ident">socket_addr</span>;
                 <span class="kw">let</span> <span class="ident">timeout</span> <span class="op">=</span> <span class="ident">options</span>.<span class="ident">timeout</span>;
 
                 <span class="kw">let</span> (<span class="ident">stream</span>, <span class="ident">handle</span>) <span class="op">=</span>
-                    <span class="ident">MdnsClientStream</span>::<span class="ident">new</span>(<span class="ident">socket_addr</span>, <span class="ident">MdnsQueryType</span>::<span class="ident">OneShot</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+                    <span class="ident">MdnsClientStream::new</span>(<span class="ident">socket_addr</span>, <span class="ident">MdnsQueryType::OneShot</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
                 <span class="comment">// TODO: need config for Signer...</span>
-                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer</span>::<span class="ident">with_timeout</span>(
+                <span class="kw">let</span> <span class="ident">dns_conn</span> <span class="op">=</span> <span class="ident">DnsMultiplexer::with_timeout</span>(
                     <span class="ident">stream</span>,
                     <span class="ident">handle</span>,
                     <span class="ident">timeout</span>,
-                    <span class="ident">NoopMessageFinalizer</span>::<span class="ident">new</span>(),
+                    <span class="ident">NoopMessageFinalizer::new</span>(),
                 );
 
-                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange</span>::<span class="ident">connect</span>(<span class="ident">dns_conn</span>);
-                <span class="ident">ConnectionConnect</span>::<span class="ident">Mdns</span>(<span class="ident">exchange</span>)
+                <span class="kw">let</span> <span class="ident">exchange</span> <span class="op">=</span> <span class="ident">DnsExchange::connect</span>(<span class="ident">dns_conn</span>);
+                <span class="ident">ConnectionConnect::Mdns</span>(<span class="ident">exchange</span>)
             }
         };
 
@@ -744,32 +744,32 @@
 }
 
 <span class="doccomment">/// The variants of all supported connections for the Resolver</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">large_enum_variant</span>, <span class="ident">clippy</span>::<span class="ident">type_complexity</span>)]</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::large_enum_variant</span>, <span class="ident">clippy::type_complexity</span>)]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">ConnectionConnect</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="ident">Udp</span>(
         <span class="ident">DnsExchangeConnect</span><span class="op">&lt;</span>
-            <span class="ident">UdpClientConnect</span><span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Udp</span><span class="op">&gt;</span>,
-            <span class="ident">UdpClientStream</span><span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Udp</span><span class="op">&gt;</span>,
+            <span class="ident">UdpClientConnect</span><span class="op">&lt;</span><span class="ident">R::Udp</span><span class="op">&gt;</span>,
+            <span class="ident">UdpClientStream</span><span class="op">&lt;</span><span class="ident">R::Udp</span><span class="op">&gt;</span>,
             <span class="ident">UdpResponse</span>,
-            <span class="ident">R</span>::<span class="ident">Timer</span>,
+            <span class="ident">R::Timer</span>,
         <span class="op">&gt;</span>,
     ),
     <span class="ident">Tcp</span>(
         <span class="ident">DnsExchangeConnect</span><span class="op">&lt;</span>
             <span class="ident">DnsMultiplexerConnect</span><span class="op">&lt;</span>
-                <span class="ident">TcpClientConnect</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span><span class="op">&gt;</span>,
-                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span><span class="op">&gt;</span>,
+                <span class="ident">TcpClientConnect</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span><span class="op">&gt;</span>,
+                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span><span class="op">&gt;</span>,
                 <span class="ident">NoopMessageFinalizer</span>,
             <span class="op">&gt;</span>,
             <span class="ident">DnsMultiplexer</span><span class="op">&lt;</span>
-                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span><span class="op">&gt;</span>,
+                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span><span class="op">&gt;</span>,
                 <span class="ident">NoopMessageFinalizer</span>,
             <span class="op">&gt;</span>,
             <span class="ident">DnsMultiplexerSerialResponse</span>,
-            <span class="ident">R</span>::<span class="ident">Timer</span>,
+            <span class="ident">R::Timer</span>,
         <span class="op">&gt;</span>,
     ),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
@@ -778,7 +778,7 @@
             <span class="ident">DnsMultiplexerConnect</span><span class="op">&lt;</span>
                 <span class="ident">Pin</span><span class="op">&lt;</span>
                     <span class="ident">Box</span><span class="op">&lt;</span>
-                        <span class="kw">dyn</span> <span class="ident">futures</span>::<span class="ident">Future</span><span class="op">&lt;</span>
+                        <span class="kw">dyn</span> <span class="ident">futures::Future</span><span class="op">&lt;</span>
                                 <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>
                                     <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="ident">AsyncIo02As03</span><span class="op">&lt;</span><span class="ident">TokioTlsStream</span><span class="op">&lt;</span><span class="ident">TokioTcpStream</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>,
                                     <span class="ident">ProtoError</span>,
@@ -817,57 +817,57 @@
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;futures do nothing unless polled&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConnectionFuture</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="ident">connect</span>: <span class="ident">ConnectionConnect</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>,
-    <span class="ident">spawner</span>: <span class="ident">R</span>::<span class="ident">Handle</span>,
+    <span class="ident">spawner</span>: <span class="ident">R::Handle</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ConnectionFuture</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">GenericConnection</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
         <span class="kw">let</span> (<span class="ident">connection</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">connect</span> {
-            <span class="ident">ConnectionConnect</span>::<span class="ident">Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected</span>::<span class="ident">Udp</span>(<span class="ident">conn</span>));
-                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span>::<span class="ident">Udp</span>(<span class="ident">bg</span>));
+            <span class="ident">ConnectionConnect::Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected::Udp</span>(<span class="ident">conn</span>));
+                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner::Udp</span>(<span class="ident">bg</span>));
                 (<span class="ident">conn</span>, <span class="ident">bg</span>)
             }
-            <span class="ident">ConnectionConnect</span>::<span class="ident">Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected</span>::<span class="ident">Tcp</span>(<span class="ident">conn</span>));
-                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span>::<span class="ident">Tcp</span>(<span class="ident">bg</span>));
+            <span class="ident">ConnectionConnect::Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected::Tcp</span>(<span class="ident">conn</span>));
+                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner::Tcp</span>(<span class="ident">bg</span>));
                 (<span class="ident">conn</span>, <span class="ident">bg</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
-            <span class="ident">ConnectionConnect</span>::<span class="ident">Tls</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected</span>::<span class="ident">Tls</span>(<span class="ident">conn</span>));
-                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span>::<span class="ident">Tls</span>(<span class="ident">bg</span>));
+            <span class="ident">ConnectionConnect::Tls</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected::Tls</span>(<span class="ident">conn</span>));
+                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner::Tls</span>(<span class="ident">bg</span>));
                 (<span class="ident">conn</span>, <span class="ident">bg</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-https&quot;</span>)]</span>
-            <span class="ident">ConnectionConnect</span>::<span class="ident">Https</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected</span>::<span class="ident">Https</span>(<span class="ident">conn</span>));
-                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span>::<span class="ident">Https</span>(<span class="ident">bg</span>));
+            <span class="ident">ConnectionConnect::Https</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected::Https</span>(<span class="ident">conn</span>));
+                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner::Https</span>(<span class="ident">bg</span>));
                 (<span class="ident">conn</span>, <span class="ident">bg</span>)
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-            <span class="ident">ConnectionConnect</span>::<span class="ident">Mdns</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready</span><span class="macro">!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
-                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected</span>::<span class="ident">Mdns</span>(<span class="ident">conn</span>));
-                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span>::<span class="ident">Mdns</span>(<span class="ident">bg</span>));
+            <span class="ident">ConnectionConnect::Mdns</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="kw">let</span> (<span class="ident">conn</span>, <span class="ident">bg</span>) <span class="op">=</span> <span class="macro">ready!</span>(<span class="ident">conn</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>))<span class="question-mark">?</span>;
+                <span class="kw">let</span> <span class="ident">conn</span> <span class="op">=</span> <span class="ident">GenericConnection</span>(<span class="ident">ConnectionConnected::Mdns</span>(<span class="ident">conn</span>));
+                <span class="kw">let</span> <span class="ident">bg</span> <span class="op">=</span> <span class="ident">ConnectionBackground</span>::<span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner::Mdns</span>(<span class="ident">bg</span>));
                 (<span class="ident">conn</span>, <span class="ident">bg</span>)
             }
         };
-        <span class="self">self</span>.<span class="ident">spawner</span>.<span class="ident">spawn_bg</span>(<span class="ident">Box</span>::<span class="ident">pin</span>(<span class="ident">bg</span>));
+        <span class="self">self</span>.<span class="ident">spawner</span>.<span class="ident">spawn_bg</span>(<span class="ident">Box::pin</span>(<span class="ident">bg</span>));
         <span class="comment">//spawn_bg(&amp;self.spawner, bg);</span>
-        <span class="ident">Poll</span>::<span class="ident">Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">connection</span>))
+        <span class="ident">Poll::Ready</span>(<span class="prelude-val">Ok</span>(<span class="ident">connection</span>))
     }
 }
 
@@ -878,7 +878,7 @@
 <span class="kw">impl</span> <span class="ident">DnsHandle</span> <span class="kw">for</span> <span class="ident">GenericConnection</span> {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ConnectionResponse</span>;
 
-    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Response</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">send</span>(<span class="ident">request</span>)
     }
 }
@@ -899,25 +899,25 @@
 <span class="kw">impl</span> <span class="ident">DnsHandle</span> <span class="kw">for</span> <span class="ident">ConnectionConnected</span> {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">ConnectionResponse</span>;
 
-    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Unpin</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Response</span> {
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">ConnectionConnected</span>::<span class="ident">Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ConnectionResponseInner</span>::<span class="ident">Udp</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">ConnectionConnected::Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ConnectionResponseInner::Udp</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
             }
-            <span class="ident">ConnectionConnected</span>::<span class="ident">Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ConnectionResponseInner</span>::<span class="ident">Tcp</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">ConnectionConnected::Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ConnectionResponseInner::Tcp</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
-            <span class="ident">ConnectionConnected</span>::<span class="ident">Tls</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ConnectionResponseInner</span>::<span class="ident">Tls</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">ConnectionConnected::Tls</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">conn</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ConnectionResponseInner::Tls</span>(<span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request</span>))
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-https&quot;</span>)]</span>
-            <span class="ident">ConnectionConnected</span>::<span class="ident">Https</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">https</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ConnectionResponseInner</span>::<span class="ident">Https</span>(<span class="ident">https</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">ConnectionConnected::Https</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">https</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ConnectionResponseInner::Https</span>(<span class="ident">https</span>.<span class="ident">send</span>(<span class="ident">request</span>))
             }
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-            <span class="ident">ConnectionConnected</span>::<span class="ident">Mdns</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">mdns</span>) <span class="op">=</span><span class="op">&gt;</span> {
-                <span class="ident">ConnectionResponseInner</span>::<span class="ident">Mdns</span>(<span class="ident">mdns</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">ConnectionConnected::Mdns</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">mdns</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ConnectionResponseInner::Mdns</span>(<span class="ident">mdns</span>.<span class="ident">send</span>(<span class="ident">request</span>))
             }
         };
 
@@ -939,12 +939,12 @@
 }
 
 <span class="kw">impl</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ConnectionResponseInner</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">proto</span>::<span class="ident">error</span>::<span class="ident">ProtoError</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">proto::error::ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
-        <span class="kw">use</span> <span class="self">self</span>::<span class="ident">ConnectionResponseInner</span>::<span class="kw-2">*</span>;
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
+        <span class="kw">use</span> <span class="self">self</span><span class="ident">::ConnectionResponseInner</span>::<span class="kw-2">*</span>;
 
-        <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;polling response inner&quot;</span>);
+        <span class="macro">trace!</span>(<span class="string">&quot;polling response inner&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="ident">Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">resp</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>),
             <span class="ident">Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">resp</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">resp</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>),
@@ -963,9 +963,9 @@
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConnectionResponse</span>(<span class="ident">ConnectionResponseInner</span>);
 
 <span class="kw">impl</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ConnectionResponse</span> {
-    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">proto</span>::<span class="ident">error</span>::<span class="ident">ProtoError</span><span class="op">&gt;</span>;
+    <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">proto::error::ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>)
     }
 }
@@ -974,35 +974,35 @@
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;futures do nothing unless polled&quot;</span>]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ConnectionBackground</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>(<span class="ident">ConnectionBackgroundInner</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>)
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>;
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>;
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ConnectionBackground</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="number">0</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>)
     }
 }
 
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">large_enum_variant</span>)]</span>
-<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">type_complexity</span>)]</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::large_enum_variant</span>)]</span>
+<span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::type_complexity</span>)]</span>
 <span class="attribute">#[<span class="ident">must_use</span> <span class="op">=</span> <span class="string">&quot;futures do nothing unless polled&quot;</span>]</span>
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum</span> <span class="ident">ConnectionBackgroundInner</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
-    <span class="ident">Udp</span>(<span class="ident">DnsExchangeBackground</span><span class="op">&lt;</span><span class="ident">UdpClientStream</span><span class="op">&lt;</span><span class="ident">R</span>::<span class="ident">Udp</span><span class="op">&gt;</span>, <span class="ident">UdpResponse</span>, <span class="ident">R</span>::<span class="ident">Timer</span><span class="op">&gt;</span>),
+    <span class="ident">Udp</span>(<span class="ident">DnsExchangeBackground</span><span class="op">&lt;</span><span class="ident">UdpClientStream</span><span class="op">&lt;</span><span class="ident">R::Udp</span><span class="op">&gt;</span>, <span class="ident">UdpResponse</span>, <span class="ident">R::Timer</span><span class="op">&gt;</span>),
     <span class="ident">Tcp</span>(
         <span class="ident">DnsExchangeBackground</span><span class="op">&lt;</span>
             <span class="ident">DnsMultiplexer</span><span class="op">&lt;</span>
-                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span><span class="op">&gt;</span>,
+                <span class="ident">TcpClientStream</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span><span class="op">&gt;</span>,
                 <span class="ident">NoopMessageFinalizer</span>,
             <span class="op">&gt;</span>,
             <span class="ident">DnsMultiplexerSerialResponse</span>,
-            <span class="ident">R</span>::<span class="ident">Timer</span>,
+            <span class="ident">R::Timer</span>,
         <span class="op">&gt;</span>,
     ),
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-tls&quot;</span>)]</span>
@@ -1030,14 +1030,14 @@
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">RuntimeProvider</span><span class="op">&gt;</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">ConnectionBackgroundInner</span><span class="op">&lt;</span><span class="ident">R</span><span class="op">&gt;</span>
 <span class="kw">where</span>
-    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span>::<span class="ident">Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span>::<span class="ident">Transport</span>: <span class="ident">Unpin</span>,
+    <span class="op">&lt;</span><span class="op">&lt;</span><span class="ident">R</span> <span class="kw">as</span> <span class="ident">RuntimeProvider</span><span class="op">&gt;</span><span class="ident">::Tcp</span> <span class="kw">as</span> <span class="ident">Connect</span><span class="op">&gt;</span><span class="ident">::Transport</span>: <span class="ident">Unpin</span>,
 {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
-        <span class="kw">use</span> <span class="self">self</span>::<span class="ident">ConnectionBackgroundInner</span>::<span class="kw-2">*</span>;
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
+        <span class="kw">use</span> <span class="self">self</span><span class="ident">::ConnectionBackgroundInner</span>::<span class="kw-2">*</span>;
 
-        <span class="macro">trace</span><span class="macro">!</span>(<span class="string">&quot;polling response inner&quot;</span>);
+        <span class="macro">trace!</span>(<span class="string">&quot;polling response inner&quot;</span>);
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="ident">Udp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">bg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">bg</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>),
             <span class="ident">Tcp</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">bg</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">bg</span>.<span class="ident">poll_unpin</span>(<span class="ident">cx</span>),
@@ -1054,9 +1054,9 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">tokio_runtime</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">net</span>::<span class="ident">UdpSocket</span> <span class="kw">as</span> <span class="ident">TokioUdpSocket</span>;
+    <span class="kw">use</span> <span class="ident">tokio::net::UdpSocket</span> <span class="kw">as</span> <span class="ident">TokioUdpSocket</span>;
 
-    <span class="kw">impl</span> <span class="ident">Spawn</span> <span class="kw">for</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>::<span class="ident">Handle</span> {
+    <span class="kw">impl</span> <span class="ident">Spawn</span> <span class="kw">for</span> <span class="ident">tokio::runtime::Handle</span> {
         <span class="kw">fn</span> <span class="ident">spawn_bg</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">future</span>: <span class="ident">F</span>)
         <span class="kw">where</span>
             <span class="ident">F</span>: <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
@@ -1068,7 +1068,7 @@
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Clone</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TokioRuntime</span>;
     <span class="kw">impl</span> <span class="ident">RuntimeProvider</span> <span class="kw">for</span> <span class="ident">TokioRuntime</span> {
-        <span class="kw">type</span> <span class="ident">Handle</span> <span class="op">=</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>::<span class="ident">Handle</span>;
+        <span class="kw">type</span> <span class="ident">Handle</span> <span class="op">=</span> <span class="ident">tokio::runtime::Handle</span>;
         <span class="kw">type</span> <span class="ident">Tcp</span> <span class="op">=</span> <span class="ident">AsyncIo02As03</span><span class="op">&lt;</span><span class="ident">TokioTcpStream</span><span class="op">&gt;</span>;
         <span class="kw">type</span> <span class="ident">Timer</span> <span class="op">=</span> <span class="ident">TokioTime</span>;
         <span class="kw">type</span> <span class="ident">Udp</span> <span class="op">=</span> <span class="ident">TokioUdpSocket</span>;
@@ -1077,5 +1077,5 @@
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">TokioConnectionProvider</span> <span class="op">=</span> <span class="ident">GenericConnectionProvider</span><span class="op">&lt;</span><span class="ident">TokioRuntime</span><span class="op">&gt;</span>;
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_resolver" data-search-js="../../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_resolver" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
     <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>

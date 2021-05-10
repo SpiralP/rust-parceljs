@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-proto-0.19.7/src/rr/domain/name.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>name.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
@@ -1658,20 +1658,20 @@
 
 <span class="doccomment">//! domain name, aka labels, implementation</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Borrow</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">char</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::{<span class="ident">Ordering</span>, <span class="ident">PartialEq</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::{<span class="ident">IpAddr</span>, <span class="ident">Ipv4Addr</span>, <span class="ident">Ipv6Addr</span>};
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Index</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">slice</span>::<span class="ident">Iter</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
+<span class="kw">use</span> <span class="ident">std::borrow::Borrow</span>;
+<span class="kw">use</span> <span class="ident">std::char</span>;
+<span class="kw">use</span> <span class="ident">std::cmp</span>::{<span class="ident">Ordering</span>, <span class="ident">PartialEq</span>};
+<span class="kw">use</span> <span class="ident">std::fmt</span>::{<span class="self">self</span>, <span class="ident">Write</span>};
+<span class="kw">use</span> <span class="ident">std::hash</span>::{<span class="ident">Hash</span>, <span class="ident">Hasher</span>};
+<span class="kw">use</span> <span class="ident">std::net</span>::{<span class="ident">IpAddr</span>, <span class="ident">Ipv4Addr</span>, <span class="ident">Ipv6Addr</span>};
+<span class="kw">use</span> <span class="ident">std::ops::Index</span>;
+<span class="kw">use</span> <span class="ident">std::slice::Iter</span>;
+<span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rr</span>::<span class="ident">domain</span>::<span class="ident">label</span>::{<span class="ident">CaseInsensitive</span>, <span class="ident">CaseSensitive</span>, <span class="ident">IntoLabel</span>, <span class="ident">Label</span>, <span class="ident">LabelCmp</span>};
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rr</span>::<span class="ident">domain</span>::<span class="ident">usage</span>::<span class="ident">LOCALHOST</span> <span class="kw">as</span> <span class="ident">LOCALHOST_usage</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">serialize</span>::<span class="ident">binary</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error</span>::<span class="kw-2">*</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rr::domain::label</span>::{<span class="ident">CaseInsensitive</span>, <span class="ident">CaseSensitive</span>, <span class="ident">IntoLabel</span>, <span class="ident">Label</span>, <span class="ident">LabelCmp</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rr::domain::usage::LOCALHOST</span> <span class="kw">as</span> <span class="ident">LOCALHOST_usage</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::serialize::binary</span>::<span class="kw-2">*</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-config&quot;</span>)]</span>
 <span class="kw">use</span> <span class="ident">serde</span>::{<span class="ident">de</span>, <span class="ident">Deserialize</span>, <span class="ident">Deserializer</span>, <span class="ident">Serialize</span>, <span class="ident">Serializer</span>};
 
@@ -1685,12 +1685,12 @@
 <span class="kw">impl</span> <span class="ident">Name</span> {
     <span class="doccomment">/// Create a new domain::Name, i.e. label</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="ident">Default</span>::<span class="ident">default</span>()
+        <span class="ident">Default::default</span>()
     }
 
     <span class="doccomment">/// Returns the root label, i.e. no labels, can probably make this better in the future.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">root</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">this</span> <span class="op">=</span> <span class="self">Self</span><span class="ident">::new</span>();
         <span class="ident">this</span>.<span class="ident">is_fqdn</span> <span class="op">=</span> <span class="bool-val">true</span>;
         <span class="ident">this</span>
     }
@@ -1799,16 +1799,16 @@
     {
         <span class="kw">let</span> (<span class="ident">labels</span>, <span class="ident">errors</span>): (<span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span>) <span class="op">=</span> <span class="ident">labels</span>
             .<span class="ident">into_iter</span>()
-            .<span class="ident">map</span>(<span class="ident">IntoLabel</span>::<span class="ident">into_label</span>)
-            .<span class="ident">partition</span>(<span class="prelude-ty">Result</span>::<span class="ident">is_ok</span>);
-        <span class="kw">let</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">labels</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="prelude-ty">Result</span>::<span class="ident">unwrap</span>).<span class="ident">collect</span>();
-        <span class="kw">let</span> <span class="ident">errors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">errors</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="prelude-ty">Result</span>::<span class="ident">unwrap_err</span>).<span class="ident">collect</span>();
+            .<span class="ident">map</span>(<span class="ident">IntoLabel::into_label</span>)
+            .<span class="ident">partition</span>(<span class="ident">Result::is_ok</span>);
+        <span class="kw">let</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">labels</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">Result::unwrap</span>).<span class="ident">collect</span>();
+        <span class="kw">let</span> <span class="ident">errors</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">errors</span>.<span class="ident">into_iter</span>().<span class="ident">map</span>(<span class="ident">Result::unwrap_err</span>).<span class="ident">collect</span>();
 
         <span class="kw">if</span> <span class="ident">labels</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">255</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="string">&quot;labels exceed maximum length of 255&quot;</span>.<span class="ident">into</span>());
         };
         <span class="kw">if</span> <span class="op">!</span><span class="ident">errors</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;error converting some labels: {:?}&quot;</span>, <span class="ident">errors</span>).<span class="ident">into</span>());
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;error converting some labels: {:?}&quot;</span>, <span class="ident">errors</span>).<span class="ident">into</span>());
         };
 
         <span class="prelude-val">Ok</span>(<span class="ident">Name</span> {
@@ -1890,7 +1890,7 @@
     <span class="doccomment">/// assert!(example_com.to_lowercase().eq_case(&amp;Name::from_str(&quot;example.com&quot;).unwrap()));</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_lowercase</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">len</span>());
         <span class="kw">for</span> <span class="ident">label</span> <span class="kw">in</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">labels</span> {
             <span class="ident">new_labels</span>.<span class="ident">push</span>(<span class="ident">label</span>.<span class="ident">to_lowercase</span>())
         }
@@ -2071,7 +2071,7 @@
     <span class="doccomment">/// assert_eq!(name[0].to_string(), &quot;example&quot;);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse</span>(<span class="ident">local</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">origin</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="self">Self</span>::<span class="ident">from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">local</span>, <span class="ident">origin</span>)
+        <span class="self">Self</span><span class="ident">::from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">local</span>, <span class="ident">origin</span>)
     }
 
     <span class="doccomment">/// Will convert the string to a name only allowing ascii as valid input</span>
@@ -2102,7 +2102,7 @@
     <span class="doccomment">/// assert_eq!(bytes_name, name);</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_ascii</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="self">Self</span>::<span class="ident">from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncAscii</span><span class="op">&gt;</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)
+        <span class="self">Self</span><span class="ident">::from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncAscii</span><span class="op">&gt;</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)
     }
 
     <span class="comment">// TODO: currently reserved to be private to the crate, due to confusion of IDNA vs. utf8 in https://tools.ietf.org/html/rfc6762#appendix-F</span>
@@ -2126,7 +2126,7 @@
     <span class="doccomment">/// assert!(lower_name.eq_case(&amp;utf8_name));</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_utf8</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="self">Self</span>::<span class="ident">from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)
+        <span class="self">Self</span><span class="ident">::from_encoded_str</span>::<span class="op">&lt;</span><span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">name</span>.<span class="ident">as_ref</span>(), <span class="prelude-val">None</span>)
     }
 
     <span class="doccomment">/// First attempts to decode via `from_utf8`, if that fails IDNA checks, than falls back to</span>
@@ -2149,14 +2149,14 @@
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_str_relaxed</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">str</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">name</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">as_ref</span>();
-        <span class="self">Self</span>::<span class="ident">from_utf8</span>(<span class="ident">name</span>).<span class="ident">or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">Self</span>::<span class="ident">from_ascii</span>(<span class="ident">name</span>))
+        <span class="self">Self</span><span class="ident">::from_utf8</span>(<span class="ident">name</span>).<span class="ident">or_else</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">Self</span><span class="ident">::from_ascii</span>(<span class="ident">name</span>))
     }
 
     <span class="kw">fn</span> <span class="ident">from_encoded_str</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">LabelEnc</span><span class="op">&gt;</span>(<span class="ident">local</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">origin</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="self">Self</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">new</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">label</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">label</span> <span class="op">=</span> <span class="ident">String::new</span>();
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState</span>::<span class="ident">Label</span>;
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState::Label</span>;
 
         <span class="comment">// short circuit root parse</span>
         <span class="kw">if</span> <span class="ident">local</span> <span class="op">=</span><span class="op">=</span> <span class="string">&quot;.&quot;</span> {
@@ -2168,58 +2168,58 @@
         <span class="comment">// evaluate all characters</span>
         <span class="kw">for</span> <span class="ident">ch</span> <span class="kw">in</span> <span class="ident">local</span>.<span class="ident">chars</span>() {
             <span class="kw">match</span> <span class="ident">state</span> {
-                <span class="ident">ParseState</span>::<span class="ident">Label</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">ch</span> {
+                <span class="ident">ParseState::Label</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">ch</span> {
                     <span class="string">&#39;.&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {
-                        <span class="ident">name</span>.<span class="ident">labels</span>.<span class="ident">push</span>(<span class="ident">E</span>::<span class="ident">to_label</span>(<span class="kw-2">&amp;</span><span class="ident">label</span>)<span class="question-mark">?</span>);
+                        <span class="ident">name</span>.<span class="ident">labels</span>.<span class="ident">push</span>(<span class="ident">E::to_label</span>(<span class="kw-2">&amp;</span><span class="ident">label</span>)<span class="question-mark">?</span>);
                         <span class="ident">label</span>.<span class="ident">clear</span>();
                     }
-                    <span class="string">&#39;\\&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState</span>::<span class="ident">Escape1</span>,
+                    <span class="string">&#39;\\&#39;</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState::Escape1</span>,
                     <span class="ident">ch</span> <span class="kw">if</span> <span class="op">!</span><span class="ident">ch</span>.<span class="ident">is_control</span>() <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ident">ch</span>.<span class="ident">is_whitespace</span>() <span class="op">=</span><span class="op">&gt;</span> <span class="ident">label</span>.<span class="ident">push</span>(<span class="ident">ch</span>),
-                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>).<span class="ident">into</span>()),
+                    <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>).<span class="ident">into</span>()),
                 },
-                <span class="ident">ParseState</span>::<span class="ident">Escape1</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ParseState::Escape1</span> <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="ident">ch</span>.<span class="ident">is_numeric</span>() {
                         <span class="ident">state</span> <span class="op">=</span>
-                            <span class="ident">ParseState</span>::<span class="ident">Escape2</span>(<span class="ident">ch</span>.<span class="ident">to_digit</span>(<span class="number">8</span>).<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
-                                <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>))
+                            <span class="ident">ParseState::Escape2</span>(<span class="ident">ch</span>.<span class="ident">to_digit</span>(<span class="number">8</span>).<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> {
+                                <span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>))
                             })<span class="question-mark">?</span>);
                     } <span class="kw">else</span> {
                         <span class="comment">// it&#39;s a single escaped char</span>
                         <span class="ident">label</span>.<span class="ident">push</span>(<span class="ident">ch</span>);
-                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState</span>::<span class="ident">Label</span>;
+                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState::Label</span>;
                     }
                 }
-                <span class="ident">ParseState</span>::<span class="ident">Escape2</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ParseState::Escape2</span>(<span class="ident">i</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="ident">ch</span>.<span class="ident">is_numeric</span>() {
-                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState</span>::<span class="ident">Escape3</span>(
+                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState::Escape3</span>(
                             <span class="ident">i</span>,
                             <span class="ident">ch</span>.<span class="ident">to_digit</span>(<span class="number">8</span>)
-                                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>,
+                                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>,
                         );
                     } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>)));
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>)));
                     }
                 }
-                <span class="ident">ParseState</span>::<span class="ident">Escape3</span>(<span class="ident">i</span>, <span class="ident">ii</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">ParseState::Escape3</span>(<span class="ident">i</span>, <span class="ident">ii</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="kw">if</span> <span class="ident">ch</span>.<span class="ident">is_numeric</span>() {
                         <span class="comment">// octal conversion</span>
                         <span class="kw">let</span> <span class="ident">val</span>: <span class="ident">u32</span> <span class="op">=</span> (<span class="ident">i</span> <span class="op">*</span> <span class="number">8</span> <span class="op">*</span> <span class="number">8</span>)
                             <span class="op">+</span> (<span class="ident">ii</span> <span class="op">*</span> <span class="number">8</span>)
                             <span class="op">+</span> <span class="ident">ch</span>.<span class="ident">to_digit</span>(<span class="number">8</span>)
-                                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>;
-                        <span class="kw">let</span> <span class="ident">new</span>: <span class="ident">char</span> <span class="op">=</span> <span class="ident">char</span>::<span class="ident">from_u32</span>(<span class="ident">val</span>)
-                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>;
+                                .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>;
+                        <span class="kw">let</span> <span class="ident">new</span>: <span class="ident">char</span> <span class="op">=</span> <span class="ident">char::from_u32</span>(<span class="ident">val</span>)
+                            .<span class="ident">ok_or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="ident">ProtoError::from</span>(<span class="macro">format!</span>(<span class="string">&quot;illegal char: {}&quot;</span>, <span class="ident">ch</span>)))<span class="question-mark">?</span>;
                         <span class="ident">label</span>.<span class="ident">push</span>(<span class="ident">new</span>);
-                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState</span>::<span class="ident">Label</span>;
+                        <span class="ident">state</span> <span class="op">=</span> <span class="ident">ParseState::Label</span>;
                     } <span class="kw">else</span> {
-                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>).<span class="ident">into</span>());
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">&quot;unrecognized char: {}&quot;</span>, <span class="ident">ch</span>).<span class="ident">into</span>());
                     }
                 }
             }
         }
 
         <span class="kw">if</span> <span class="op">!</span><span class="ident">label</span>.<span class="ident">is_empty</span>() {
-            <span class="ident">name</span>.<span class="ident">labels</span>.<span class="ident">push</span>(<span class="ident">E</span>::<span class="ident">to_label</span>(<span class="kw-2">&amp;</span><span class="ident">label</span>)<span class="question-mark">?</span>);
+            <span class="ident">name</span>.<span class="ident">labels</span>.<span class="ident">push</span>(<span class="ident">E::to_label</span>(<span class="kw-2">&amp;</span><span class="ident">label</span>)<span class="question-mark">?</span>);
         }
 
         <span class="kw">if</span> <span class="ident">local</span>.<span class="ident">ends_with</span>(<span class="string">&#39;.&#39;</span>) {
@@ -2241,7 +2241,7 @@
         <span class="kw">let</span> <span class="ident">labels</span>: <span class="kw-2">&amp;</span>[<span class="ident">Label</span>] <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">labels</span>;
 
         <span class="comment">// start index of each label</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">labels_written</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">labels</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">labels_written</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">labels</span>.<span class="ident">len</span>());
 
         <span class="kw">if</span> <span class="ident">canonical</span> {
             <span class="kw">for</span> <span class="ident">label</span> <span class="kw">in</span> <span class="ident">labels</span> {
@@ -2252,7 +2252,7 @@
             <span class="comment">//   then we&#39;ll look to see if we can remove them and recapture the capacity in the buffer...</span>
             <span class="kw">for</span> <span class="ident">label</span> <span class="kw">in</span> <span class="ident">labels</span> {
                 <span class="kw">if</span> <span class="ident">label</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">63</span> {
-                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">LabelBytesTooLong</span>(<span class="ident">label</span>.<span class="ident">len</span>()).<span class="ident">into</span>());
+                    <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind::LabelBytesTooLong</span>(<span class="ident">label</span>.<span class="ident">len</span>()).<span class="ident">into</span>());
                 }
 
                 <span class="ident">labels_written</span>.<span class="ident">push</span>(<span class="ident">encoder</span>.<span class="ident">offset</span>());
@@ -2293,7 +2293,7 @@
         <span class="comment">// the entire name needs to be less than 256.</span>
         <span class="kw">let</span> <span class="ident">length</span> <span class="op">=</span> <span class="ident">encoder</span>.<span class="ident">len</span>() <span class="op">-</span> <span class="ident">buf_len</span>;
         <span class="kw">if</span> <span class="ident">length</span> <span class="op">&gt;</span> <span class="number">255</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">DomainNameTooLong</span>(<span class="ident">length</span>).<span class="ident">into</span>());
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind::DomainNameTooLong</span>(<span class="ident">length</span>).<span class="ident">into</span>());
         }
 
         <span class="prelude-val">Ok</span>(())
@@ -2322,7 +2322,7 @@
     <span class="doccomment">/// compares with the other label, ignoring case</span>
     <span class="kw">fn</span> <span class="ident">cmp_with_f</span><span class="op">&lt;</span><span class="ident">F</span>: <span class="ident">LabelCmp</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Ordering</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">is_empty</span>() <span class="op">&amp;&amp;</span> <span class="ident">other</span>.<span class="ident">labels</span>.<span class="ident">is_empty</span>() {
-            <span class="kw">return</span> <span class="ident">Ordering</span>::<span class="ident">Equal</span>;
+            <span class="kw">return</span> <span class="ident">Ordering::Equal</span>;
         }
 
         <span class="comment">// we reverse the iters so that we are comparing from the root/domain to the local...</span>
@@ -2331,7 +2331,7 @@
 
         <span class="kw">for</span> (<span class="ident">l</span>, <span class="ident">r</span>) <span class="kw">in</span> <span class="ident">self_labels</span>.<span class="ident">zip</span>(<span class="ident">other_labels</span>) {
             <span class="kw">match</span> <span class="ident">l</span>.<span class="ident">cmp_with_f</span>::<span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="ident">r</span>) {
-                <span class="ident">Ordering</span>::<span class="ident">Equal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
+                <span class="ident">Ordering::Equal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">continue</span>,
                 <span class="ident">not_eq</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="ident">not_eq</span>,
             }
         }
@@ -2346,7 +2346,7 @@
 
     <span class="doccomment">/// Compares the Names, in a case sensitive manner</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">cmp_with_f</span>::<span class="op">&lt;</span><span class="ident">CaseSensitive</span><span class="op">&gt;</span>(<span class="ident">other</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">Ordering</span>::<span class="ident">Equal</span>
+        <span class="self">self</span>.<span class="ident">cmp_with_f</span>::<span class="op">&lt;</span><span class="ident">CaseSensitive</span><span class="op">&gt;</span>(<span class="ident">other</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">Ordering::Equal</span>
     }
 
     <span class="doccomment">/// Converts this name into an ascii safe string.</span>
@@ -2354,7 +2354,7 @@
     <span class="doccomment">/// If the name is an IDNA name, then the name labels will be returned with the `xn--` prefix.</span>
     <span class="doccomment">///  see `to_utf8` or the `Display` impl for methods which convert labels to utf8.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_ascii</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">with_capacity</span>(<span class="self">self</span>.<span class="ident">len</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::with_capacity</span>(<span class="self">self</span>.<span class="ident">len</span>());
         <span class="self">self</span>.<span class="ident">write_labels</span>::<span class="op">&lt;</span><span class="ident">String</span>, <span class="ident">LabelEncAscii</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">s</span>)
             .<span class="ident">expect</span>(<span class="string">&quot;string conversion of name should not fail&quot;</span>);
         <span class="ident">s</span>
@@ -2366,23 +2366,23 @@
     <span class="doccomment">///  is followed by the final `.`, e.g. as in `www.example.com.`, which represents a fully</span>
     <span class="doccomment">///  qualified Name.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_utf8</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
-        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>)
+        <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="self">self</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">write_labels</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span>, <span class="ident">E</span>: <span class="ident">LabelEnc</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_labels</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span>, <span class="ident">E</span>: <span class="ident">LabelEnc</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">iter</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">iter</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">label</span>) <span class="op">=</span> <span class="ident">iter</span>.<span class="ident">next</span>() {
-            <span class="ident">E</span>::<span class="ident">write_label</span>(<span class="ident">f</span>, <span class="ident">label</span>)<span class="question-mark">?</span>;
+            <span class="ident">E::write_label</span>(<span class="ident">f</span>, <span class="ident">label</span>)<span class="question-mark">?</span>;
         }
 
         <span class="kw">for</span> <span class="ident">label</span> <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;.&quot;</span>)<span class="question-mark">?</span>;
-            <span class="ident">E</span>::<span class="ident">write_label</span>(<span class="ident">f</span>, <span class="ident">label</span>)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;.&quot;</span>)<span class="question-mark">?</span>;
+            <span class="ident">E::write_label</span>(<span class="ident">f</span>, <span class="ident">label</span>)<span class="question-mark">?</span>;
         }
 
         <span class="comment">// if it was the root name</span>
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">is_root</span>() <span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">is_fqdn</span>() {
-            <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;.&quot;</span>)<span class="question-mark">?</span>;
+            <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;.&quot;</span>)<span class="question-mark">?</span>;
         }
         <span class="prelude-val">Ok</span>(())
     }
@@ -2426,7 +2426,7 @@
     <span class="doccomment">/// assert!(!name.is_wildcard());</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_wildcard</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">first</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="ident">Label</span>::<span class="ident">is_wildcard</span>)
+        <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">first</span>().<span class="ident">map_or</span>(<span class="bool-val">false</span>, <span class="ident">Label::is_wildcard</span>)
     }
 
     <span class="doccomment">/// Converts a name to a wildcard, by replacing the first label with `*`</span>
@@ -2445,7 +2445,7 @@
     <span class="doccomment">/// assert_eq!(name, Name::root());</span>
     <span class="doccomment">/// ```</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">into_wildcard</span>(<span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="kw">let</span> <span class="ident">wildcard</span> <span class="op">=</span> <span class="ident">Label</span>::<span class="ident">wildcard</span>();
+        <span class="kw">let</span> <span class="ident">wildcard</span> <span class="op">=</span> <span class="ident">Label::wildcard</span>();
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">first</span>) <span class="op">=</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">first_mut</span>() {
             <span class="kw-2">*</span><span class="ident">first</span> <span class="op">=</span> <span class="ident">wildcard</span>;
         }
@@ -2456,16 +2456,16 @@
 
 <span class="kw">trait</span> <span class="ident">LabelEnc</span> {
     <span class="kw">fn</span> <span class="ident">to_label</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>;
-    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span>;
 }
 
 <span class="kw">struct</span> <span class="ident">LabelEncAscii</span>;
 <span class="kw">impl</span> <span class="ident">LabelEnc</span> <span class="kw">for</span> <span class="ident">LabelEncAscii</span> {
     <span class="kw">fn</span> <span class="ident">to_label</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> {
-        <span class="ident">Label</span>::<span class="ident">from_ascii</span>(<span class="ident">name</span>)
+        <span class="ident">Label::from_ascii</span>(<span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
         <span class="ident">label</span>.<span class="ident">write_ascii</span>(<span class="ident">f</span>)
     }
 }
@@ -2473,11 +2473,11 @@
 <span class="kw">struct</span> <span class="ident">LabelEncUtf8</span>;
 <span class="kw">impl</span> <span class="ident">LabelEnc</span> <span class="kw">for</span> <span class="ident">LabelEncUtf8</span> {
     <span class="kw">fn</span> <span class="ident">to_label</span>(<span class="ident">name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> {
-        <span class="ident">Label</span>::<span class="ident">from_utf8</span>(<span class="ident">name</span>)
+        <span class="ident">Label::from_utf8</span>(<span class="ident">name</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
-        <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">label</span>)
+    <span class="kw">fn</span> <span class="ident">write_label</span><span class="op">&lt;</span><span class="ident">W</span>: <span class="ident">Write</span><span class="op">&gt;</span>(<span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">W</span>, <span class="ident">label</span>: <span class="kw-2">&amp;</span><span class="ident">Label</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">fmt::Error</span><span class="op">&gt;</span> {
+        <span class="macro">write!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="ident">label</span>)
     }
 }
 
@@ -2487,15 +2487,15 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">LabelIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>];
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">next</span>().<span class="ident">map</span>(<span class="ident">Borrow</span>::<span class="ident">borrow</span>)
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Item</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">next</span>().<span class="ident">map</span>(<span class="ident">Borrow::borrow</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ExactSizeIterator</span> <span class="kw">for</span> <span class="ident">LabelIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {}
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">DoubleEndedIterator</span> <span class="kw">for</span> <span class="ident">LabelIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">next_back</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">next_back</span>().<span class="ident">map</span>(<span class="ident">Borrow</span>::<span class="ident">borrow</span>)
+    <span class="kw">fn</span> <span class="ident">next_back</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Item</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="number">0</span>.<span class="ident">next_back</span>().<span class="ident">map</span>(<span class="ident">Borrow::borrow</span>)
     }
 }
 
@@ -2503,7 +2503,7 @@
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>];
     <span class="kw">type</span> <span class="ident">IntoIter</span> <span class="op">=</span> <span class="ident">LabelIter</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">IntoIter</span> {
+    <span class="kw">fn</span> <span class="ident">into_iter</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::IntoIter</span> {
         <span class="self">self</span>.<span class="ident">iter</span>()
     }
 }
@@ -2511,8 +2511,8 @@
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">IpAddr</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">addr</span>: <span class="ident">IpAddr</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Name</span> {
         <span class="kw">match</span> <span class="ident">addr</span> {
-            <span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">ip</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ip</span>.<span class="ident">into</span>(),
-            <span class="ident">IpAddr</span>::<span class="ident">V6</span>(<span class="ident">ip</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ip</span>.<span class="ident">into</span>(),
+            <span class="ident">IpAddr::V4</span>(<span class="ident">ip</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ip</span>.<span class="ident">into</span>(),
+            <span class="ident">IpAddr::V6</span>(<span class="ident">ip</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ip</span>.<span class="ident">into</span>(),
         }
     }
 }
@@ -2525,8 +2525,8 @@
             <span class="ident">octets</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">rev</span>()
-                .<span class="ident">fold</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>::<span class="ident">with_capacity</span>(<span class="number">6</span>), <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">labels</span>, <span class="ident">o</span><span class="op">|</span> {
-                    <span class="kw">let</span> <span class="ident">label</span>: <span class="ident">Label</span> <span class="op">=</span> <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">o</span>)
+                .<span class="ident">fold</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span><span class="ident">::with_capacity</span>(<span class="number">6</span>), <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">labels</span>, <span class="ident">o</span><span class="op">|</span> {
+                    <span class="kw">let</span> <span class="ident">label</span>: <span class="ident">Label</span> <span class="op">=</span> <span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">o</span>)
                         .<span class="ident">as_bytes</span>()
                         .<span class="ident">into_label</span>()
                         .<span class="ident">expect</span>(<span class="string">&quot;IP octet to label should never fail&quot;</span>);
@@ -2541,7 +2541,7 @@
         );
         <span class="ident">labels</span>.<span class="ident">push</span>(<span class="string">b&quot;arpa&quot;</span>.<span class="ident">into_label</span>().<span class="ident">expect</span>(<span class="string">&quot;simple name should never fail&quot;</span>));
 
-        <span class="self">Self</span>::<span class="ident">from_labels</span>(<span class="ident">labels</span>).<span class="ident">expect</span>(<span class="string">&quot;a translation of Ipv4Addr should never fail&quot;</span>)
+        <span class="self">Self</span><span class="ident">::from_labels</span>(<span class="ident">labels</span>).<span class="ident">expect</span>(<span class="string">&quot;a translation of Ipv4Addr should never fail&quot;</span>)
     }
 }
 
@@ -2553,27 +2553,27 @@
             <span class="ident">segments</span>
                 .<span class="ident">iter</span>()
                 .<span class="ident">rev</span>()
-                .<span class="ident">fold</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span>::<span class="ident">with_capacity</span>(<span class="number">34</span>), <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">labels</span>, <span class="ident">o</span><span class="op">|</span> {
+                .<span class="ident">fold</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span><span class="ident">::with_capacity</span>(<span class="number">34</span>), <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">labels</span>, <span class="ident">o</span><span class="op">|</span> {
                     <span class="ident">labels</span>.<span class="ident">push</span>(
-                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
+                        <span class="macro">format!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
                             .<span class="ident">as_bytes</span>()
                             .<span class="ident">into_label</span>()
                             .<span class="ident">expect</span>(<span class="string">&quot;IP octet to label should never fail&quot;</span>),
                     );
                     <span class="ident">labels</span>.<span class="ident">push</span>(
-                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
+                        <span class="macro">format!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
                             .<span class="ident">as_bytes</span>()
                             .<span class="ident">into_label</span>()
                             .<span class="ident">expect</span>(<span class="string">&quot;IP octet to label should never fail&quot;</span>),
                     );
                     <span class="ident">labels</span>.<span class="ident">push</span>(
-                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
+                        <span class="macro">format!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">8</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
                             .<span class="ident">as_bytes</span>()
                             .<span class="ident">into_label</span>()
                             .<span class="ident">expect</span>(<span class="string">&quot;IP octet to label should never fail&quot;</span>),
                     );
                     <span class="ident">labels</span>.<span class="ident">push</span>(
-                        <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">12</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
+                        <span class="macro">format!</span>(<span class="string">&quot;{:x}&quot;</span>, (<span class="kw-2">*</span><span class="ident">o</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">12</span> <span class="op">&amp;</span> <span class="number">0x000F</span>) <span class="kw">as</span> <span class="ident">u8</span>)
                             .<span class="ident">as_bytes</span>()
                             .<span class="ident">into_label</span>()
                             .<span class="ident">expect</span>(<span class="string">&quot;IP octet to label should never fail&quot;</span>),
@@ -2584,13 +2584,13 @@
         <span class="ident">labels</span>.<span class="ident">push</span>(<span class="string">b&quot;ip6&quot;</span>.<span class="ident">into_label</span>().<span class="ident">expect</span>(<span class="string">&quot;simple name should never fail&quot;</span>));
         <span class="ident">labels</span>.<span class="ident">push</span>(<span class="string">b&quot;arpa&quot;</span>.<span class="ident">into_label</span>().<span class="ident">expect</span>(<span class="string">&quot;simple name should never fail&quot;</span>));
 
-        <span class="self">Self</span>::<span class="ident">from_labels</span>(<span class="ident">labels</span>).<span class="ident">expect</span>(<span class="string">&quot;a translation of Ipv6Addr should never fail&quot;</span>)
+        <span class="self">Self</span><span class="ident">::from_labels</span>(<span class="ident">labels</span>).<span class="ident">expect</span>(<span class="string">&quot;a translation of Ipv6Addr should never fail&quot;</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">PartialEq</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
     <span class="kw">fn</span> <span class="ident">eq</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">other</span>: <span class="kw-2">&amp;</span><span class="self">Self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">cmp_with_f</span>::<span class="op">&lt;</span><span class="ident">CaseInsensitive</span><span class="op">&gt;</span>(<span class="ident">other</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">Ordering</span>::<span class="ident">Equal</span>
+        <span class="self">self</span>.<span class="ident">cmp_with_f</span>::<span class="op">&lt;</span><span class="ident">CaseInsensitive</span><span class="op">&gt;</span>(<span class="ident">other</span>) <span class="op">=</span><span class="op">=</span> <span class="ident">Ordering::Equal</span>
     }
 }
 
@@ -2599,7 +2599,7 @@
         <span class="self">self</span>.<span class="ident">is_fqdn</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
 
         <span class="comment">// this needs to be CaseInsensitive like PartialEq</span>
-        <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">Label</span>::<span class="ident">to_lowercase</span>) {
+        <span class="kw">for</span> <span class="ident">l</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">labels</span>.<span class="ident">iter</span>().<span class="ident">map</span>(<span class="ident">Label::to_lowercase</span>) {
             <span class="ident">l</span>.<span class="ident">hash</span>(<span class="ident">state</span>);
         }
     }
@@ -2630,8 +2630,8 @@
 }
 
 <span class="kw">fn</span> <span class="ident">read_inner</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span><span class="op">&gt;</span>(<span class="ident">decoder</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">BinDecoder</span><span class="op">&lt;</span><span class="lifetime">&#39;r</span><span class="op">&gt;</span>, <span class="ident">max_idx</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span>: <span class="ident">LabelParseState</span> <span class="op">=</span> <span class="ident">LabelParseState</span>::<span class="ident">LabelLengthOrPointer</span>;
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">3</span>); <span class="comment">// most labels will be around three, e.g. www.example.com</span>
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">state</span>: <span class="ident">LabelParseState</span> <span class="op">=</span> <span class="ident">LabelParseState::LabelLengthOrPointer</span>;
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">labels</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Label</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">3</span>); <span class="comment">// most labels will be around three, e.g. www.example.com</span>
     <span class="kw">let</span> <span class="ident">name_start</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">index</span>();
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">run_len</span> <span class="op">=</span> <span class="number">0_usize</span>;
 
@@ -2644,7 +2644,7 @@
         <span class="comment">// this protects against overlapping labels</span>
         <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">max_idx</span>) <span class="op">=</span> <span class="ident">max_idx</span> {
             <span class="kw">if</span> <span class="ident">decoder</span>.<span class="ident">index</span>() <span class="op">&gt;</span><span class="op">=</span> <span class="ident">max_idx</span> {
-                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">LabelOverlapsWithOther</span> {
+                <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind::LabelOverlapsWithOther</span> {
                     <span class="ident">label</span>: <span class="ident">name_start</span>,
                     <span class="ident">other</span>: <span class="ident">max_idx</span>,
                 }
@@ -2655,34 +2655,34 @@
         <span class="comment">// enforce max length of name</span>
         <span class="kw">let</span> <span class="ident">cur_len</span> <span class="op">=</span> <span class="ident">run_len</span> <span class="op">+</span> <span class="ident">labels</span>.<span class="ident">len</span>();
         <span class="kw">if</span> <span class="ident">cur_len</span> <span class="op">&gt;</span> <span class="number">255</span> {
-            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">DomainNameTooLong</span>(<span class="ident">cur_len</span>).<span class="ident">into</span>());
+            <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind::DomainNameTooLong</span>(<span class="ident">cur_len</span>).<span class="ident">into</span>());
         }
 
         <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">state</span> {
-            <span class="ident">LabelParseState</span>::<span class="ident">LabelLengthOrPointer</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">LabelParseState::LabelLengthOrPointer</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="comment">// determine what the next label is</span>
                 <span class="kw">match</span> <span class="ident">decoder</span>
                     .<span class="ident">peek</span>()
-                    .<span class="ident">map</span>(<span class="ident">Restrict</span>::<span class="ident">unverified</span> <span class="comment">/*verified in this usage*/</span>)
+                    .<span class="ident">map</span>(<span class="ident">Restrict::unverified</span> <span class="comment">/*verified in this usage*/</span>)
                 {
-                    <span class="prelude-val">Some</span>(<span class="number">0</span>) <span class="op">|</span> <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState</span>::<span class="ident">Root</span>,
-                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState</span>::<span class="ident">Pointer</span>,
-                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0000</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState</span>::<span class="ident">Label</span>,
-                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">UnrecognizedLabelCode</span>(<span class="ident">byte</span>).<span class="ident">into</span>()),
+                    <span class="prelude-val">Some</span>(<span class="number">0</span>) <span class="op">|</span> <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState::Root</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState::Pointer</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="kw">if</span> <span class="ident">byte</span> <span class="op">&amp;</span> <span class="number">0b1100_0000</span> <span class="op">=</span><span class="op">=</span> <span class="number">0b0000_0000</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">LabelParseState::Label</span>,
+                    <span class="prelude-val">Some</span>(<span class="ident">byte</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ProtoErrorKind::UnrecognizedLabelCode</span>(<span class="ident">byte</span>).<span class="ident">into</span>()),
                 }
             }
             <span class="comment">// labels must have a maximum length of 63</span>
-            <span class="ident">LabelParseState</span>::<span class="ident">Label</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">LabelParseState::Label</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">label</span> <span class="op">=</span> <span class="ident">decoder</span>
                     .<span class="ident">read_character_data_max</span>(<span class="prelude-val">Some</span>(<span class="number">63</span>))<span class="question-mark">?</span>
                     .<span class="ident">verify_unwrap</span>(<span class="op">|</span><span class="ident">l</span><span class="op">|</span> <span class="ident">l</span>.<span class="ident">len</span>() <span class="op">&lt;</span><span class="op">=</span> <span class="number">63</span>)
-                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="string">&quot;label exceeds maximum length of 63&quot;</span>))<span class="question-mark">?</span>;
+                    .<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">ProtoError::from</span>(<span class="string">&quot;label exceeds maximum length of 63&quot;</span>))<span class="question-mark">?</span>;
 
                 <span class="ident">run_len</span> <span class="op">+</span><span class="op">=</span> <span class="ident">label</span>.<span class="ident">len</span>();
                 <span class="ident">labels</span>.<span class="ident">push</span>(<span class="ident">label</span>.<span class="ident">into_label</span>()<span class="question-mark">?</span>);
 
                 <span class="comment">// reset to collect more data</span>
-                <span class="ident">LabelParseState</span>::<span class="ident">LabelLengthOrPointer</span>
+                <span class="ident">LabelParseState::LabelLengthOrPointer</span>
             }
             <span class="comment">//         4.1.4. Message compression</span>
             <span class="comment">//</span>
@@ -2705,7 +2705,7 @@
             <span class="comment">// the start of the message (i.e., the first octet of the ID field in the</span>
             <span class="comment">// domain header).  A zero offset specifies the first byte of the ID field,</span>
             <span class="comment">// etc.</span>
-            <span class="ident">LabelParseState</span>::<span class="ident">Pointer</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">LabelParseState::Pointer</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="kw">let</span> <span class="ident">pointer_location</span> <span class="op">=</span> <span class="ident">decoder</span>.<span class="ident">index</span>();
                 <span class="kw">let</span> <span class="ident">location</span> <span class="op">=</span> <span class="ident">decoder</span>
                     .<span class="ident">read_u16</span>()<span class="question-mark">?</span>
@@ -2718,7 +2718,7 @@
                         (<span class="kw-2">*</span><span class="ident">ptr</span> <span class="kw">as</span> <span class="ident">usize</span>) <span class="op">&lt;</span> <span class="ident">name_start</span>
                     })
                     .<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">e</span><span class="op">|</span> {
-                        <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="ident">ProtoErrorKind</span>::<span class="ident">PointerNotPriorToLabel</span> {
+                        <span class="ident">ProtoError::from</span>(<span class="ident">ProtoErrorKind::PointerNotPriorToLabel</span> {
                             <span class="ident">idx</span>: <span class="ident">pointer_location</span>,
                             <span class="ident">ptr</span>: <span class="ident">e</span>,
                         })
@@ -2737,7 +2737,7 @@
                 <span class="comment">// Pointers always finish the name, break like Root.</span>
                 <span class="kw">break</span>;
             }
-            <span class="ident">LabelParseState</span>::<span class="ident">Root</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">LabelParseState::Root</span> <span class="op">=</span><span class="op">&gt;</span> {
                 <span class="comment">// need to pop() the 0 off the stack...</span>
                 <span class="ident">decoder</span>.<span class="ident">pop</span>()<span class="question-mark">?</span>;
                 <span class="kw">break</span>;
@@ -2751,14 +2751,14 @@
         <span class="ident">labels</span>,
     };
 
-    <span class="macro">debug_assert_eq</span><span class="macro">!</span>(<span class="ident">run_len</span>, <span class="ident">name</span>.<span class="ident">len</span>());
+    <span class="macro">debug_assert_eq!</span>(<span class="ident">run_len</span>, <span class="ident">name</span>.<span class="ident">len</span>());
 
     <span class="prelude-val">Ok</span>(<span class="ident">name</span>)
 }
 
-<span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">Name</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
-        <span class="self">self</span>.<span class="ident">write_labels</span>::<span class="op">&lt;</span><span class="ident">fmt</span>::<span class="ident">Formatter</span>, <span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">f</span>)
+<span class="kw">impl</span> <span class="ident">fmt::Display</span> <span class="kw">for</span> <span class="ident">Name</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt::Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt::Result</span> {
+        <span class="self">self</span>.<span class="ident">write_labels</span>::<span class="op">&lt;</span><span class="ident">fmt::Formatter</span>, <span class="ident">LabelEncUtf8</span><span class="op">&gt;</span>(<span class="ident">f</span>)
     }
 }
 
@@ -2829,8 +2829,8 @@
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ProtoError</span>;
 
     <span class="doccomment">/// Uses the Name::from_utf8 conversion on this string, see [`from_ascii`] for ascii only, or for preserving case</span>
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span>::<span class="prelude-val">Err</span><span class="op">&gt;</span> {
-        <span class="ident">Name</span>::<span class="ident">from_str_relaxed</span>(<span class="ident">s</span>)
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="self">Self</span><span class="ident">::Err</span><span class="op">&gt;</span> {
+        <span class="ident">Name::from_str_relaxed</span>(<span class="ident">s</span>)
     }
 }
 
@@ -2843,14 +2843,14 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">IntoName</span> <span class="kw">for</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="ident">str</span> {
     <span class="doccomment">/// Performs a utf8, IDNA or punycode, translation of the `str` into `Name`</span>
     <span class="kw">fn</span> <span class="ident">into_name</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span> {
-        <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="self">self</span>)
+        <span class="ident">Name::from_utf8</span>(<span class="self">self</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">IntoName</span> <span class="kw">for</span> <span class="ident">String</span> {
     <span class="doccomment">/// Performs a utf8, IDNA or punycode, translation of the `String` into `Name`</span>
     <span class="kw">fn</span> <span class="ident">into_name</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ProtoResult</span><span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span> {
-        <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="self">self</span>)
+        <span class="ident">Name::from_utf8</span>(<span class="self">self</span>)
     }
 }
 
@@ -2865,7 +2865,7 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-config&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">Name</span> {
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S::Ok</span>, <span class="ident">S::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">S</span>: <span class="ident">Serializer</span>,
     {
@@ -2875,57 +2875,57 @@
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde-config&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">Name</span> {
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Name</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Name</span>, <span class="ident">D::Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span>,
     {
-        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String</span>::<span class="ident">deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>;
-        <span class="ident">FromStr</span>::<span class="ident">from_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">map_err</span>(<span class="ident">de</span>::<span class="ident">Error</span>::<span class="ident">custom</span>)
+        <span class="kw">let</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">String::deserialize</span>(<span class="ident">deserializer</span>)<span class="question-mark">?</span>;
+        <span class="ident">FromStr::from_str</span>(<span class="kw-2">&amp;</span><span class="ident">s</span>).<span class="ident">map_err</span>(<span class="ident">de::Error::custom</span>)
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
-    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">dbg_macro</span>, <span class="ident">clippy</span>::<span class="ident">print_stdout</span>)]</span>
+    <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">clippy::dbg_macro</span>, <span class="ident">clippy::print_stdout</span>)]</span>
 
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cmp</span>::<span class="ident">Ordering</span>;
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
+    <span class="kw">use</span> <span class="ident">std::cmp::Ordering</span>;
+    <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">serialize</span>::<span class="ident">binary</span>::<span class="ident">bin_tests</span>::{<span class="ident">test_emit_data_set</span>, <span class="ident">test_read_data_set</span>};
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">useless_attribute</span>)]</span>
+    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::serialize::binary::bin_tests</span>::{<span class="ident">test_emit_data_set</span>, <span class="ident">test_read_data_set</span>};
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::useless_attribute</span>)]</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unused</span>)]</span>
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">serialize</span>::<span class="ident">binary</span>::<span class="kw-2">*</span>;
+    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::serialize::binary</span>::<span class="kw-2">*</span>;
 
     <span class="kw">fn</span> <span class="ident">get_data</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>)<span class="op">&gt;</span> {
-        <span class="macro">vec</span><span class="macro">!</span>[
-            (<span class="ident">Name</span>::<span class="ident">new</span>(), <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>]),                           <span class="comment">// base case, only the root</span>
-            (<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a&quot;</span>).<span class="ident">unwrap</span>(), <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">0</span>]), <span class="comment">// a single &#39;a&#39; label</span>
+        <span class="macro">vec!</span>[
+            (<span class="ident">Name::new</span>(), <span class="macro">vec!</span>[<span class="number">0</span>]),                           <span class="comment">// base case, only the root</span>
+            (<span class="ident">Name::from_str</span>(<span class="string">&quot;a&quot;</span>).<span class="ident">unwrap</span>(), <span class="macro">vec!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">0</span>]), <span class="comment">// a single &#39;a&#39; label</span>
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.bc&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">2</span>, <span class="string">b&#39;b&#39;</span>, <span class="string">b&#39;c&#39;</span>, <span class="number">0</span>],
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;a.bc&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="macro">vec!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">2</span>, <span class="string">b&#39;b&#39;</span>, <span class="string">b&#39;c&#39;</span>, <span class="number">0</span>],
             ), <span class="comment">// two labels, &#39;a.bc&#39;</span>
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.♥&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="macro">vec</span><span class="macro">!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">7</span>, <span class="string">b&#39;x&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;-&#39;</span>, <span class="string">b&#39;-&#39;</span>, <span class="string">b&#39;g&#39;</span>, <span class="string">b&#39;6&#39;</span>, <span class="string">b&#39;h&#39;</span>, <span class="number">0</span>],
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;a.♥&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="macro">vec!</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>, <span class="number">7</span>, <span class="string">b&#39;x&#39;</span>, <span class="string">b&#39;n&#39;</span>, <span class="string">b&#39;-&#39;</span>, <span class="string">b&#39;-&#39;</span>, <span class="string">b&#39;g&#39;</span>, <span class="string">b&#39;6&#39;</span>, <span class="string">b&#39;h&#39;</span>, <span class="number">0</span>],
             ), <span class="comment">// two labels utf8, &#39;a.♥&#39;</span>
         ]
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_num_labels</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;*&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">0</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">1</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;*.b&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">1</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.b&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">2</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;*.b.c&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">2</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.b.c&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">3</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;*&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">0</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;a&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;*.b&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">1</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;a.b&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;*.b.c&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">2</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;a.b.c&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">num_labels</span>(), <span class="number">3</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_read</span>() {
-        <span class="ident">test_read_data_set</span>(<span class="ident">get_data</span>(), <span class="op">|</span><span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">d</span><span class="op">|</span> <span class="ident">Name</span>::<span class="ident">read</span>(<span class="ident">d</span>));
+        <span class="ident">test_read_data_set</span>(<span class="ident">get_data</span>(), <span class="op">|</span><span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">d</span><span class="op">|</span> <span class="ident">Name::read</span>(<span class="ident">d</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -2935,77 +2935,77 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_pointer</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">512</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">512</span>);
 
-        <span class="kw">let</span> <span class="ident">first</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;ra.rb.rc&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;rb.rc&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">third</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;rc&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">fourth</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;z.ra.rb.rc&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">first</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;ra.rb.rc&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">second</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;rb.rc&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">third</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;rc&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">fourth</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;z.ra.rb.rc&quot;</span>).<span class="ident">unwrap</span>();
 
         {
-            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">BinEncoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>);
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">e</span> <span class="op">=</span> <span class="ident">BinEncoder::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">bytes</span>);
 
             <span class="ident">first</span>.<span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">10</span>); <span class="comment">// should be 7 u8s...</span>
+            <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">10</span>); <span class="comment">// should be 7 u8s...</span>
 
             <span class="ident">second</span>.<span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>).<span class="ident">unwrap</span>();
             <span class="comment">// if this wrote the entire thing, then it would be +5... but a pointer should be +2</span>
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">12</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">12</span>);
 
             <span class="ident">third</span>.<span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">14</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">14</span>);
 
             <span class="ident">fourth</span>.<span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">e</span>).<span class="ident">unwrap</span>();
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">18</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">e</span>.<span class="ident">len</span>(), <span class="number">18</span>);
         }
 
         <span class="comment">// now read them back</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
-        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">first</span>, <span class="ident">r_test</span>);
+        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">first</span>, <span class="ident">r_test</span>);
 
-        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">second</span>, <span class="ident">r_test</span>);
+        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">second</span>, <span class="ident">r_test</span>);
 
-        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">third</span>, <span class="ident">r_test</span>);
+        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">third</span>, <span class="ident">r_test</span>);
 
-        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">fourth</span>, <span class="ident">r_test</span>);
+        <span class="kw">let</span> <span class="ident">r_test</span> <span class="op">=</span> <span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">fourth</span>, <span class="ident">r_test</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_recursive_pointer</span>() {
         <span class="comment">// points to an invalid beginning label marker</span>
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0xC0</span>, <span class="number">0x01</span>];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0xC0</span>, <span class="number">0x01</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
-
-        <span class="comment">// formerly a stack overflow, recursing back on itself</span>
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0xC0</span>, <span class="number">0x00</span>];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
-
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
 
         <span class="comment">// formerly a stack overflow, recursing back on itself</span>
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0x01</span>, <span class="number">0x41</span>, <span class="number">0xC0</span>, <span class="number">0x00</span>];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0xC0</span>, <span class="number">0x00</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+
+        <span class="comment">// formerly a stack overflow, recursing back on itself</span>
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0x01</span>, <span class="number">0x41</span>, <span class="number">0xC0</span>, <span class="number">0x00</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
 
         <span class="comment">// formerly a stack overflow, recursing by going past the end, then back to the beginning.</span>
         <span class="comment">//   this is disallowed based on the rule that all labels must be &quot;prior&quot; to the current label.</span>
-        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0xC0</span>, <span class="number">0x02</span>, <span class="number">0xC0</span>, <span class="number">0x00</span>];
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="macro">vec!</span>[<span class="number">0xC0</span>, <span class="number">0x02</span>, <span class="number">0xC0</span>, <span class="number">0x00</span>];
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_bin_overlap_enforced</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">512</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">512</span>);
         <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="number">31</span>;
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="number">5</span> {
             <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="op">=</span><span class="ident">n</span> {
@@ -3020,282 +3020,282 @@
         <span class="kw">for</span> <span class="ident">b</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">n</span> {
             <span class="ident">bytes</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>[<span class="number">0xC0</span>, <span class="ident">b</span>]);
         }
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
         <span class="ident">d</span>.<span class="ident">read_slice</span>(<span class="ident">n</span> <span class="kw">as</span> <span class="ident">usize</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_bin_max_octets</span>() {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="number">512</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="number">512</span>);
         <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">256</span> {
             <span class="ident">bytes</span>.<span class="ident">extend_from_slice</span>(<span class="kw-2">&amp;</span>[<span class="number">1</span>, <span class="string">b&#39;a&#39;</span>]);
         }
         <span class="ident">bytes</span>.<span class="ident">push</span>(<span class="number">0</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">d</span> <span class="op">=</span> <span class="ident">BinDecoder::new</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
+        <span class="macro">assert!</span>(<span class="ident">Name::read</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">d</span>).<span class="ident">is_err</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_base_name</span>() {
-        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;example.com.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;example.com.&quot;</span>).<span class="ident">unwrap</span>();
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>(), <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;com&quot;</span>).<span class="ident">unwrap</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">is_root</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">is_root</span>());
+        <span class="macro">assert_eq!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>(), <span class="ident">Name::from_str</span>(<span class="string">&quot;com&quot;</span>).<span class="ident">unwrap</span>());
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">is_root</span>());
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">base_name</span>().<span class="ident">is_root</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_zone_of</span>() {
-        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;example.com&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">www</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">none</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;none.com&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">root</span>();
+        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;example.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">www</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">none</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;none.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="ident">Name::root</span>();
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">www</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">none</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">root</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">root</span>));
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">www</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">none</span>));
+        <span class="macro">assert!</span>(<span class="ident">root</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">root</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_zone_of_case</span>() {
-        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;examplE.cOm&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">www</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">none</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;none.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">zone</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;examplE.cOm&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">www</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">none</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;none.com&quot;</span>).<span class="ident">unwrap</span>();
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">www</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">none</span>))
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">zone</span>));
+        <span class="macro">assert!</span>(<span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">www</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">zone</span>.<span class="ident">zone_of</span>(<span class="kw-2">&amp;</span><span class="ident">none</span>))
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_partial_cmp_eq</span>() {
-        <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>::<span class="ident">new</span>()).<span class="ident">unwrap</span>());
-        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">root</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">Name::from_labels</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="ident">::new</span>()).<span class="ident">unwrap</span>());
+        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[
             (<span class="ident">root</span>.<span class="ident">clone</span>().<span class="ident">unwrap</span>(), <span class="ident">root</span>.<span class="ident">clone</span>().<span class="ident">unwrap</span>()),
             (
-                <span class="ident">Name</span>::<span class="ident">parse</span>(<span class="string">&quot;example.&quot;</span>, <span class="ident">root</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">parse</span>(<span class="string">&quot;example&quot;</span>, <span class="ident">root</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::parse</span>(<span class="string">&quot;example.&quot;</span>, <span class="ident">root</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::parse</span>(<span class="string">&quot;example&quot;</span>, <span class="ident">root</span>.<span class="ident">as_ref</span>()).<span class="ident">unwrap</span>(),
             ),
         ];
 
         <span class="kw">for</span> (<span class="ident">left</span>, <span class="ident">right</span>) <span class="kw">in</span> <span class="ident">comparisons</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">left</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">right</span>), <span class="prelude-val">Some</span>(<span class="ident">Ordering</span>::<span class="ident">Equal</span>));
+            <span class="macro">println!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">left</span>.<span class="ident">partial_cmp</span>(<span class="kw-2">&amp;</span><span class="ident">right</span>), <span class="prelude-val">Some</span>(<span class="ident">Ordering::Equal</span>));
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_partial_cmp</span>() {
-        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;yljkjljk.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;yljkjljk.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;yljkjljk.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;Z.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;yljkjljk.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;Z.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;Z.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;zABC.a.EXAMPLE&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;Z.a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;zABC.a.EXAMPLE&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;zABC.a.EXAMPLE.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;z.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;zABC.a.EXAMPLE.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;z.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;z.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="kw-2">&amp;</span>[<span class="number">1u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;z.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="kw-2">&amp;</span>[<span class="number">1u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="kw-2">&amp;</span>[<span class="number">1u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;*.z.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="kw-2">&amp;</span>[<span class="number">1u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;*.z.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;*.z.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="kw-2">&amp;</span>[<span class="number">200u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_str</span>(<span class="string">&quot;*.z.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="kw-2">&amp;</span>[<span class="number">200u8</span>] <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;z&quot;</span>, <span class="string">b&quot;example&quot;</span>]).<span class="ident">unwrap</span>(),
             ),
         ];
 
         <span class="kw">for</span> (<span class="ident">left</span>, <span class="ident">right</span>) <span class="kw">in</span> <span class="ident">comparisons</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">left</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">right</span>), <span class="ident">Ordering</span>::<span class="ident">Less</span>);
+            <span class="macro">println!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">left</span>.<span class="ident">cmp</span>(<span class="kw-2">&amp;</span><span class="ident">right</span>), <span class="ident">Ordering::Less</span>);
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_cmp_ignore_case</span>() {
-        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec</span><span class="macro">!</span>[
+        <span class="kw">let</span> <span class="ident">comparisons</span>: <span class="ident">Vec</span><span class="op">&lt;</span>(<span class="ident">Name</span>, <span class="ident">Name</span>)<span class="op">&gt;</span> <span class="op">=</span> <span class="macro">vec!</span>[
             (
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;ExAmPle.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;ExAmPle.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
             (
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;A.example.&quot;</span>).<span class="ident">unwrap</span>(),
-                <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;A.example.&quot;</span>).<span class="ident">unwrap</span>(),
+                <span class="ident">Name::from_ascii</span>(<span class="string">&quot;a.example.&quot;</span>).<span class="ident">unwrap</span>(),
             ),
         ];
 
         <span class="kw">for</span> (<span class="ident">left</span>, <span class="ident">right</span>) <span class="kw">in</span> <span class="ident">comparisons</span> {
-            <span class="macro">println</span><span class="macro">!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
-            <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">left</span>, <span class="ident">right</span>);
+            <span class="macro">println!</span>(<span class="string">&quot;left: {}, right: {}&quot;</span>, <span class="ident">left</span>, <span class="ident">right</span>);
+            <span class="macro">assert_eq!</span>(<span class="ident">left</span>, <span class="ident">right</span>);
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_ipv4</span>() {
-        <span class="kw">let</span> <span class="ident">ip</span> <span class="op">=</span> <span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">26</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">103</span>));
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;103.0.3.26.in-addr.arpa&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">ip</span> <span class="op">=</span> <span class="ident">IpAddr::V4</span>(<span class="ident">Ipv4Addr::new</span>(<span class="number">26</span>, <span class="number">3</span>, <span class="number">0</span>, <span class="number">103</span>));
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;103.0.3.26.in-addr.arpa&quot;</span>).<span class="ident">unwrap</span>();
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span>::<span class="ident">into</span>(<span class="ident">ip</span>), <span class="ident">name</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="ident">::into</span>(<span class="ident">ip</span>), <span class="ident">name</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_ipv6</span>() {
-        <span class="kw">let</span> <span class="ident">ip</span> <span class="op">=</span> <span class="ident">IpAddr</span>::<span class="ident">V6</span>(<span class="ident">Ipv6Addr</span>::<span class="ident">new</span>(<span class="number">0x2001</span>, <span class="number">0xdb8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x1</span>));
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(
+        <span class="kw">let</span> <span class="ident">ip</span> <span class="op">=</span> <span class="ident">IpAddr::V6</span>(<span class="ident">Ipv6Addr::new</span>(<span class="number">0x2001</span>, <span class="number">0xdb8</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0x1</span>));
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(
             <span class="string">&quot;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa&quot;</span>,
         )
         .<span class="ident">unwrap</span>();
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span>::<span class="ident">into</span>(<span class="ident">ip</span>), <span class="ident">name</span>);
+        <span class="macro">assert_eq!</span>(<span class="ident">Into</span>::<span class="op">&lt;</span><span class="ident">Name</span><span class="op">&gt;</span><span class="ident">::into</span>(<span class="ident">ip</span>), <span class="ident">name</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_str</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>(),
-            <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;www&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;com&quot;</span>]).<span class="ident">unwrap</span>()
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>(),
+            <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="string">b&quot;www&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;com&quot;</span>]).<span class="ident">unwrap</span>()
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;.&quot;</span>).<span class="ident">unwrap</span>(),
-            <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span>::<span class="ident">new</span>()).<span class="ident">unwrap</span>()
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_str</span>(<span class="string">&quot;.&quot;</span>).<span class="ident">unwrap</span>(),
+            <span class="ident">Name::from_labels</span>(<span class="ident">Vec</span>::<span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="ident">str</span><span class="op">&gt;</span><span class="ident">::new</span>()).<span class="ident">unwrap</span>()
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_fqdn</span>() {
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">root</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;www&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;com&quot;</span>])
+        <span class="macro">assert!</span>(<span class="ident">Name::root</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="string">b&quot;www&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;com&quot;</span>])
             .<span class="ident">unwrap</span>()
             .<span class="ident">is_fqdn</span>());
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">Name</span>::<span class="ident">new</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Name::new</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Name::from_str</span>(<span class="string">&quot;www.example&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">Name::from_str</span>(<span class="string">&quot;www&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">is_fqdn</span>());
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_to_string</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
             <span class="string">&quot;www.example.com.&quot;</span>
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_string</span>(),
             <span class="string">&quot;www.example.com&quot;</span>
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_ascii</span>() {
-        <span class="kw">let</span> <span class="ident">bytes_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;WWW&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;COM&quot;</span>]).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">ascii_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">lower_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">bytes_name</span> <span class="op">=</span> <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="string">b&quot;WWW&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;COM&quot;</span>]).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">ascii_name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">lower_name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bytes_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">ascii_name</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">lower_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">ascii_name</span>));
+        <span class="macro">assert!</span>(<span class="ident">bytes_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">ascii_name</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">lower_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">ascii_name</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_from_utf8</span>() {
-        <span class="kw">let</span> <span class="ident">bytes_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_labels</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="string">b&quot;WWW&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;COM&quot;</span>]).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">utf8_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">lower_name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">bytes_name</span> <span class="op">=</span> <span class="ident">Name::from_labels</span>(<span class="macro">vec!</span>[<span class="string">b&quot;WWW&quot;</span> <span class="kw">as</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>], <span class="string">b&quot;example&quot;</span>, <span class="string">b&quot;COM&quot;</span>]).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">utf8_name</span> <span class="op">=</span> <span class="ident">Name::from_utf8</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">lower_name</span> <span class="op">=</span> <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="op">!</span><span class="ident">bytes_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">utf8_name</span>));
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">lower_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">utf8_name</span>));
+        <span class="macro">assert!</span>(<span class="op">!</span><span class="ident">bytes_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">utf8_name</span>));
+        <span class="macro">assert!</span>(<span class="ident">lower_name</span>.<span class="ident">eq_case</span>(<span class="kw-2">&amp;</span><span class="ident">utf8_name</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_into_name</span>() {
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
-        <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(), <span class="ident">name</span>);
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
-            <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>)
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="macro">assert_eq!</span>(<span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(), <span class="ident">name</span>);
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
+            <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>)
                 .<span class="ident">unwrap</span>()
                 .<span class="ident">into_name</span>()
                 .<span class="ident">unwrap</span>()
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
             <span class="string">&quot;www.example.com&quot;</span>.<span class="ident">into_name</span>().<span class="ident">unwrap</span>()
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_utf8</span>(<span class="string">&quot;www.example.com&quot;</span>).<span class="ident">unwrap</span>(),
             <span class="string">&quot;www.example.com&quot;</span>.<span class="ident">to_string</span>().<span class="ident">into_name</span>().<span class="ident">unwrap</span>()
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_encoding</span>() {
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_ascii</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_ascii</span>(),
             <span class="string">&quot;WWW.example.COM.&quot;</span>
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_utf8</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_ascii</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_utf8</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_ascii</span>(),
             <span class="string">&quot;www.example.com.&quot;</span>
         );
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
-            <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_utf8</span>(),
+        <span class="macro">assert_eq!</span>(
+            <span class="ident">Name::from_ascii</span>(<span class="string">&quot;WWW.example.COM.&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">to_utf8</span>(),
             <span class="string">&quot;WWW.example.COM.&quot;</span>
         );
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_excessive_encoding_len</span>() {
-        <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">error</span>::<span class="ident">ProtoErrorKind</span>;
+        <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::error::ProtoErrorKind</span>;
 
         <span class="comment">// u16 max value is where issues start being tickled...</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">Vec</span>::<span class="ident">with_capacity</span>(<span class="ident">u16</span>::<span class="ident">max_value</span>() <span class="kw">as</span> <span class="ident">usize</span>);
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">BinEncoder</span>::<span class="ident">new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">buf</span> <span class="op">=</span> <span class="ident">Vec::with_capacity</span>(<span class="ident">u16::max_value</span>() <span class="kw">as</span> <span class="ident">usize</span>);
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">encoder</span> <span class="op">=</span> <span class="ident">BinEncoder::new</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">buf</span>);
 
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">result</span> <span class="op">=</span> <span class="prelude-val">Ok</span>(());
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10000</span> {
-            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;name{}.example.com.&quot;</span>, <span class="ident">i</span>)).<span class="ident">unwrap</span>();
+            <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="macro">format!</span>(<span class="string">&quot;name{}.example.com.&quot;</span>, <span class="ident">i</span>)).<span class="ident">unwrap</span>();
             <span class="ident">result</span> <span class="op">=</span> <span class="ident">name</span>.<span class="ident">emit</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">encoder</span>);
             <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Err</span>(..) <span class="op">=</span> <span class="ident">result</span> {
                 <span class="kw">break</span>;
             }
         }
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
+        <span class="macro">assert!</span>(<span class="ident">result</span>.<span class="ident">is_err</span>());
         <span class="kw">match</span> <span class="kw-2">*</span><span class="ident">result</span>.<span class="ident">unwrap_err</span>().<span class="ident">kind</span>() {
-            <span class="ident">ProtoErrorKind</span>::<span class="ident">MaxBufferSizeExceeded</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(),
+            <span class="ident">ProtoErrorKind::MaxBufferSizeExceeded</span>(<span class="kw">_</span>) <span class="op">=</span><span class="op">&gt;</span> (),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(),
         }
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_underscore</span>() {
-        <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;_begin.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed at beginning&quot;</span>);
-        <span class="ident">Name</span>::<span class="ident">from_str_relaxed</span>(<span class="string">&quot;mid_dle.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed in the middle&quot;</span>);
-        <span class="ident">Name</span>::<span class="ident">from_str_relaxed</span>(<span class="string">&quot;end_.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed at the end&quot;</span>);
+        <span class="ident">Name::from_str</span>(<span class="string">&quot;_begin.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed at beginning&quot;</span>);
+        <span class="ident">Name::from_str_relaxed</span>(<span class="string">&quot;mid_dle.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed in the middle&quot;</span>);
+        <span class="ident">Name::from_str_relaxed</span>(<span class="string">&quot;end_.example.com&quot;</span>).<span class="ident">expect</span>(<span class="string">&quot;failed at the end&quot;</span>);
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="trust_dns_proto" data-search-js="../../../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="trust_dns_proto" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
     <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script></body></html>

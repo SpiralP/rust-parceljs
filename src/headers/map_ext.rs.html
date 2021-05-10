@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/headers-0.3.4/src/map_ext.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>map_ext.rs - source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script id="default-settings"></script><script src="../../storage.js"></script><script src="../../crates.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../headers/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../headers/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1"> 1</span>
 <span id="2"> 2</span>
 <span id="3"> 3</span>
@@ -94,7 +94,7 @@
 <span class="kw">use</span> <span class="ident">http</span>;
 
 <span class="doccomment">/// An extension trait adding &quot;typed&quot; methods to `http::HeaderMap`.</span>
-<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">HeaderMapExt</span>: <span class="self">self</span>::<span class="ident">sealed</span>::<span class="ident">Sealed</span> {
+<span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">HeaderMapExt</span>: <span class="self">self</span><span class="ident">::sealed::Sealed</span> {
     <span class="doccomment">/// Inserts the typed `Header` into this `HeaderMap`.</span>
     <span class="kw">fn</span> <span class="ident">typed_insert</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>)
     <span class="kw">where</span>
@@ -111,14 +111,14 @@
         <span class="ident">H</span>: <span class="ident">Header</span>;
 }
 
-<span class="kw">impl</span> <span class="ident">HeaderMapExt</span> <span class="kw">for</span> <span class="ident">http</span>::<span class="ident">HeaderMap</span> {
+<span class="kw">impl</span> <span class="ident">HeaderMapExt</span> <span class="kw">for</span> <span class="ident">http::HeaderMap</span> {
     <span class="kw">fn</span> <span class="ident">typed_insert</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">header</span>: <span class="ident">H</span>)
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">Header</span>,
     {
-        <span class="kw">let</span> <span class="ident">entry</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">entry</span>(<span class="ident">H</span>::<span class="ident">name</span>());
+        <span class="kw">let</span> <span class="ident">entry</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">entry</span>(<span class="ident">H::name</span>());
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">values</span> <span class="op">=</span> <span class="ident">ToValues</span> {
-            <span class="ident">state</span>: <span class="ident">State</span>::<span class="ident">First</span>(<span class="ident">entry</span>),
+            <span class="ident">state</span>: <span class="ident">State::First</span>(<span class="ident">entry</span>),
         };
         <span class="ident">header</span>.<span class="ident">encode</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">values</span>);
     }
@@ -127,18 +127,18 @@
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">Header</span>,
     {
-        <span class="ident">HeaderMapExt</span>::<span class="ident">typed_try_get</span>(<span class="self">self</span>).<span class="ident">unwrap_or</span>(<span class="prelude-val">None</span>)
+        <span class="ident">HeaderMapExt::typed_try_get</span>(<span class="self">self</span>).<span class="ident">unwrap_or</span>(<span class="prelude-val">None</span>)
     }
 
     <span class="kw">fn</span> <span class="ident">typed_try_get</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">H</span><span class="op">&gt;</span>, <span class="ident">Error</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">H</span>: <span class="ident">Header</span>,
     {
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">values</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_all</span>(<span class="ident">H</span>::<span class="ident">name</span>()).<span class="ident">iter</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">values</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">get_all</span>(<span class="ident">H::name</span>()).<span class="ident">iter</span>();
         <span class="kw">if</span> <span class="ident">values</span>.<span class="ident">size_hint</span>() <span class="op">=</span><span class="op">=</span> (<span class="number">0</span>, <span class="prelude-val">Some</span>(<span class="number">0</span>)) {
             <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)
         } <span class="kw">else</span> {
-            <span class="ident">H</span>::<span class="ident">decode</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">values</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)
+            <span class="ident">H::decode</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">values</span>).<span class="ident">map</span>(<span class="prelude-val">Some</span>)
         }
     }
 }
@@ -149,35 +149,35 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>)]</span>
 <span class="kw">enum</span> <span class="ident">State</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">First</span>(<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">Entry</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">HeaderValue</span><span class="op">&gt;</span>),
-    <span class="ident">Latter</span>(<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">OccupiedEntry</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">HeaderValue</span><span class="op">&gt;</span>),
+    <span class="ident">First</span>(<span class="ident">http::header::Entry</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">HeaderValue</span><span class="op">&gt;</span>),
+    <span class="ident">Latter</span>(<span class="ident">http::header::OccupiedEntry</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="ident">HeaderValue</span><span class="op">&gt;</span>),
     <span class="ident">Tmp</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Extend</span><span class="op">&lt;</span><span class="ident">HeaderValue</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ToValues</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">extend</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">IntoIterator</span><span class="op">&lt;</span><span class="ident">Item</span> <span class="op">=</span> <span class="ident">HeaderValue</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">iter</span>: <span class="ident">T</span>) {
         <span class="kw">for</span> <span class="ident">value</span> <span class="kw">in</span> <span class="ident">iter</span> {
-            <span class="kw">let</span> <span class="ident">entry</span> <span class="op">=</span> <span class="kw">match</span> ::<span class="ident">std</span>::<span class="ident">mem</span>::<span class="ident">replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">state</span>, <span class="ident">State</span>::<span class="ident">Tmp</span>) {
-                <span class="ident">State</span>::<span class="ident">First</span>(<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">Entry</span>::<span class="ident">Occupied</span>(<span class="kw-2">mut</span> <span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="kw">let</span> <span class="ident">entry</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">::std::mem::replace</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">state</span>, <span class="ident">State::Tmp</span>) {
+                <span class="ident">State::First</span>(<span class="ident">http::header::Entry::Occupied</span>(<span class="kw-2">mut</span> <span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">e</span>.<span class="ident">insert</span>(<span class="ident">value</span>);
                     <span class="ident">e</span>
                 }
-                <span class="ident">State</span>::<span class="ident">First</span>(<span class="ident">http</span>::<span class="ident">header</span>::<span class="ident">Entry</span>::<span class="ident">Vacant</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">insert_entry</span>(<span class="ident">value</span>),
-                <span class="ident">State</span>::<span class="ident">Latter</span>(<span class="kw-2">mut</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="ident">State::First</span>(<span class="ident">http::header::Entry::Vacant</span>(<span class="ident">e</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">e</span>.<span class="ident">insert_entry</span>(<span class="ident">value</span>),
+                <span class="ident">State::Latter</span>(<span class="kw-2">mut</span> <span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
                     <span class="ident">e</span>.<span class="ident">append</span>(<span class="ident">value</span>);
                     <span class="ident">e</span>
                 }
-                <span class="ident">State</span>::<span class="ident">Tmp</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(<span class="string">&quot;ToValues State::Tmp&quot;</span>),
+                <span class="ident">State::Tmp</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable!</span>(<span class="string">&quot;ToValues State::Tmp&quot;</span>),
             };
-            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State</span>::<span class="ident">Latter</span>(<span class="ident">entry</span>);
+            <span class="self">self</span>.<span class="ident">state</span> <span class="op">=</span> <span class="ident">State::Latter</span>(<span class="ident">entry</span>);
         }
     }
 }
 
 <span class="kw">mod</span> <span class="ident">sealed</span> {
     <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Sealed</span> {}
-    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> ::<span class="ident">http</span>::<span class="ident">HeaderMap</span> {}
+    <span class="kw">impl</span> <span class="ident">Sealed</span> <span class="kw">for</span> <span class="ident">::http::HeaderMap</span> {}
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="headers" data-search-js="../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../" data-current-crate="headers" data-search-index-js="../../search-index.js" data-search-js="../../search.js"></div>
     <script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script></body></html>

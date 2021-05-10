@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-proto-0.19.7/src/rr/domain/usage.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>usage.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../trust_dns_proto/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../../settings.html"><img src="../../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -578,26 +578,26 @@
 <span class="doccomment">//!</span>
 <span class="doccomment">//! see [Special-Use Domain Names](https://tools.ietf.org/html/rfc6761), RFC 6761 February, 2013</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">ops</span>::<span class="ident">Deref</span>;
+<span class="kw">use</span> <span class="ident">std::ops::Deref</span>;
 
-<span class="kw">use</span> <span class="ident">lazy_static</span>::<span class="ident">lazy_static</span>;
+<span class="kw">use</span> <span class="ident">lazy_static::lazy_static</span>;
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">rr</span>::<span class="ident">domain</span>::<span class="ident">Name</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::rr::domain::Name</span>;
 
-<span class="macro">lazy_static</span><span class="macro">!</span> {
+<span class="macro">lazy_static!</span> {
     <span class="doccomment">/// Default Name usage, everything is normal...</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">DEFAULT</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">default</span>();
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">DEFAULT</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::default</span>();
 }
 
-<span class="macro">lazy_static</span><span class="macro">!</span> {
-    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;arpa.&quot;</span>).<span class="ident">unwrap</span>();
+<span class="macro">lazy_static!</span> {
+    <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;arpa.&quot;</span>).<span class="ident">unwrap</span>();
     <span class="doccomment">/// zone for ipv4 reverse addresses</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;in-addr&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">ARPA</span>);
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;in-addr&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">ARPA</span>);
     <span class="doccomment">/// zone for ipv6 reverse addresses</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;ip6&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">ARPA</span>);
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA</span>: <span class="ident">Name</span> <span class="op">=</span> <span class="ident">Name::from_ascii</span>(<span class="string">&quot;ip6&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">ARPA</span>);
 }
 
-<span class="macro">lazy_static</span><span class="macro">!</span> {
+<span class="macro">lazy_static!</span> {
     <span class="doccomment">/// localhost.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [Special-Use Domain Names](https://tools.ietf.org/html/rfc6761), RFC 6761 February, 2013</span>
@@ -610,16 +610,16 @@
     <span class="doccomment">/// ```</span>
 
     <span class="doccomment">/// localhost. usage</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">LOCALHOST</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">localhost</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;localhost.&quot;</span>).<span class="ident">unwrap</span>());
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">LOCALHOST</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::localhost</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;localhost.&quot;</span>).<span class="ident">unwrap</span>());
 
     <span class="doccomment">/// 127.in-addr.arpa. usage; 127/8 is reserved for loopback</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA_127</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">localhost</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;127&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IN_ADDR_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA_127</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::localhost</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;127&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IN_ADDR_ARPA</span>));
 
     <span class="doccomment">/// 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.ip6.arpa. usage; 1/128 is the only address in ipv6 loopback</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_1</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">localhost</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_1</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::localhost</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
 }
 
-<span class="macro">lazy_static</span><span class="macro">!</span> {
+<span class="macro">lazy_static!</span> {
     <span class="doccomment">/// .local.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [Multicast DNS](https://tools.ietf.org/html/rfc6762), RFC 6762  February 2013</span>
@@ -635,7 +635,7 @@
     <span class="doccomment">/// ```</span>
 
     <span class="doccomment">/// localhost. usage</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">LOCAL</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">local</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;local.&quot;</span>).<span class="ident">unwrap</span>());
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">LOCAL</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::local</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;local.&quot;</span>).<span class="ident">unwrap</span>());
 
     <span class="comment">// RFC 6762                      Multicast DNS                February 2013</span>
 
@@ -653,17 +653,17 @@
     <span class="comment">//  the mDNS IPv4 link-local multicast address 224.0.0.251.</span>
 
     <span class="doccomment">/// 254.169.in-addr.arpa. usage link-local, i.e. mDNS</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA_169_254</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">local</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;254.169&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IN_ADDR_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IN_ADDR_ARPA_169_254</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::local</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;254.169&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IN_ADDR_ARPA</span>));
 
     <span class="doccomment">/// 254.169.in-addr.arpa. usage link-local, i.e. mDNS</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_8</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">local</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;8.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_8</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::local</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;8.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
     <span class="doccomment">/// 254.169.in-addr.arpa. usage link-local, i.e. mDNS</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_9</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">local</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;9.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_9</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::local</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;9.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
     <span class="doccomment">/// 254.169.in-addr.arpa. usage link-local, i.e. mDNS</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_B</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">local</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;b.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">IP6_ARPA_FE_B</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::local</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;b.e.f&quot;</span>).<span class="ident">unwrap</span>().<span class="ident">append_domain</span>(<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="ident">IP6_ARPA</span>));
 }
 
-<span class="macro">lazy_static</span><span class="macro">!</span> {
+<span class="macro">lazy_static!</span> {
     <span class="doccomment">/// invalid.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [Special-Use Domain Names](https://tools.ietf.org/html/rfc6761), RFC 6761 February, 2013</span>
@@ -678,7 +678,7 @@
     <span class="doccomment">/// ```</span>
 
     <span class="doccomment">/// invalid. name usage</span>
-    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">INVALID</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage</span>::<span class="ident">invalid</span>(<span class="ident">Name</span>::<span class="ident">from_ascii</span>(<span class="string">&quot;invalid.&quot;</span>).<span class="ident">unwrap</span>());
+    <span class="kw">pub</span> <span class="kw">static</span> <span class="kw-2">ref</span> <span class="ident">INVALID</span>: <span class="ident">ZoneUsage</span> <span class="op">=</span> <span class="ident">ZoneUsage::invalid</span>(<span class="ident">Name::from_ascii</span>(<span class="string">&quot;invalid.&quot;</span>).<span class="ident">unwrap</span>());
 }
 
 <span class="doccomment">/// Users:</span>
@@ -963,7 +963,7 @@
 
 <span class="kw">impl</span> <span class="ident">ZoneUsage</span> {
     <span class="doccomment">/// Constructs a new ZoneUsage with the associated values</span>
-    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">too_many_arguments</span>)]</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy::too_many_arguments</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
         <span class="ident">name</span>: <span class="ident">Name</span>,
         <span class="ident">user</span>: <span class="ident">UserUsage</span>,
@@ -988,99 +988,99 @@
 
     <span class="doccomment">/// Constructs a new Default, with all no restrictions</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
-            <span class="ident">Name</span>::<span class="ident">root</span>(),
-            <span class="ident">UserUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Normal</span>,
+        <span class="self">Self</span><span class="ident">::new</span>(
+            <span class="ident">Name::root</span>(),
+            <span class="ident">UserUsage::Normal</span>,
+            <span class="ident">AppUsage::Normal</span>,
+            <span class="ident">ResolverUsage::Normal</span>,
+            <span class="ident">CacheUsage::Normal</span>,
+            <span class="ident">AuthUsage::Normal</span>,
+            <span class="ident">OpUsage::Normal</span>,
+            <span class="ident">RegistryUsage::Normal</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for reverse zones</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">reverse</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">NonRecursive</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Local</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::Normal</span>,
+            <span class="ident">AppUsage::Normal</span>,
+            <span class="ident">ResolverUsage::Normal</span>,
+            <span class="ident">CacheUsage::NonRecursive</span>,
+            <span class="ident">AuthUsage::Local</span>,
+            <span class="ident">OpUsage::Normal</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for the .test. zone</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">test</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">NonRecursive</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Local</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::Normal</span>,
+            <span class="ident">AppUsage::Normal</span>,
+            <span class="ident">ResolverUsage::Normal</span>,
+            <span class="ident">CacheUsage::NonRecursive</span>,
+            <span class="ident">AuthUsage::Local</span>,
+            <span class="ident">OpUsage::Normal</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for the .localhost. zone</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">localhost</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Loopback</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::Loopback</span>,
+            <span class="ident">AppUsage::Loopback</span>,
+            <span class="ident">ResolverUsage::Loopback</span>,
+            <span class="ident">CacheUsage::Loopback</span>,
+            <span class="ident">AuthUsage::Loopback</span>,
+            <span class="ident">OpUsage::Loopback</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for the .local. zone</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">local</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">LinkLocal</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">LinkLocal</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">LinkLocal</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Local</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::LinkLocal</span>,
+            <span class="ident">AppUsage::LinkLocal</span>,
+            <span class="ident">ResolverUsage::LinkLocal</span>,
+            <span class="ident">CacheUsage::Normal</span>,
+            <span class="ident">AuthUsage::Local</span>,
+            <span class="ident">OpUsage::Normal</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for the .invalid. zone</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">invalid</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">NxDomain</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::NxDomain</span>,
+            <span class="ident">AppUsage::NxDomain</span>,
+            <span class="ident">ResolverUsage::NxDomain</span>,
+            <span class="ident">CacheUsage::NxDomain</span>,
+            <span class="ident">AuthUsage::NxDomain</span>,
+            <span class="ident">OpUsage::NxDomain</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
     <span class="doccomment">/// Restrictions for the .example. zone</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">example</span>(<span class="ident">name</span>: <span class="ident">Name</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">new</span>(
+        <span class="self">Self</span><span class="ident">::new</span>(
             <span class="ident">name</span>,
-            <span class="ident">UserUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AppUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">ResolverUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">CacheUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">AuthUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">OpUsage</span>::<span class="ident">Normal</span>,
-            <span class="ident">RegistryUsage</span>::<span class="ident">Reserved</span>,
+            <span class="ident">UserUsage::Normal</span>,
+            <span class="ident">AppUsage::Normal</span>,
+            <span class="ident">ResolverUsage::Normal</span>,
+            <span class="ident">CacheUsage::Normal</span>,
+            <span class="ident">AuthUsage::Normal</span>,
+            <span class="ident">OpUsage::Normal</span>,
+            <span class="ident">RegistryUsage::Reserved</span>,
         )
     }
 
@@ -1128,10 +1128,10 @@
 <span class="kw">impl</span> <span class="ident">Deref</span> <span class="kw">for</span> <span class="ident">ZoneUsage</span> {
     <span class="kw">type</span> <span class="ident">Target</span> <span class="op">=</span> <span class="ident">Name</span>;
 
-    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span>::<span class="ident">Target</span> {
+    <span class="kw">fn</span> <span class="ident">deref</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="self">Self</span><span class="ident">::Target</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">name</span>
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="trust_dns_proto" data-search-js="../../../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="trust_dns_proto" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
     <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script></body></html>

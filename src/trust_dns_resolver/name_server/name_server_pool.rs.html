@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/trust-dns-resolver-0.19.7/src/name_server/name_server_pool.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>name_server_pool.rs - source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script id="default-settings"></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="icon" type="image/svg+xml" href="../../../favicon.svg">
 <link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png">
-<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_resolver/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
+<link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../trust_dns_resolver/index.html'><div class='logo-container rust-logo'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu"><img src="../../../brush.svg" width="18" height="18" alt="Pick another theme!"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" class="help-button">?</button>
                 <a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" height="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
@@ -536,27 +536,27 @@
 <span class="comment">// http://opensource.org/licenses/MIT&gt;, at your option. This file may not be</span>
 <span class="comment">// copied, modified, or distributed except according to those terms.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">pin</span>::<span class="ident">Pin</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::<span class="ident">Arc</span>;
-<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
+<span class="kw">use</span> <span class="ident">std::pin::Pin</span>;
+<span class="kw">use</span> <span class="ident">std::sync::Arc</span>;
+<span class="kw">use</span> <span class="ident">std::task</span>::{<span class="ident">Context</span>, <span class="ident">Poll</span>};
 
 <span class="kw">use</span> <span class="ident">futures</span>::{<span class="ident">future</span>, <span class="ident">Future</span>, <span class="ident">TryFutureExt</span>};
-<span class="kw">use</span> <span class="ident">smallvec</span>::<span class="ident">SmallVec</span>;
+<span class="kw">use</span> <span class="ident">smallvec::SmallVec</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
-<span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>::<span class="ident">Handle</span>;
+<span class="kw">use</span> <span class="ident">tokio::runtime::Handle</span>;
 
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">error</span>::<span class="ident">ProtoError</span>;
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">op</span>::<span class="ident">ResponseCode</span>;
-<span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">xfer</span>::{<span class="ident">DnsHandle</span>, <span class="ident">DnsRequest</span>, <span class="ident">DnsResponse</span>};
+<span class="kw">use</span> <span class="ident">proto::error::ProtoError</span>;
+<span class="kw">use</span> <span class="ident">proto::op::ResponseCode</span>;
+<span class="kw">use</span> <span class="ident">proto::xfer</span>::{<span class="ident">DnsHandle</span>, <span class="ident">DnsRequest</span>, <span class="ident">DnsResponse</span>};
 
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::{<span class="ident">ResolverConfig</span>, <span class="ident">ResolverOpts</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config</span>::{<span class="ident">ResolverConfig</span>, <span class="ident">ResolverOpts</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">name_server</span>;
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">name_server</span>::{<span class="ident">ConnectionProvider</span>, <span class="ident">NameServer</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::name_server</span>;
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::name_server</span>::{<span class="ident">ConnectionProvider</span>, <span class="ident">NameServer</span>};
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;tokio-runtime&quot;</span>)]</span>
-<span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">name_server</span>::{<span class="ident">TokioConnection</span>, <span class="ident">TokioConnectionProvider</span>};
+<span class="kw">use</span> <span class="kw">crate</span><span class="ident">::name_server</span>::{<span class="ident">TokioConnection</span>, <span class="ident">TokioConnectionProvider</span>};
 
 <span class="doccomment">/// A pool of NameServers</span>
 <span class="doccomment">///</span>
@@ -583,7 +583,7 @@
         <span class="ident">options</span>: <span class="kw-2">&amp;</span><span class="ident">ResolverOpts</span>,
         <span class="ident">runtime</span>: <span class="ident">Handle</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-        <span class="self">Self</span>::<span class="ident">from_config_with_provider</span>(<span class="ident">config</span>, <span class="ident">options</span>, <span class="ident">TokioConnectionProvider</span>::<span class="ident">new</span>(<span class="ident">runtime</span>))
+        <span class="self">Self</span><span class="ident">::from_config_with_provider</span>(<span class="ident">config</span>, <span class="ident">options</span>, <span class="ident">TokioConnectionProvider::new</span>(<span class="ident">runtime</span>))
     }
 }
 
@@ -609,7 +609,7 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>))]</span>
                 <span class="kw">let</span> <span class="ident">ns_config</span> <span class="op">=</span> { <span class="ident">ns_config</span>.<span class="ident">clone</span>() };
 
-                <span class="ident">NameServer</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>::<span class="ident">new_with_provider</span>(<span class="ident">ns_config</span>, <span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>())
+                <span class="ident">NameServer</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span><span class="ident">::new_with_provider</span>(<span class="ident">ns_config</span>, <span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>())
             })
             .<span class="ident">collect</span>();
 
@@ -627,15 +627,15 @@
                 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>))]</span>
                 <span class="kw">let</span> <span class="ident">ns_config</span> <span class="op">=</span> { <span class="ident">ns_config</span>.<span class="ident">clone</span>() };
 
-                <span class="ident">NameServer</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>::<span class="ident">new_with_provider</span>(<span class="ident">ns_config</span>, <span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>())
+                <span class="ident">NameServer</span>::<span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span><span class="ident">::new_with_provider</span>(<span class="ident">ns_config</span>, <span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>())
             })
             .<span class="ident">collect</span>();
 
         <span class="ident">NameServerPool</span> {
-            <span class="ident">datagram_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">datagram_conns</span>),
-            <span class="ident">stream_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">stream_conns</span>),
+            <span class="ident">datagram_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">datagram_conns</span>),
+            <span class="ident">stream_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">stream_conns</span>),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-            <span class="ident">mdns_conns</span>: <span class="ident">name_server</span>::<span class="ident">mdns_nameserver</span>(<span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>()),
+            <span class="ident">mdns_conns</span>: <span class="ident">name_server::mdns_nameserver</span>(<span class="kw-2">*</span><span class="ident">options</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>()),
             <span class="ident">options</span>: <span class="kw-2">*</span><span class="ident">options</span>,
             <span class="ident">conn_provider</span>,
         }
@@ -650,8 +650,8 @@
         <span class="ident">conn_provider</span>: <span class="ident">P</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">NameServerPool</span> {
-            <span class="ident">datagram_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">datagram_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
-            <span class="ident">stream_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">stream_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
+            <span class="ident">datagram_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">datagram_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
+            <span class="ident">stream_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">stream_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
             <span class="ident">options</span>: <span class="kw-2">*</span><span class="ident">options</span>,
             <span class="ident">conn_provider</span>,
         }
@@ -667,8 +667,8 @@
         <span class="ident">conn_provider</span>: <span class="ident">P</span>,
     ) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="ident">NameServerPool</span> {
-            <span class="ident">datagram_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">datagram_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
-            <span class="ident">stream_conns</span>: <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="ident">stream_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
+            <span class="ident">datagram_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">datagram_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
+            <span class="ident">stream_conns</span>: <span class="ident">Arc::new</span>(<span class="ident">stream_conns</span>.<span class="ident">into_iter</span>().<span class="ident">collect</span>()),
             <span class="ident">mdns_conns</span>,
             <span class="ident">options</span>: <span class="kw-2">*</span><span class="ident">options</span>,
             <span class="ident">conn_provider</span>,
@@ -733,23 +733,23 @@
 {
     <span class="kw">type</span> <span class="ident">Response</span> <span class="op">=</span> <span class="ident">Pin</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Response</span> {
+    <span class="kw">fn</span> <span class="ident">send</span><span class="op">&lt;</span><span class="ident">R</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">DnsRequest</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">request</span>: <span class="ident">R</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span><span class="ident">::Response</span> {
         <span class="kw">let</span> <span class="ident">opts</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">options</span>;
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">into</span>();
-        <span class="kw">let</span> <span class="ident">datagram_conns</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">datagram_conns</span>);
-        <span class="kw">let</span> <span class="ident">stream_conns1</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stream_conns</span>);
-        <span class="kw">let</span> <span class="ident">stream_conns2</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stream_conns</span>);
+        <span class="kw">let</span> <span class="ident">datagram_conns</span> <span class="op">=</span> <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">datagram_conns</span>);
+        <span class="kw">let</span> <span class="ident">stream_conns1</span> <span class="op">=</span> <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stream_conns</span>);
+        <span class="kw">let</span> <span class="ident">stream_conns2</span> <span class="op">=</span> <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">stream_conns</span>);
         <span class="comment">// TODO: remove this clone, return the Message in the error?</span>
         <span class="kw">let</span> <span class="ident">tcp_message1</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">clone</span>();
         <span class="kw">let</span> <span class="ident">tcp_message2</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">clone</span>();
 
         <span class="comment">// if it&#39;s a .local. query, then we *only* query mDNS, these should never be sent on to upstream resolvers</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-        <span class="kw">let</span> <span class="ident">mdns</span> <span class="op">=</span> <span class="ident">mdns</span>::<span class="ident">maybe_local</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">mdns_conns</span>, <span class="ident">request</span>);
+        <span class="kw">let</span> <span class="ident">mdns</span> <span class="op">=</span> <span class="ident">mdns::maybe_local</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">mdns_conns</span>, <span class="ident">request</span>);
 
         <span class="comment">// TODO: limited to only when mDNS is enabled, but this should probably always be enforced?</span>
         <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>))]</span>
-        <span class="kw">let</span> <span class="ident">mdns</span> <span class="op">=</span> <span class="ident">Local</span>::<span class="ident">NotMdns</span>(<span class="ident">request</span>);
+        <span class="kw">let</span> <span class="ident">mdns</span> <span class="op">=</span> <span class="ident">Local::NotMdns</span>(<span class="ident">request</span>);
 
         <span class="comment">// local queries are queried through mDNS</span>
         <span class="kw">if</span> <span class="ident">mdns</span>.<span class="ident">is_local</span>() {
@@ -761,23 +761,23 @@
         <span class="comment">// it wasn&#39;t a local query, continue with standard lookup path</span>
         <span class="kw">let</span> <span class="ident">request</span> <span class="op">=</span> <span class="ident">mdns</span>.<span class="ident">take_request</span>();
 
-        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;sending request: {:?}&quot;</span>, <span class="ident">request</span>.<span class="ident">queries</span>());
+        <span class="macro">debug!</span>(<span class="string">&quot;sending request: {:?}&quot;</span>, <span class="ident">request</span>.<span class="ident">queries</span>());
         <span class="comment">// First try the UDP connections</span>
-        <span class="ident">Box</span>::<span class="ident">pin</span>(
-            <span class="self">Self</span>::<span class="ident">try_send</span>(<span class="ident">opts</span>, <span class="ident">datagram_conns</span>, <span class="ident">request</span>)
+        <span class="ident">Box::pin</span>(
+            <span class="self">Self</span><span class="ident">::try_send</span>(<span class="ident">opts</span>, <span class="ident">datagram_conns</span>, <span class="ident">request</span>)
                 .<span class="ident">and_then</span>(<span class="kw">move</span> <span class="op">|</span><span class="ident">response</span><span class="op">|</span> {
                     <span class="comment">// handling promotion from datagram to stream base on truncation in message</span>
-                    <span class="kw">if</span> <span class="ident">ResponseCode</span>::<span class="ident">NoError</span> <span class="op">=</span><span class="op">=</span> <span class="ident">response</span>.<span class="ident">response_code</span>() <span class="op">&amp;&amp;</span> <span class="ident">response</span>.<span class="ident">truncated</span>() {
+                    <span class="kw">if</span> <span class="ident">ResponseCode::NoError</span> <span class="op">=</span><span class="op">=</span> <span class="ident">response</span>.<span class="ident">response_code</span>() <span class="op">&amp;&amp;</span> <span class="ident">response</span>.<span class="ident">truncated</span>() {
                         <span class="comment">// TCP connections should not truncate</span>
-                        <span class="ident">future</span>::<span class="ident">Either</span>::<span class="ident">Left</span>(<span class="self">Self</span>::<span class="ident">try_send</span>(<span class="ident">opts</span>, <span class="ident">stream_conns1</span>, <span class="ident">tcp_message1</span>))
+                        <span class="ident">future::Either::Left</span>(<span class="self">Self</span><span class="ident">::try_send</span>(<span class="ident">opts</span>, <span class="ident">stream_conns1</span>, <span class="ident">tcp_message1</span>))
                     } <span class="kw">else</span> {
-                        <span class="macro">debug</span><span class="macro">!</span>(<span class="string">&quot;mDNS responsed for query: {:?}&quot;</span>, <span class="ident">response</span>.<span class="ident">response_code</span>());
+                        <span class="macro">debug!</span>(<span class="string">&quot;mDNS responsed for query: {:?}&quot;</span>, <span class="ident">response</span>.<span class="ident">response_code</span>());
                         <span class="comment">// Return the result from the UDP connection</span>
-                        <span class="ident">future</span>::<span class="ident">Either</span>::<span class="ident">Right</span>(<span class="ident">future</span>::<span class="ident">ok</span>(<span class="ident">response</span>))
+                        <span class="ident">future::Either::Right</span>(<span class="ident">future::ok</span>(<span class="ident">response</span>))
                     }
                 })
                 <span class="comment">// if UDP fails, try TCP</span>
-                .<span class="ident">or_else</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">Self</span>::<span class="ident">try_send</span>(<span class="ident">opts</span>, <span class="ident">stream_conns2</span>, <span class="ident">tcp_message2</span>)),
+                .<span class="ident">or_else</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="self">Self</span><span class="ident">::try_send</span>(<span class="ident">opts</span>, <span class="ident">stream_conns2</span>, <span class="ident">tcp_message2</span>)),
         )
     }
 }
@@ -793,13 +793,13 @@
     <span class="ident">C</span>: <span class="ident">DnsHandle</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
     <span class="ident">P</span>: <span class="ident">ConnectionProvider</span><span class="op">&lt;</span><span class="ident">Conn</span> <span class="op">=</span> <span class="ident">C</span><span class="op">&gt;</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
 {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">ProtoError</span>::<span class="ident">from</span>(<span class="string">&quot;No connections available&quot;</span>);
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">err</span> <span class="op">=</span> <span class="ident">ProtoError::from</span>(<span class="string">&quot;No connections available&quot;</span>);
 
     <span class="kw">loop</span> {
         <span class="kw">let</span> <span class="ident">request_cont</span> <span class="op">=</span> <span class="ident">request</span>.<span class="ident">clone</span>();
 
         <span class="comment">// construct the parallel requests, 2 is the default</span>
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">par_conns</span> <span class="op">=</span> <span class="ident">SmallVec</span>::<span class="op">&lt;</span>[<span class="ident">NameServer</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>; <span class="number">2</span>]<span class="op">&gt;</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">par_conns</span> <span class="op">=</span> <span class="ident">SmallVec</span>::<span class="op">&lt;</span>[<span class="ident">NameServer</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>; <span class="number">2</span>]<span class="op">&gt;</span><span class="ident">::new</span>();
         <span class="kw">let</span> <span class="ident">count</span> <span class="op">=</span> <span class="ident">conns</span>.<span class="ident">len</span>().<span class="ident">min</span>(<span class="ident">opts</span>.<span class="ident">num_concurrent_reqs</span>.<span class="ident">max</span>(<span class="number">1</span>));
         <span class="kw">for</span> <span class="ident">conn</span> <span class="kw">in</span> <span class="ident">conns</span>.<span class="ident">drain</span>(..<span class="ident">count</span>) {
             <span class="ident">par_conns</span>.<span class="ident">push</span>(<span class="ident">conn</span>);
@@ -814,7 +814,7 @@
                 .<span class="ident">map</span>(<span class="kw">move</span> <span class="op">|</span><span class="kw-2">mut</span> <span class="ident">conn</span><span class="op">|</span> <span class="ident">conn</span>.<span class="ident">send</span>(<span class="ident">request_cont</span>.<span class="ident">clone</span>()))
         };
 
-        <span class="kw">match</span> <span class="ident">future</span>::<span class="ident">select_ok</span>(<span class="ident">requests</span>).<span class="kw">await</span> {
+        <span class="kw">match</span> <span class="ident">future::select_ok</span>(<span class="ident">requests</span>).<span class="kw">await</span> {
             <span class="prelude-val">Ok</span>((<span class="ident">sent</span>, <span class="kw">_</span>)) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Ok</span>(<span class="ident">sent</span>),
             <span class="comment">// consider a debug msg here</span>
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) <span class="op">=</span><span class="op">&gt;</span> {
@@ -829,8 +829,8 @@
 <span class="kw">mod</span> <span class="ident">mdns</span> {
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
-    <span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">rr</span>::<span class="ident">domain</span>::<span class="ident">usage</span>;
-    <span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">DnsHandle</span>;
+    <span class="kw">use</span> <span class="ident">proto::rr::domain::usage</span>;
+    <span class="kw">use</span> <span class="ident">proto::DnsHandle</span>;
 
     <span class="doccomment">/// Returns true</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">maybe_local</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>(<span class="ident">name_server</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">NameServer</span><span class="op">&lt;</span><span class="ident">C</span>, <span class="ident">P</span><span class="op">&gt;</span>, <span class="ident">request</span>: <span class="ident">DnsRequest</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Local</span>
@@ -842,11 +842,11 @@
         <span class="kw">if</span> <span class="ident">request</span>
             .<span class="ident">queries</span>()
             .<span class="ident">iter</span>()
-            .<span class="ident">any</span>(<span class="op">|</span><span class="ident">query</span><span class="op">|</span> <span class="ident">usage</span>::<span class="ident">LOCAL</span>.<span class="ident">name</span>().<span class="ident">zone_of</span>(<span class="ident">query</span>.<span class="ident">name</span>()))
+            .<span class="ident">any</span>(<span class="op">|</span><span class="ident">query</span><span class="op">|</span> <span class="ident">usage::LOCAL</span>.<span class="ident">name</span>().<span class="ident">zone_of</span>(<span class="ident">query</span>.<span class="ident">name</span>()))
         {
-            <span class="ident">Local</span>::<span class="ident">ResolveFuture</span>(<span class="ident">name_server</span>.<span class="ident">send</span>(<span class="ident">request</span>))
+            <span class="ident">Local::ResolveFuture</span>(<span class="ident">name_server</span>.<span class="ident">send</span>(<span class="ident">request</span>))
         } <span class="kw">else</span> {
-            <span class="ident">Local</span>::<span class="ident">NotMdns</span>(<span class="ident">request</span>)
+            <span class="ident">Local::NotMdns</span>(<span class="ident">request</span>)
         }
     }
 }
@@ -859,7 +859,7 @@
 
 <span class="kw">impl</span> <span class="ident">Local</span> {
     <span class="kw">fn</span> <span class="ident">is_local</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Local</span>::<span class="ident">ResolveFuture</span>(..) <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span> {
+        <span class="kw">if</span> <span class="kw">let</span> <span class="ident">Local::ResolveFuture</span>(..) <span class="op">=</span> <span class="kw-2">*</span><span class="self">self</span> {
             <span class="bool-val">true</span>
         } <span class="kw">else</span> {
             <span class="bool-val">false</span>
@@ -873,8 +873,8 @@
     <span class="doccomment">/// Panics if this is in fact a Local::NotMdns</span>
     <span class="kw">fn</span> <span class="ident">take_future</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Pin</span><span class="op">&lt;</span><span class="ident">Box</span><span class="op">&lt;</span><span class="kw">dyn</span> <span class="ident">Future</span><span class="op">&lt;</span><span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">Send</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Local</span>::<span class="ident">ResolveFuture</span>(<span class="ident">future</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">future</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;non Local queries have no future, see take_message()&quot;</span>),
+            <span class="ident">Local::ResolveFuture</span>(<span class="ident">future</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">future</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;non Local queries have no future, see take_message()&quot;</span>),
         }
     }
 
@@ -885,8 +885,8 @@
     <span class="doccomment">/// Panics if this is in fact a Local::ResolveFuture</span>
     <span class="kw">fn</span> <span class="ident">take_request</span>(<span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DnsRequest</span> {
         <span class="kw">match</span> <span class="self">self</span> {
-            <span class="ident">Local</span>::<span class="ident">NotMdns</span>(<span class="ident">request</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">request</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Local queries must be polled, see take_future()&quot;</span>),
+            <span class="ident">Local::NotMdns</span>(<span class="ident">request</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">request</span>,
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Local queries must be polled, see take_future()&quot;</span>),
         }
     }
 }
@@ -894,11 +894,11 @@
 <span class="kw">impl</span> <span class="ident">Future</span> <span class="kw">for</span> <span class="ident">Local</span> {
     <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">DnsResponse</span>, <span class="ident">ProtoError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Output</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">poll</span>(<span class="kw-2">mut</span> <span class="self">self</span>: <span class="ident">Pin</span><span class="op">&lt;</span><span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span><span class="op">&gt;</span>, <span class="ident">cx</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">Context</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Poll</span><span class="op">&lt;</span><span class="self">Self</span><span class="ident">::Output</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">Local</span>::<span class="ident">ResolveFuture</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">ns</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ns</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>),
+            <span class="ident">Local::ResolveFuture</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">ns</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ns</span>.<span class="ident">as_mut</span>().<span class="ident">poll</span>(<span class="ident">cx</span>),
             <span class="comment">// TODO: making this a panic for now</span>
-            <span class="ident">Local</span>::<span class="ident">NotMdns</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;Local queries that are not mDNS should not be polled&quot;</span>), <span class="comment">//Local::NotMdns(message) =&gt; return Err(ResolveErrorKind::Message(&quot;not mDNS&quot;)),</span>
+            <span class="ident">Local::NotMdns</span>(..) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic!</span>(<span class="string">&quot;Local queries that are not mDNS should not be polled&quot;</span>), <span class="comment">//Local::NotMdns(message) =&gt; return Err(ResolveErrorKind::Message(&quot;not mDNS&quot;)),</span>
         }
     }
 }
@@ -908,59 +908,59 @@
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">env_logger</span>;
 
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">net</span>::{<span class="ident">IpAddr</span>, <span class="ident">Ipv4Addr</span>, <span class="ident">Ipv6Addr</span>, <span class="ident">SocketAddr</span>};
-    <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">str</span>::<span class="ident">FromStr</span>;
+    <span class="kw">use</span> <span class="ident">std::net</span>::{<span class="ident">IpAddr</span>, <span class="ident">Ipv4Addr</span>, <span class="ident">Ipv6Addr</span>, <span class="ident">SocketAddr</span>};
+    <span class="kw">use</span> <span class="ident">std::str::FromStr</span>;
 
-    <span class="kw">use</span> <span class="ident">tokio</span>::<span class="ident">runtime</span>::<span class="ident">Runtime</span>;
+    <span class="kw">use</span> <span class="ident">tokio::runtime::Runtime</span>;
 
-    <span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">op</span>::<span class="ident">Query</span>;
-    <span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">rr</span>::{<span class="ident">Name</span>, <span class="ident">RecordType</span>};
-    <span class="kw">use</span> <span class="ident">proto</span>::<span class="ident">xfer</span>::{<span class="ident">DnsHandle</span>, <span class="ident">DnsRequestOptions</span>};
+    <span class="kw">use</span> <span class="ident">proto::op::Query</span>;
+    <span class="kw">use</span> <span class="ident">proto::rr</span>::{<span class="ident">Name</span>, <span class="ident">RecordType</span>};
+    <span class="kw">use</span> <span class="ident">proto::xfer</span>::{<span class="ident">DnsHandle</span>, <span class="ident">DnsRequestOptions</span>};
 
     <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::<span class="ident">NameServerConfig</span>;
-    <span class="kw">use</span> <span class="kw">crate</span>::<span class="ident">config</span>::<span class="ident">Protocol</span>;
+    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::NameServerConfig</span>;
+    <span class="kw">use</span> <span class="kw">crate</span><span class="ident">::config::Protocol</span>;
 
     <span class="attribute">#[<span class="ident">ignore</span>]</span>
     <span class="comment">// because of there is a real connection that needs a reasonable timeout</span>
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_failed_then_success_pool</span>() {
         <span class="kw">let</span> <span class="ident">config1</span> <span class="op">=</span> <span class="ident">NameServerConfig</span> {
-            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr</span>::<span class="ident">new</span>(<span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">252</span>)), <span class="number">253</span>),
-            <span class="ident">protocol</span>: <span class="ident">Protocol</span>::<span class="ident">Udp</span>,
+            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr::new</span>(<span class="ident">IpAddr::V4</span>(<span class="ident">Ipv4Addr::new</span>(<span class="number">127</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">252</span>)), <span class="number">253</span>),
+            <span class="ident">protocol</span>: <span class="ident">Protocol::Udp</span>,
             <span class="ident">tls_dns_name</span>: <span class="prelude-val">None</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
             <span class="ident">tls_config</span>: <span class="prelude-val">None</span>,
         };
 
         <span class="kw">let</span> <span class="ident">config2</span> <span class="op">=</span> <span class="ident">NameServerConfig</span> {
-            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr</span>::<span class="ident">new</span>(<span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>)), <span class="number">53</span>),
-            <span class="ident">protocol</span>: <span class="ident">Protocol</span>::<span class="ident">Udp</span>,
+            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr::new</span>(<span class="ident">IpAddr::V4</span>(<span class="ident">Ipv4Addr::new</span>(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>)), <span class="number">53</span>),
+            <span class="ident">protocol</span>: <span class="ident">Protocol::Udp</span>,
             <span class="ident">tls_dns_name</span>: <span class="prelude-val">None</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
             <span class="ident">tls_config</span>: <span class="prelude-val">None</span>,
         };
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resolver_config</span> <span class="op">=</span> <span class="ident">ResolverConfig</span>::<span class="ident">new</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">resolver_config</span> <span class="op">=</span> <span class="ident">ResolverConfig::new</span>();
         <span class="ident">resolver_config</span>.<span class="ident">add_name_server</span>(<span class="ident">config1</span>);
         <span class="ident">resolver_config</span>.<span class="ident">add_name_server</span>(<span class="ident">config2</span>);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime</span>::<span class="ident">new</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">NameServerPool</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">TokioConnectionProvider</span><span class="op">&gt;</span>::<span class="ident">from_config</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime::new</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">NameServerPool</span>::<span class="op">&lt;</span><span class="kw">_</span>, <span class="ident">TokioConnectionProvider</span><span class="op">&gt;</span><span class="ident">::from_config</span>(
             <span class="kw-2">&amp;</span><span class="ident">resolver_config</span>,
-            <span class="kw-2">&amp;</span><span class="ident">ResolverOpts</span>::<span class="ident">default</span>(),
+            <span class="kw-2">&amp;</span><span class="ident">ResolverOpts::default</span>(),
             <span class="ident">io_loop</span>.<span class="ident">handle</span>().<span class="ident">clone</span>(),
         );
 
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">parse</span>(<span class="string">&quot;www.example.com.&quot;</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::parse</span>(<span class="string">&quot;www.example.com.&quot;</span>, <span class="prelude-val">None</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// TODO: it&#39;s not clear why there are two failures before the success</span>
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">2</span> {
-            <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="macro">assert!</span>(
                 <span class="ident">io_loop</span>
                     .<span class="ident">block_on</span>(<span class="ident">pool</span>.<span class="ident">lookup</span>(
-                        <span class="ident">Query</span>::<span class="ident">query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType</span>::<span class="ident">A</span>),
-                        <span class="ident">DnsRequestOptions</span>::<span class="ident">default</span>()
+                        <span class="ident">Query::query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType::A</span>),
+                        <span class="ident">DnsRequestOptions::default</span>()
                     ))
                     .<span class="ident">is_err</span>(),
                 <span class="string">&quot;iter: {}&quot;</span>,
@@ -969,11 +969,11 @@
         }
 
         <span class="kw">for</span> <span class="ident">i</span> <span class="kw">in</span> <span class="number">0</span>..<span class="number">10</span> {
-            <span class="macro">assert</span><span class="macro">!</span>(
+            <span class="macro">assert!</span>(
                 <span class="ident">io_loop</span>
                     .<span class="ident">block_on</span>(<span class="ident">pool</span>.<span class="ident">lookup</span>(
-                        <span class="ident">Query</span>::<span class="ident">query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType</span>::<span class="ident">A</span>),
-                        <span class="ident">DnsRequestOptions</span>::<span class="ident">default</span>()
+                        <span class="ident">Query::query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType::A</span>),
+                        <span class="ident">DnsRequestOptions::default</span>()
                     ))
                     .<span class="ident">is_ok</span>(),
                 <span class="string">&quot;iter: {}&quot;</span>,
@@ -984,52 +984,52 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_multi_use_conns</span>() {
-        <span class="ident">env_logger</span>::<span class="ident">try_init</span>().<span class="ident">ok</span>();
+        <span class="ident">env_logger::try_init</span>().<span class="ident">ok</span>();
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime</span>::<span class="ident">new</span>().<span class="ident">unwrap</span>();
-        <span class="kw">let</span> <span class="ident">conn_provider</span> <span class="op">=</span> <span class="ident">TokioConnectionProvider</span>::<span class="ident">new</span>(<span class="ident">io_loop</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">io_loop</span> <span class="op">=</span> <span class="ident">Runtime::new</span>().<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">conn_provider</span> <span class="op">=</span> <span class="ident">TokioConnectionProvider::new</span>(<span class="ident">io_loop</span>.<span class="ident">handle</span>().<span class="ident">clone</span>());
 
         <span class="kw">let</span> <span class="ident">tcp</span> <span class="op">=</span> <span class="ident">NameServerConfig</span> {
-            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr</span>::<span class="ident">new</span>(<span class="ident">IpAddr</span>::<span class="ident">V4</span>(<span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>)), <span class="number">53</span>),
-            <span class="ident">protocol</span>: <span class="ident">Protocol</span>::<span class="ident">Tcp</span>,
+            <span class="ident">socket_addr</span>: <span class="ident">SocketAddr::new</span>(<span class="ident">IpAddr::V4</span>(<span class="ident">Ipv4Addr::new</span>(<span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>, <span class="number">8</span>)), <span class="number">53</span>),
+            <span class="ident">protocol</span>: <span class="ident">Protocol::Tcp</span>,
             <span class="ident">tls_dns_name</span>: <span class="prelude-val">None</span>,
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;dns-over-rustls&quot;</span>)]</span>
             <span class="ident">tls_config</span>: <span class="prelude-val">None</span>,
         };
 
-        <span class="kw">let</span> <span class="ident">opts</span> <span class="op">=</span> <span class="ident">ResolverOpts</span>::<span class="ident">default</span>();
+        <span class="kw">let</span> <span class="ident">opts</span> <span class="op">=</span> <span class="ident">ResolverOpts::default</span>();
         <span class="kw">let</span> <span class="ident">ns_config</span> <span class="op">=</span> { <span class="ident">tcp</span> };
-        <span class="kw">let</span> <span class="ident">name_server</span> <span class="op">=</span> <span class="ident">NameServer</span>::<span class="ident">new_with_provider</span>(<span class="ident">ns_config</span>, <span class="ident">opts</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>());
-        <span class="kw">let</span> <span class="ident">name_servers</span> <span class="op">=</span> <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">name_server</span>]);
+        <span class="kw">let</span> <span class="ident">name_server</span> <span class="op">=</span> <span class="ident">NameServer::new_with_provider</span>(<span class="ident">ns_config</span>, <span class="ident">opts</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>());
+        <span class="kw">let</span> <span class="ident">name_servers</span> <span class="op">=</span> <span class="ident">Arc::new</span>(<span class="macro">vec!</span>[<span class="ident">name_server</span>]);
 
-        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">NameServerPool</span>::<span class="ident">from_nameservers_test</span>(
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">pool</span> <span class="op">=</span> <span class="ident">NameServerPool::from_nameservers_test</span>(
             <span class="kw-2">&amp;</span><span class="ident">opts</span>,
-            <span class="ident">Arc</span>::<span class="ident">new</span>(<span class="macro">vec</span><span class="macro">!</span>[]),
-            <span class="ident">Arc</span>::<span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="ident">name_servers</span>),
+            <span class="ident">Arc::new</span>(<span class="macro">vec!</span>[]),
+            <span class="ident">Arc::clone</span>(<span class="kw-2">&amp;</span><span class="ident">name_servers</span>),
             <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mdns&quot;</span>)]</span>
-            <span class="ident">name_server</span>::<span class="ident">mdns_nameserver</span>(<span class="ident">opts</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>()),
+            <span class="ident">name_server::mdns_nameserver</span>(<span class="ident">opts</span>, <span class="ident">conn_provider</span>.<span class="ident">clone</span>()),
             <span class="ident">conn_provider</span>,
         );
 
-        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name</span>::<span class="ident">from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">name</span> <span class="op">=</span> <span class="ident">Name::from_str</span>(<span class="string">&quot;www.example.com.&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="comment">// first lookup</span>
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">io_loop</span>
             .<span class="ident">block_on</span>(<span class="ident">pool</span>.<span class="ident">lookup</span>(
-                <span class="ident">Query</span>::<span class="ident">query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType</span>::<span class="ident">A</span>),
-                <span class="ident">DnsRequestOptions</span>::<span class="ident">default</span>(),
+                <span class="ident">Query::query</span>(<span class="ident">name</span>.<span class="ident">clone</span>(), <span class="ident">RecordType::A</span>),
+                <span class="ident">DnsRequestOptions::default</span>(),
             ))
             .<span class="ident">expect</span>(<span class="string">&quot;lookup failed&quot;</span>);
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="kw-2">*</span><span class="ident">response</span>.<span class="ident">answers</span>()[<span class="number">0</span>]
                 .<span class="ident">rdata</span>()
                 .<span class="ident">as_a</span>()
                 .<span class="ident">expect</span>(<span class="string">&quot;no a record available&quot;</span>),
-            <span class="ident">Ipv4Addr</span>::<span class="ident">new</span>(<span class="number">93</span>, <span class="number">184</span>, <span class="number">216</span>, <span class="number">34</span>)
+            <span class="ident">Ipv4Addr::new</span>(<span class="number">93</span>, <span class="number">184</span>, <span class="number">216</span>, <span class="number">34</span>)
         );
 
-        <span class="macro">assert</span><span class="macro">!</span>(
+        <span class="macro">assert!</span>(
             <span class="ident">name_servers</span>[<span class="number">0</span>].<span class="ident">is_connected</span>(),
             <span class="string">&quot;if this is failing then the NameServers aren&#39;t being properly shared.&quot;</span>
         );
@@ -1037,25 +1037,25 @@
         <span class="comment">// first lookup</span>
         <span class="kw">let</span> <span class="ident">response</span> <span class="op">=</span> <span class="ident">io_loop</span>
             .<span class="ident">block_on</span>(<span class="ident">pool</span>.<span class="ident">lookup</span>(
-                <span class="ident">Query</span>::<span class="ident">query</span>(<span class="ident">name</span>, <span class="ident">RecordType</span>::<span class="ident">AAAA</span>),
-                <span class="ident">DnsRequestOptions</span>::<span class="ident">default</span>(),
+                <span class="ident">Query::query</span>(<span class="ident">name</span>, <span class="ident">RecordType::AAAA</span>),
+                <span class="ident">DnsRequestOptions::default</span>(),
             ))
             .<span class="ident">expect</span>(<span class="string">&quot;lookup failed&quot;</span>);
 
-        <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="macro">assert_eq!</span>(
             <span class="kw-2">*</span><span class="ident">response</span>.<span class="ident">answers</span>()[<span class="number">0</span>]
                 .<span class="ident">rdata</span>()
                 .<span class="ident">as_aaaa</span>()
                 .<span class="ident">expect</span>(<span class="string">&quot;no aaaa record available&quot;</span>),
-            <span class="ident">Ipv6Addr</span>::<span class="ident">new</span>(<span class="number">0x2606</span>, <span class="number">0x2800</span>, <span class="number">0x0220</span>, <span class="number">0x0001</span>, <span class="number">0x0248</span>, <span class="number">0x1893</span>, <span class="number">0x25c8</span>, <span class="number">0x1946</span>)
+            <span class="ident">Ipv6Addr::new</span>(<span class="number">0x2606</span>, <span class="number">0x2800</span>, <span class="number">0x0220</span>, <span class="number">0x0001</span>, <span class="number">0x0248</span>, <span class="number">0x1893</span>, <span class="number">0x25c8</span>, <span class="number">0x1946</span>)
         );
 
-        <span class="macro">assert</span><span class="macro">!</span>(
+        <span class="macro">assert!</span>(
             <span class="ident">name_servers</span>[<span class="number">0</span>].<span class="ident">is_connected</span>(),
             <span class="string">&quot;if this is failing then the NameServers aren&#39;t being properly shared.&quot;</span>
         );
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_resolver" data-search-js="../../../search-index.js"></div>
+</section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="trust_dns_resolver" data-search-index-js="../../../search-index.js" data-search-js="../../../search.js"></div>
     <script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script></body></html>
